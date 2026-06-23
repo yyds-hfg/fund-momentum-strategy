@@ -4,7 +4,9 @@
 /Users/hanfugui/code/fund-momentum-strategy/src/main/java/com/hacker/code/domain/shared/event/DomainEvent.java
 /Users/hanfugui/code/fund-momentum-strategy/src/main/java/com/hacker/code/domain/strategy/service/MarketEnvironmentService.java
 /Users/hanfugui/code/fund-momentum-strategy/src/main/java/com/hacker/code/domain/fund/repository/FundRepository.java
+/Users/hanfugui/code/fund-momentum-strategy/src/main/java/com/hacker/code/application/dto/DashboardDTO.java
 /Users/hanfugui/code/fund-momentum-strategy/src/main/java/com/hacker/code/domain/strategy/entity/StrategyResult.java
+/Users/hanfugui/code/fund-momentum-strategy/src/main/java/com/hacker/code/adapter/web/controller/DashboardController.java
 /Users/hanfugui/code/fund-momentum-strategy/src/main/java/com/hacker/code/domain/fund/repository/NavDataRepository.java
 /Users/hanfugui/code/fund-momentum-strategy/src/main/java/com/hacker/code/infrastructure/repository/StrategyResultRepositoryImpl.java
 /Users/hanfugui/code/fund-momentum-strategy/src/main/java/com/hacker/code/domain/strategy/repository/BacktestRecordRepository.java
@@ -24,7 +26,9 @@
 /Users/hanfugui/code/fund-momentum-strategy/src/main/java/com/hacker/code/infrastructure/mapper/StrategyResultMapper.java
 /Users/hanfugui/code/fund-momentum-strategy/src/main/java/com/hacker/code/adapter/web/controller/FundController.java
 /Users/hanfugui/code/fund-momentum-strategy/src/main/java/com/hacker/code/application/dto/BacktestResponse.java
+/Users/hanfugui/code/fund-momentum-strategy/src/main/java/com/hacker/code/application/dto/BacktestRecordDTO.java
 /Users/hanfugui/code/fund-momentum-strategy/src/main/java/com/hacker/code/domain/fund/valueobject/FundType.java
+/Users/hanfugui/code/fund-momentum-strategy/src/main/java/com/hacker/code/application/service/DashboardAppService.java
 /Users/hanfugui/code/fund-momentum-strategy/src/main/java/com/hacker/code/domain/portfolio/valueobject/Position.java
 /Users/hanfugui/code/fund-momentum-strategy/src/main/java/com/hacker/code/domain/strategy/valueobject/Frequency.java
 /Users/hanfugui/code/fund-momentum-strategy/src/main/java/com/hacker/code/domain/shared/event/StrategyCalculatedEvent.java
@@ -53,11 +57,13 @@
 /Users/hanfugui/code/fund-momentum-strategy/src/main/java/com/hacker/code/domain/strategy/service/MovingAverageCalculator.java
 /Users/hanfugui/code/fund-momentum-strategy/src/main/java/com/hacker/code/application/dto/PositionDTO.java
 /Users/hanfugui/code/fund-momentum-strategy/src/main/java/com/hacker/code/domain/risk/valueobject/CoolingPeriod.java
+/Users/hanfugui/code/fund-momentum-strategy/src/main/java/com/hacker/code/application/dto/BacktestDetailDTO.java
 /Users/hanfugui/code/fund-momentum-strategy/src/main/java/com/hacker/code/application/dto/FundDTO.java
 /Users/hanfugui/code/fund-momentum-strategy/src/main/java/com/hacker/code/application/assembler/FundAssembler.java
 /Users/hanfugui/code/fund-momentum-strategy/src/main/java/com/hacker/code/domain/portfolio/service/PortfolioMergeService.java
 /Users/hanfugui/code/fund-momentum-strategy/src/main/java/com/hacker/code/application/dto/StrategyResultDTO.java
 /Users/hanfugui/code/fund-momentum-strategy/src/main/java/com/hacker/code/infrastructure/persistence/po/FundTagPO.java
+/Users/hanfugui/code/fund-momentum-strategy/src/main/java/com/hacker/code/application/dto/DrawdownPointDTO.java
 /Users/hanfugui/code/fund-momentum-strategy/src/main/java/com/hacker/code/application/dto/RebalanceAdviceDTO.java
 /Users/hanfugui/code/fund-momentum-strategy/src/main/java/com/hacker/code/application/service/ReportAppService.java
 /Users/hanfugui/code/fund-momentum-strategy/src/main/java/com/hacker/code/domain/fund/service/NavDataFetcher.java
@@ -68,6 +74,7 @@
 /Users/hanfugui/code/fund-momentum-strategy/src/main/java/com/hacker/code/infrastructure/repository/StrategyConfigRepositoryImpl.java
 /Users/hanfugui/code/fund-momentum-strategy/src/main/java/com/hacker/code/domain/fund/service/FundDomainService.java
 /Users/hanfugui/code/fund-momentum-strategy/src/main/java/com/hacker/code/infrastructure/external/sina/SinaFinanceNavClient.java
+/Users/hanfugui/code/fund-momentum-strategy/src/main/java/com/hacker/code/application/dto/NavPointDTO.java
 /Users/hanfugui/code/fund-momentum-strategy/src/main/java/com/hacker/code/infrastructure/mapper/FundMapper.java
 /Users/hanfugui/code/fund-momentum-strategy/src/main/java/com/hacker/code/application/service/BacktestAppService.java
 /Users/hanfugui/code/fund-momentum-strategy/src/main/java/com/hacker/code/application/dto/FundTagDTO.java

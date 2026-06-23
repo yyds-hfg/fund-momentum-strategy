@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ETF 动量轮动策略看板</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+    <style>
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f0f2f5; }
+        #app { max-width: 1400px; margin: 0 auto; padding: 24px; }
+        h1 { margin: 0 0 24px; color: #1f1f1f; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin-bottom: 24px; }
+        .card { background: #fff; border-radius: 8px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .card h3 { margin: 0 0 16px; font-size: 16px; color: #333; }
+        .metric { display: flex; align-items: baseline; gap: 8px; }
+        .metric-value { font-size: 32px; font-weight: 600; color: #1890ff; }
+        .metric-label { color: #666; }
+        .tag { display: inline-block; padding: 4px 12px; border-radius: 4px; font-size: 14px; font-weight: 500; }
+        .tag.STRONG { background: #f6ffed; color: #389e0d; }
+        .tag.WEAK { background: #fff1f0; color: #cf1322; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #f0f0f0; }
+        th { background: #fafafa; font-weight: 600; }
+        tr:hover { background: #fafafa; cursor: pointer; }
+        .selected { background: #e6f7ff !important; }
+        .chart { width: 100%; height: 360px; }
+        .empty { color: #999; text-align: center; padding: 40px; }
+    </style>
+</head>
+<body>
+<div id="app">
+    <h1>ETF 动量轮动策略看板</h1>
+
+    <div class="grid">
+        <div class="card">
+            <h3>最新交易日</h3>
+            <div class="metric">
+                <span class="metric-value">{{ dashboard.tradeDate || '-' }}</span>
+            </div>
+        </div>
+        <div class="card">
+            <h3>大盘状态</h3>
+            <span class="tag" :class="dashboard.marketStatus">
+                {{ dashboard.marketStatus === 'STRONG' ? '强势' : dashboard.marketStatus === 'WEAK' ? '弱势' : '-' }}
+            </span>
+        </div>
+        <div class="card">
+            <h3>当前总仓位</h3>
+            <div class="metric">
+                <span class="metric-value">{{ totalWeight }}%</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid">
+        <div class="card">
+            <h3>持仓权重分布</h3>
+            <div ref="pieChart" class="chart"></div>
+            <div v-if="dashboard.positions.length === 0" class="empty">暂无持仓建议</div>
+        </div>
+        <div class="card">
+            <h3>最新持仓明细</h3>
+            <table v-if="dashboard.positions.length > 0">
+                <thead>
+                <tr><th>基金</th><th>策略</th><th>权重</th></tr>
+                </thead>
+                <tbody>
+                <tr v-for="pos in dashboard.positions" :key="pos.fundCode + pos.sourceStrategy">
+                    <td>{{ pos.fundName }} ({{ pos.fundCode }})</td>
+                    <td>{{ pos.sourceStrategy === 'BALANCED' ? '平衡型' : '积极型' }}</td>
+                    <td>{{ (pos.weight * 100).toFixed(2) }}%</td>
+                </tr>
+                </tbody>
+            </table>
+            <div v-else class="empty">暂无持仓建议</div>
+        </div>
+    </div>
+
+    <div class="grid">
+        <div class="card" style="grid-column: 1 / -1;">
+            <h3>回测记录</h3>
+            <table v-if="dashboard.backtestRecords.length > 0">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>区间</th>
+                    <th>年化收益</th>
+                    <th>最大回撤</th>
+                    <th>夏普比率</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="record in dashboard.backtestRecords" :key="record.id"
+                    :class="{ selected: selectedBacktestId === record.id }"
+                    @click="loadBacktestDetail(record.id)">
+                    <td>{{ record.id }}</td>
+                    <td>{{ record.startDate }} ~ {{ record.endDate }}</td>
+                    <td>{{ (record.annualReturn * 100).toFixed(2) }}%</td>
+                    <td>{{ (record.maxDrawdown * 100).toFixed(2) }}%</td>
+                    <td>{{ record.sharpeRatio?.toFixed(2) || '-' }}</td>
+                </tr>
+                </tbody>
+            </table>
+            <div v-else class="empty">暂无回测记录，请先执行回测</div>
+        </div>
+    </div>
+
+    <div class="grid" v-if="backtestDetail.navCurve.length > 0">
+        <div class="card">
+            <h3>回测净值曲线</h3>
+            <div ref="navChart" class="chart"></div>
+        </div>
+        <div class="card">
+            <h3>回测回撤曲线</h3>
+            <div ref="drawdownChart" class="chart"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const { createApp } = Vue;
+
+    createApp({
+        data() {
+            return {
+                dashboard: {
+                    tradeDate: null,
+                    marketStatus: null,
+                    positions: [],
+                    backtestRecords: []
+                },
+                selectedBacktestId: null,
+                backtestDetail: {
+                    navCurve: [],
+                    drawdownCurve: []
+                },
+                pieChart: null,
+                navChart: null,
+                drawdownChart: null
+            };
+        },
+        computed: {
+            totalWeight() {
+                return this.dashboard.positions
+                    .reduce((sum, p) => sum + p.weight, 0)
+                    .toFixed(2);
+            }
+        },
+        async mounted() {
+            await this.loadDashboard();
+            this.$nextTick(() => {
+                this.initPieChart();
+                window.addEventListener('resize', this.handleResize);
+            });
+        },
+        beforeUnmount() {
+            window.removeEventListener('resize', this.handleResize);
+            this.disposeCharts();
+        },
+        methods: {
+            async loadDashboard() {
+                try {
+                    const res = await axios.get('/dashboard/api/data');
+                    this.dashboard = res.data;
+                    this.updatePieChart();
+                } catch (e) {
+                    console.error('加载看板数据失败', e);
+                }
+            },
+            initPieChart() {
+                this.pieChart = echarts.init(this.$refs.pieChart);
+                this.updatePieChart();
+            },
+            updatePieChart() {
+                if (!this.pieChart) return;
+                const data = this.dashboard.positions.map(p => ({
+                    name: p.fundName,
+                    value: parseFloat((p.weight * 100).toFixed(2))
+                }));
+                this.pieChart.setOption({
+                    tooltip: { trigger: 'item', formatter: '{b}: {c}%' },
+                    series: [{
+                        type: 'pie',
+                        radius: ['40%', '70%'],
+                        data: data,
+                        label: { formatter: '{b}\n{c}%' }
+                    }]
+                });
+            },
+            async loadBacktestDetail(id) {
+                this.selectedBacktestId = id;
+                try {
+                    const res = await axios.get(`/dashboard/api/backtest/${id}`);
+                    this.backtestDetail = res.data;
+                    this.$nextTick(() => {
+                        this.initNavChart();
+                        this.initDrawdownChart();
+                    });
+                } catch (e) {
+                    console.error('加载回测详情失败', e);
+                }
+            },
+            initNavChart() {
+                if (this.navChart) this.navChart.dispose();
+                this.navChart = echarts.init(this.$refs.navChart);
+                this.navChart.setOption({
+                    tooltip: { trigger: 'axis' },
+                    xAxis: { type: 'category', data: this.backtestDetail.navCurve.map(p => p.date) },
+                    yAxis: { type: 'value', name: '净值' },
+                    series: [{
+                        data: this.backtestDetail.navCurve.map(p => p.nav),
+                        type: 'line',
+                        smooth: true,
+                        areaStyle: { opacity: 0.2 }
+                    }]
+                });
+            },
+            initDrawdownChart() {
+                if (this.drawdownChart) this.drawdownChart.dispose();
+                this.drawdownChart = echarts.init(this.$refs.drawdownChart);
+                this.drawdownChart.setOption({
+                    tooltip: { trigger: 'axis', formatter: p => `${p[0].name}<br/>回撤: ${p[0].value.toFixed(2)}%` },
+                    xAxis: { type: 'category', data: this.backtestDetail.drawdownCurve.map(p => p.date) },
+                    yAxis: { type: 'value', name: '回撤 %' },
+                    series: [{
+                        data: this.backtestDetail.drawdownCurve.map(p => p.drawdown),
+                        type: 'line',
+                        smooth: true,
+                        lineStyle: { color: '#cf1322' },
+                        itemStyle: { color: '#cf1322' }
+                    }]
+                });
+            },
+            handleResize() {
+                this.pieChart && this.pieChart.resize();
+                this.navChart && this.navChart.resize();
+                this.drawdownChart && this.drawdownChart.resize();
+            },
+            disposeCharts() {
+                this.pieChart && this.pieChart.dispose();
+                this.navChart && this.navChart.dispose();
+                this.drawdownChart && this.drawdownChart.dispose();
+            }
+        }
+    }).mount('#app');
+</script>
+</body>
+</html>
