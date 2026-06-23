@@ -1,0 +1,8 @@
+/Users/hanfugui/code/fund-momentum-strategy/src/test/java/com/hacker/code/domain/portfolio/service/LowVolatilityWeightingServiceTest.java
+/Users/hanfugui/code/fund-momentum-strategy/src/test/java/com/hacker/code/ApplicationTests.java
+/Users/hanfugui/code/fund-momentum-strategy/src/test/java/com/hacker/code/domain/strategy/service/ETFScreeningServiceTest.java
+/Users/hanfugui/code/fund-momentum-strategy/src/test/java/com/hacker/code/domain/strategy/service/VolatilityCalculatorTest.java
+/Users/hanfugui/code/fund-momentum-strategy/src/test/java/com/hacker/code/application/service/BacktestAppServiceTest.java
+/Users/hanfugui/code/fund-momentum-strategy/src/test/java/com/hacker/code/infrastructure/external/eastmoney/EastMoneyKlineNavFetcherTest.java
+/Users/hanfugui/code/fund-momentum-strategy/src/test/java/com/hacker/code/domain/strategy/service/MomentumCalculatorTest.java
+/Users/hanfugui/code/fund-momentum-strategy/src/test/java/com/hacker/code/domain/strategy/service/UpQualityCalculatorTest.java
