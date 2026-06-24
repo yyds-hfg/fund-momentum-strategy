@@ -1,8 +1,0 @@
-com/hacker/code/infrastructure/external/eastmoney/EastMoneyKlineNavFetcherTest.class
-com/hacker/code/domain/strategy/service/VolatilityCalculatorTest.class
-com/hacker/code/application/service/BacktestAppServiceTest.class
-com/hacker/code/domain/portfolio/service/LowVolatilityWeightingServiceTest.class
-com/hacker/code/domain/strategy/service/UpQualityCalculatorTest.class
-com/hacker/code/domain/strategy/service/ETFScreeningServiceTest.class
-com/hacker/code/domain/strategy/service/MomentumCalculatorTest.class
-com/hacker/code/ApplicationTests.class

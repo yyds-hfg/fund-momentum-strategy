@@ -124,34 +124,91 @@
             </div>
         </div>
 
+        <!-- A 股成交量趋势 -->
         <div class="grid">
-            <div v-for="group in dashboard.momentumRankGroups" :key="group.strategyType" class="card" style="overflow-x: auto;">
-                <h3>{{ group.strategyName }} 动量分 TOP10（截至 {{ group.ranks[0]?.navDate || '-' }}）</h3>
-                <table v-if="group.ranks.length > 0">
+            <div class="card" style="grid-column: 1 / -1;">
+                <h3>A 股成交量趋势（近 3 个月）</h3>
+                <div ref="volumeChart" class="chart"></div>
+            </div>
+        </div>
+
+        <!-- 资金流向看板 -->
+        <div class="grid" v-if="dashboard.latestCapitalFlow">
+            <div class="card" style="text-align: center;">
+                <h3>主力净流入</h3>
+                <div class="metric" style="justify-content: center;">
+                    <span class="metric-value" :style="{ color: flowColor(dashboard.latestCapitalFlow.mainInflow) }">
+                        {{ formatMoney(dashboard.latestCapitalFlow.mainInflow) }}
+                    </span>
+                </div>
+            </div>
+            <div class="card" style="text-align: center;">
+                <h3>机构净流入</h3>
+                <div class="metric" style="justify-content: center;">
+                    <span class="metric-value" :style="{ color: flowColor(dashboard.latestCapitalFlow.superLargeInflow) }">
+                        {{ formatMoney(dashboard.latestCapitalFlow.superLargeInflow) }}
+                    </span>
+                </div>
+            </div>
+            <div class="card" style="text-align: center;">
+                <h3>大户净流入</h3>
+                <div class="metric" style="justify-content: center;">
+                    <span class="metric-value" :style="{ color: flowColor(dashboard.latestCapitalFlow.largeInflow) }">
+                        {{ formatMoney(dashboard.latestCapitalFlow.largeInflow) }}
+                    </span>
+                </div>
+            </div>
+            <div class="card" style="text-align: center;">
+                <h3>散户净流入</h3>
+                <div class="metric" style="justify-content: center;">
+                    <span class="metric-value" :style="{ color: flowColor(retailInflow) }">
+                        {{ formatMoney(retailInflow) }}
+                    </span>
+                </div>
+            </div>
+            <div class="card" style="text-align: center;">
+                <h3>北向资金净流入</h3>
+                <div class="metric" style="justify-content: center;">
+                    <span class="metric-value" :style="{ color: flowColor(dashboard.latestCapitalFlow.northBoundInflow) }">
+                        {{ dashboard.latestCapitalFlow.northBoundInflow !== null ? formatMoney(dashboard.latestCapitalFlow.northBoundInflow) : '暂无数据' }}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 资金流向趋势 -->
+        <div class="grid" v-if="dashboard.capitalFlowTrend.length > 0">
+            <div class="card" style="grid-column: 1 / -1;">
+                <h3>资金流向趋势（近 3 个月）</h3>
+                <div ref="capitalFlowChart" class="chart"></div>
+            </div>
+        </div>
+
+        <!-- ETF 推荐持仓 -->
+        <div class="grid">
+            <div class="card" style="grid-column: 1 / -1;">
+                <h3>ETF 推荐持仓（基于最新动量排名）</h3>
+                <table v-if="dashboard.recommendedPositions.length > 0">
                     <thead>
                     <tr>
-                        <th style="width: 60px;">排名</th>
+                        <th style="width: 60px;">序号</th>
                         <th>基金</th>
-                        <th>动量分</th>
-                        <th>收盘净值</th>
-                        <th>短期动量</th>
-                        <th>长期动量</th>
-                        <th>上涨占比</th>
+                        <th>来源策略</th>
+                        <th>推荐占比</th>
+                        <th>入选原因</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="item in group.ranks" :key="item.fundCode">
-                        <td><span class="rank-badge" :class="{ top: item.rank <= 3 }">{{ item.rank }}</span></td>
+                    <tr v-for="(item, index) in dashboard.recommendedPositions" :key="item.fundCode + item.sourceStrategy">
+                        <td><span class="rank-badge" :class="{ top: index < 3 }">{{ index + 1 }}</span></td>
                         <td>{{ item.fundName }} ({{ item.fundCode }})</td>
-                        <td :class="momentumClass(item.momentumScore)" class="momentum-score">{{ formatPercent(item.momentumScore) }}</td>
-                        <td>{{ item.closeNav?.toFixed(4) || '-' }}</td>
-                        <td :class="momentumClass(item.shortMomentum)">{{ formatPercent(item.shortMomentum) }}</td>
-                        <td :class="momentumClass(item.longMomentum)">{{ formatPercent(item.longMomentum) }}</td>
-                        <td>{{ formatRatio(item.upDaysRatio) }}</td>
+                        <td>{{ strategyTypeLabel(item.sourceStrategy) }}</td>
+                        <td>{{ (item.weight * 100).toFixed(2) }}%</td>
+                        <td>{{ item.reason || '-' }}</td>
                     </tr>
                     </tbody>
                 </table>
-                <div v-else class="empty">暂无动量数据，请先同步基金净值</div>
+                <div v-else class="empty">暂无推荐持仓</div>
             </div>
         </div>
 
@@ -583,8 +640,12 @@
                 dashboard: {
                     tradeDate: null,
                     marketStatus: null,
+                    totalWeight: 0,
                     positions: [],
-                    momentumRankGroups: [],
+                    recommendedPositions: [],
+                    volumeTrend: [],
+                    capitalFlowTrend: [],
+                    latestCapitalFlow: null,
                     backtestRecords: []
                 },
                 selectedBacktestId: null,
@@ -596,6 +657,8 @@
                 rankTagFilter: null,
                 navChart: null,
                 drawdownChart: null,
+                volumeChart: null,
+                capitalFlowChart: null,
                 funds: [],
                 tags: [],
                 fundFilterTagId: null,
@@ -617,6 +680,13 @@
                 return this.dashboard.positions
                     .reduce((sum, p) => sum + p.weight, 0)
                     .toFixed(2);
+            },
+            retailInflow() {
+                const flow = this.dashboard.latestCapitalFlow;
+                if (!flow) return 0;
+                const medium = Number(flow.mediumInflow || 0);
+                const small = Number(flow.smallInflow || 0);
+                return medium + small;
             },
             filteredAllMomentumRankGroups() {
                 if (!this.rankTagFilter) {
@@ -660,9 +730,13 @@
                 try {
                     const res = await axios.get('/dashboard/api/data');
                     this.dashboard = res.data;
-                    if (!this.dashboard.momentumRankGroups) {
-                        this.dashboard.momentumRankGroups = [];
-                    }
+                    if (!this.dashboard.volumeTrend) this.dashboard.volumeTrend = [];
+                    if (!this.dashboard.capitalFlowTrend) this.dashboard.capitalFlowTrend = [];
+                    if (!this.dashboard.recommendedPositions) this.dashboard.recommendedPositions = [];
+                    this.$nextTick(() => {
+                        this.initVolumeChart();
+                        this.initCapitalFlowChart();
+                    });
                 } catch (e) {
                     console.error('加载看板数据失败', e);
                 }
@@ -704,6 +778,19 @@
                 if (num > 0) return 'momentum-positive';
                 if (num < 0) return 'momentum-negative';
                 return 'momentum-zero';
+            },
+            formatMoney(value) {
+                if (value === null || value === undefined) return '-';
+                const num = Number(value) / 100000000; // 转换为亿元
+                return (num >= 0 ? '+' : '') + num.toFixed(2) + '亿';
+            },
+            flowColor(value) {
+                if (value === null || value === undefined) return '#999';
+                return Number(value) >= 0 ? '#cf1322' : '#389e0d';
+            },
+            strategyTypeLabel(type) {
+                const map = { ACTIVE: '积极型', BALANCED: '平衡型' };
+                return map[type] || type;
             },
             async loadFunds() {
                 try {
@@ -874,13 +961,63 @@
                     }]
                 });
             },
+            initVolumeChart() {
+                if (!this.$refs.volumeChart) return;
+                if (this.volumeChart) this.volumeChart.dispose();
+                this.volumeChart = echarts.init(this.$refs.volumeChart);
+                const dates = this.dashboard.volumeTrend.map(p => p.tradeDate);
+                const amounts = this.dashboard.volumeTrend.map(p => (p.totalAmount || 0) / 100000000);
+                this.volumeChart.setOption({
+                    tooltip: { trigger: 'axis', formatter: p => `${p[0].name}<br/>成交额: ${p[0].value.toFixed(2)} 亿元` },
+                    grid: { left: 60, right: 30, top: 30, bottom: 30 },
+                    xAxis: { type: 'category', data: dates, boundaryGap: false },
+                    yAxis: { type: 'value', name: '成交额（亿元）' },
+                    series: [{
+                        data: amounts,
+                        type: 'line',
+                        smooth: true,
+                        lineStyle: { color: '#1890ff' },
+                        itemStyle: { color: '#1890ff' },
+                        areaStyle: { color: 'rgba(24,144,255,0.15)' }
+                    }]
+                });
+            },
+            initCapitalFlowChart() {
+                if (!this.$refs.capitalFlowChart) return;
+                if (this.capitalFlowChart) this.capitalFlowChart.dispose();
+                this.capitalFlowChart = echarts.init(this.$refs.capitalFlowChart);
+                const dates = this.dashboard.capitalFlowTrend.map(p => p.tradeDate);
+                const main = this.dashboard.capitalFlowTrend.map(p => (p.mainInflow || 0) / 100000000);
+                const institutional = this.dashboard.capitalFlowTrend.map(p => (p.superLargeInflow || 0) / 100000000);
+                const large = this.dashboard.capitalFlowTrend.map(p => (p.largeInflow || 0) / 100000000);
+                const retail = this.dashboard.capitalFlowTrend.map(p =>
+                    ((p.mediumInflow || 0) + (p.smallInflow || 0)) / 100000000
+                );
+                this.capitalFlowChart.setOption({
+                    tooltip: { trigger: 'axis' },
+                    legend: { data: ['主力', '机构', '大户', '散户'] },
+                    grid: { left: 60, right: 30, top: 40, bottom: 30 },
+                    xAxis: { type: 'category', data: dates },
+                    yAxis: { type: 'value', name: '净流入（亿元）' },
+                    series: [
+                        { name: '主力', type: 'line', data: main, smooth: true },
+                        { name: '机构', type: 'line', data: institutional, smooth: true },
+                        { name: '大户', type: 'line', data: large, smooth: true },
+                        { name: '散户', type: 'line', data: retail, smooth: true }
+                    ]
+                });
+            },
             handleResize() {
                 this.navChart && this.navChart.resize();
                 this.drawdownChart && this.drawdownChart.resize();
+                this.volumeChart && this.volumeChart.resize();
+                this.capitalFlowChart && this.capitalFlowChart.resize();
             },
             disposeCharts() {
                 this.navChart && this.navChart.dispose();
                 this.drawdownChart && this.drawdownChart.dispose();
+                this.volumeChart && this.volumeChart.dispose();
+                this.capitalFlowChart && this.capitalFlowChart.dispose();
             }
         }
     }).mount('#app');

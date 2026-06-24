@@ -38,7 +38,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DashboardAppService {
 
-    private final ReportAppService reportAppService;
+    private final StrategyExecutionAppService strategyExecutionAppService;
+    private final MarketDataAppService marketDataAppService;
     private final StrategyAssembler strategyAssembler;
     private final FundAssembler fundAssembler;
     private final BacktestRecordRepository backtestRecordRepository;
@@ -50,16 +51,28 @@ public class DashboardAppService {
     private final UpQualityCalculator upQualityCalculator;
 
     public DashboardDTO getDashboardData() {
-        RebalanceAdvice advice = reportAppService.getLatestWeeklyReport();
+        LocalDate effectiveDate = TradeDateUtil.determineEffectiveTradeDate();
+
+        // 复用策略执行逻辑生成实时推荐
+        RebalanceAdvice advice = strategyExecutionAppService.calculateWeeklyStrategy(effectiveDate);
         RebalanceAdviceDTO dto = strategyAssembler.toDTO(advice);
 
         DashboardDTO dashboard = new DashboardDTO();
-        dashboard.setTradeDate(dto.getTradeDate());
+        dashboard.setTradeDate(effectiveDate);
         dashboard.setMarketStatus(dto.getMarketStatus());
+        dashboard.setTotalWeight(dto.getSubResults().stream()
+                .map(StrategyResultDTO::getTotalWeight)
+                .reduce(BigDecimal.ZERO, BigDecimal::add));
         dashboard.setPositions(dto.getSubResults().stream()
                 .flatMap(r -> r.getPositions().stream())
                 .collect(Collectors.toList()));
-        dashboard.setMomentumRankGroups(getMomentumRankGroups(TradeDateUtil.determineEffectiveTradeDate()));
+        dashboard.setRecommendedPositions(dashboard.getPositions());
+
+        // 市场数据（成交量 + 资金流向）
+        dashboard.setVolumeTrend(marketDataAppService.getVolumeTrend(effectiveDate, 60));
+        dashboard.setLatestCapitalFlow(marketDataAppService.getMarketOverview(effectiveDate));
+        dashboard.setCapitalFlowTrend(marketDataAppService.getCapitalFlowTrend(effectiveDate, 60));
+
         dashboard.setBacktestRecords(getBacktestRecords());
         return dashboard;
     }

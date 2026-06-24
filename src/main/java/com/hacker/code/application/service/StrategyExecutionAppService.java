@@ -21,7 +21,6 @@ import com.hacker.code.domain.strategy.valueobject.ScreenedETF;
 import com.hacker.code.domain.strategy.valueobject.StrategyType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,11 +51,28 @@ public class StrategyExecutionAppService {
     private final LowVolatilityWeightingService weightingService;
     private final MarketEnvironmentService marketEnvironmentService;
     private final PortfolioMergeService portfolioMergeService;
-    private final ApplicationEventPublisher eventPublisher;
 
+    /**
+     * 执行并持久化每周策略结果。
+     */
     @Transactional
     public RebalanceAdvice executeWeeklyStrategy(LocalDate tradeDate) {
-        log.info("Executing weekly strategy for {}", tradeDate);
+        RebalanceAdvice advice = calculateWeeklyStrategy(tradeDate);
+
+        // 持久化子结果
+        for (StrategyResult result : advice.getSubResults()) {
+            strategyResultRepository.save(result);
+        }
+
+        log.info("Strategy execution completed. Sub-results: {}", advice.getSubResults().size());
+        return advice;
+    }
+
+    /**
+     * 纯计算，不持久化。用于实时推荐与策略执行保持一致。
+     */
+    public RebalanceAdvice calculateWeeklyStrategy(LocalDate tradeDate) {
+        log.info("Calculating weekly strategy for {}", tradeDate);
 
         List<Fund> candidates = fundDomainService.getCandidatePool().stream()
                 .filter(fund -> !BENCHMARK_CODE.equals(fund.getFundCode()))
@@ -74,23 +90,20 @@ public class StrategyExecutionAppService {
         List<StrategyResult> subResults = new ArrayList<>();
 
         for (StrategyConfig config : configs) {
-            StrategyResult result = executeSingleStrategy(config, tradeDate, candidates, navHistoryMap, marketStatus);
+            StrategyResult result = calculateSingleStrategy(config, tradeDate, candidates, navHistoryMap, marketStatus);
             if (result != null) {
-                strategyResultRepository.save(result);
                 subResults.add(result);
             }
         }
 
-        RebalanceAdvice advice = portfolioMergeService.merge(tradeDate, marketStatus, subResults);
-        log.info("Strategy execution completed. Sub-results: {}", subResults.size());
-        return advice;
+        return portfolioMergeService.merge(tradeDate, marketStatus, subResults);
     }
 
-    private StrategyResult executeSingleStrategy(StrategyConfig config,
-                                                 LocalDate tradeDate,
-                                                 List<Fund> candidates,
-                                                 Map<String, List<Nav>> navHistoryMap,
-                                                 MarketStatus marketStatus) {
+    private StrategyResult calculateSingleStrategy(StrategyConfig config,
+                                                   LocalDate tradeDate,
+                                                   List<Fund> candidates,
+                                                   Map<String, List<Nav>> navHistoryMap,
+                                                   MarketStatus marketStatus) {
         BigDecimal totalAllocation = resolveTotalAllocation(config, marketStatus);
         if (totalAllocation.compareTo(BigDecimal.ZERO) == 0) {
             log.info("{} strategy has zero allocation under {}", config.getStrategyType(), marketStatus);
