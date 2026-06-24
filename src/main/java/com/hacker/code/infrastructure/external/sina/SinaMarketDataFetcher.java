@@ -52,7 +52,7 @@ public class SinaMarketDataFetcher implements MarketDataFetcher {
         // 格式示例：
         // var hq_str_s_sh000001="上证指数,3367.60,11.73,0.35,286332246,326278969";
         // var hq_str_s_sz399001="深证成指,10843.41,120.11,1.12,384324676,512341237";
-        // 字段：名称, 当前价, 涨跌额, 涨跌幅, 成交量（股）, 成交额（元）
+        // 字段：名称, 当前价, 涨跌额, 涨跌幅, 成交量（手）, 成交额（万元）
 
         MarketOverview.MarketOverviewBuilder builder = MarketOverview.builder().tradeDate(LocalDate.now());
         long totalVolume = 0L;
@@ -76,8 +76,9 @@ public class SinaMarketDataFetcher implements MarketDataFetcher {
             }
             try {
                 BigDecimal close = new BigDecimal(parts[1]);
-                long volume = new BigDecimal(parts[4]).longValue();
-                BigDecimal amount = new BigDecimal(parts[5]);
+                // 新浪返回的成交量单位是“手”，成交额单位是“万元”，统一转换为股/元
+                long volume = new BigDecimal(parts[4]).longValue() * 100;
+                BigDecimal amount = new BigDecimal(parts[5]).multiply(BigDecimal.valueOf(10000));
                 totalVolume += volume;
                 totalAmount = totalAmount.add(amount);
 

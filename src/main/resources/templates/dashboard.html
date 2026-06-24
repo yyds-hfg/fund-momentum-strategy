@@ -966,14 +966,14 @@
                 if (this.volumeChart) this.volumeChart.dispose();
                 this.volumeChart = echarts.init(this.$refs.volumeChart);
                 const dates = this.dashboard.volumeTrend.map(p => p.tradeDate);
-                const amounts = this.dashboard.volumeTrend.map(p => (p.totalAmount || 0) / 100000000);
+                const volumes = this.dashboard.volumeTrend.map(p => (p.totalVolume || 0) / 100000000);
                 this.volumeChart.setOption({
-                    tooltip: { trigger: 'axis', formatter: p => `${p[0].name}<br/>成交额: ${p[0].value.toFixed(2)} 亿元` },
+                    tooltip: { trigger: 'axis', formatter: p => `${p[0].name}<br/>成交量: ${p[0].value.toFixed(2)} 亿股` },
                     grid: { left: 60, right: 30, top: 30, bottom: 30 },
                     xAxis: { type: 'category', data: dates, boundaryGap: false },
-                    yAxis: { type: 'value', name: '成交额（亿元）' },
+                    yAxis: { type: 'value', name: '成交量（亿股）' },
                     series: [{
-                        data: amounts,
+                        data: volumes,
                         type: 'line',
                         smooth: true,
                         lineStyle: { color: '#1890ff' },

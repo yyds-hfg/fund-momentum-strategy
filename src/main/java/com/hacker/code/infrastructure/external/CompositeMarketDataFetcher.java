@@ -4,6 +4,7 @@ import com.hacker.code.domain.fund.service.MarketDataFetcher;
 import com.hacker.code.domain.fund.valueobject.MarketOverview;
 import com.hacker.code.infrastructure.external.eastmoney.EastMoneyMarketDataFetcher;
 import com.hacker.code.infrastructure.external.sina.SinaMarketDataFetcher;
+import com.hacker.code.infrastructure.external.tencent.TencentMarketDataFetcher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Primary;
@@ -24,6 +25,7 @@ import java.util.List;
 public class CompositeMarketDataFetcher implements MarketDataFetcher {
 
     private final EastMoneyMarketDataFetcher eastMoneyFetcher;
+    private final TencentMarketDataFetcher tencentFetcher;
     private final SinaMarketDataFetcher sinaFetcher;
 
     @Override
@@ -32,7 +34,12 @@ public class CompositeMarketDataFetcher implements MarketDataFetcher {
         if (!history.isEmpty()) {
             return history;
         }
-        log.warn("EastMoney 获取市场概况历史失败，Sina 不支持历史数据兜底");
+        log.warn("EastMoney 获取市场概况历史失败，尝试腾讯财经兜底");
+        history = tencentFetcher.fetchMarketOverviewHistory(startDate, endDate);
+        if (!history.isEmpty()) {
+            return history;
+        }
+        log.warn("腾讯财经获取市场概况历史失败，Sina 不支持历史数据兜底");
         return Collections.emptyList();
     }
 
@@ -42,7 +49,12 @@ public class CompositeMarketDataFetcher implements MarketDataFetcher {
         if (overview != null) {
             return overview;
         }
-        log.warn("EastMoney 获取最新市场概况失败，回退到新浪快照");
+        log.warn("EastMoney 获取最新市场概况失败，尝试腾讯财经兜底");
+        overview = tencentFetcher.fetchLatestMarketOverview();
+        if (overview != null) {
+            return overview;
+        }
+        log.warn("腾讯财经获取最新市场概况失败，回退到新浪快照");
         return sinaFetcher.fetchLatestMarketOverview();
     }
 }
