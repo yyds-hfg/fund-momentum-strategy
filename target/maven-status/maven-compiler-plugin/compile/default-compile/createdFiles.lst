@@ -42,10 +42,12 @@ com/hacker/code/application/dto/FundDTO.class
 com/hacker/code/infrastructure/persistence/po/FundPO.class
 com/hacker/code/domain/fund/repository/FundRepository.class
 com/hacker/code/application/assembler/FundAssembler.class
+com/hacker/code/domain/shared/util/TradeDateUtil.class
 com/hacker/code/domain/strategy/service/MarketEnvironmentService.class
 com/hacker/code/domain/risk/service/RiskControlService.class
 com/hacker/code/application/dto/StrategyResultDTO.class
 com/hacker/code/application/dto/BacktestDetailDTO.class
+com/hacker/code/infrastructure/external/CompositeNavDataFetcher.class
 com/hacker/code/domain/strategy/valueobject/ScreenedETF$ScreenedETFBuilder.class
 com/hacker/code/infrastructure/persistence/po/FundTagRelationPO.class
 com/hacker/code/domain/fund/repository/NavDataRepository.class

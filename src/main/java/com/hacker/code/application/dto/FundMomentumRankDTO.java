@@ -4,6 +4,8 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class FundMomentumRankDTO {
@@ -17,4 +19,5 @@ public class FundMomentumRankDTO {
     private BigDecimal longMomentum;
     private BigDecimal upDaysRatio;
     private BigDecimal momentumScore;
+    private List<FundTagDTO> tags = new ArrayList<>();
 }

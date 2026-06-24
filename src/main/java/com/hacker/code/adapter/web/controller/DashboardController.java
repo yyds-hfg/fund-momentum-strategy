@@ -3,6 +3,7 @@ package com.hacker.code.adapter.web.controller;
 import com.hacker.code.application.dto.BacktestDetailDTO;
 import com.hacker.code.application.dto.BacktestRecordDTO;
 import com.hacker.code.application.dto.DashboardDTO;
+import com.hacker.code.application.dto.FundMomentumRanksGroupDTO;
 import com.hacker.code.application.service.DashboardAppService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -35,6 +36,12 @@ public class DashboardController {
     @ResponseBody
     public List<BacktestRecordDTO> backtestRecords() {
         return dashboardAppService.getBacktestRecords();
+    }
+
+    @GetMapping("/api/momentum-ranks")
+    @ResponseBody
+    public List<FundMomentumRanksGroupDTO> allMomentumRanks() {
+        return dashboardAppService.getAllMomentumRankGroupsForLatestTradeDate();
     }
 
     @GetMapping("/api/backtest/{id}")

@@ -19,5 +19,7 @@ public class CrawlerProperties {
 
     private String eastMoneyKlineUrl = "https://push2his.eastmoney.com/api/qt/stock/kline/get";
 
+    private String eastMoneyUt = "fa5fd1943c7b386f172d6893dbfba10b";
+
     private String sinaRealtimeUrl = "https://hq.sinajs.cn/list={market}{code}";
 }

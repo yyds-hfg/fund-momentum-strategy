@@ -19,6 +19,7 @@ public class RestTemplateConfig {
                 .setConnectTimeout(Duration.ofMillis(crawlerProperties.getRequestTimeout()))
                 .setReadTimeout(Duration.ofMillis(crawlerProperties.getRequestTimeout()))
                 .defaultHeader("User-Agent", crawlerProperties.getUserAgent())
+                .defaultHeader("Referer", "https://quote.eastmoney.com/")
                 .build();
     }
 

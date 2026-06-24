@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 /**
@@ -53,6 +54,25 @@ public class FundDataSyncAppService {
         log.info("NAV sync completed. Total: {}, Success: {}, Failed: {}, Records: {}",
                 result.getTotalFunds(), result.getSuccessFunds(), result.getFailedFunds(), result.getTotalRecords());
         return result;
+    }
+
+    /**
+     * 同步最新净值数据。
+     * 规则：当前时间在 15:00 之前，同步到 T-1 日；15:00 及之后，同步到 T 日。
+     */
+    public SyncResult syncLatestNavData() {
+        LocalDate endDate = determineLatestNavEndDate();
+        LocalDate startDate = endDate.minusMonths(6);
+        return syncNavData(startDate, endDate);
+    }
+
+    private LocalDate determineLatestNavEndDate() {
+        LocalDate today = LocalDate.now();
+        LocalTime now = LocalTime.now();
+        if (now.isBefore(LocalTime.of(15, 0))) {
+            return today.minusDays(1);
+        }
+        return today;
     }
 
     public SyncResult syncNavDataForFund(String fundCode, LocalDate startDate, LocalDate endDate) {

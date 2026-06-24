@@ -2,13 +2,16 @@ package com.hacker.code.application.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hacker.code.application.assembler.FundAssembler;
 import com.hacker.code.application.assembler.StrategyAssembler;
 import com.hacker.code.application.dto.*;
 import com.hacker.code.domain.fund.entity.Fund;
 import com.hacker.code.domain.fund.repository.NavDataRepository;
 import com.hacker.code.domain.fund.service.FundDomainService;
+import com.hacker.code.domain.fund.valueobject.FundTag;
 import com.hacker.code.domain.fund.valueobject.Nav;
 import com.hacker.code.domain.portfolio.valueobject.RebalanceAdvice;
+import com.hacker.code.domain.shared.util.TradeDateUtil;
 import com.hacker.code.domain.strategy.entity.StrategyConfig;
 import com.hacker.code.domain.strategy.repository.BacktestRecordRepository;
 import com.hacker.code.domain.strategy.repository.StrategyConfigRepository;
@@ -37,6 +40,7 @@ public class DashboardAppService {
 
     private final ReportAppService reportAppService;
     private final StrategyAssembler strategyAssembler;
+    private final FundAssembler fundAssembler;
     private final BacktestRecordRepository backtestRecordRepository;
     private final ObjectMapper objectMapper;
     private final FundDomainService fundDomainService;
@@ -55,7 +59,7 @@ public class DashboardAppService {
         dashboard.setPositions(dto.getSubResults().stream()
                 .flatMap(r -> r.getPositions().stream())
                 .collect(Collectors.toList()));
-        dashboard.setMomentumRankGroups(getMomentumRankGroups(advice.getTradeDate()));
+        dashboard.setMomentumRankGroups(getMomentumRankGroups(TradeDateUtil.determineEffectiveTradeDate()));
         dashboard.setBacktestRecords(getBacktestRecords());
         return dashboard;
     }
@@ -86,15 +90,27 @@ public class DashboardAppService {
     }
 
     public List<FundMomentumRanksGroupDTO> getMomentumRankGroups(LocalDate tradeDate) {
+        return buildMomentumRankGroups(tradeDate, 10);
+    }
+
+    public List<FundMomentumRanksGroupDTO> getAllMomentumRankGroups(LocalDate tradeDate) {
+        return buildMomentumRankGroups(tradeDate, Integer.MAX_VALUE);
+    }
+
+    public List<FundMomentumRanksGroupDTO> getAllMomentumRankGroupsForLatestTradeDate() {
+        return getAllMomentumRankGroups(TradeDateUtil.determineEffectiveTradeDate());
+    }
+
+    private List<FundMomentumRanksGroupDTO> buildMomentumRankGroups(LocalDate tradeDate, int limit) {
         List<Fund> candidates = fundDomainService.getCandidatePool().stream()
                 .filter(fund -> !"000852".equals(fund.getFundCode()))
                 .collect(Collectors.toList());
 
-        LocalDate targetDate = tradeDate.minusDays(1);
+        LocalDate targetDate = tradeDate;
 
         List<FundMomentumRanksGroupDTO> groups = new ArrayList<>();
         for (StrategyConfig config : strategyConfigRepository.findAllEnabled()) {
-            List<FundMomentumRankDTO> ranks = calculateMomentumRanks(candidates, config, targetDate);
+            List<FundMomentumRankDTO> ranks = calculateMomentumRanks(candidates, config, targetDate, limit);
             FundMomentumRanksGroupDTO group = new FundMomentumRanksGroupDTO();
             group.setStrategyType(config.getStrategyType().name());
             group.setStrategyName(config.getStrategyType().getDescription());
@@ -104,12 +120,12 @@ public class DashboardAppService {
         return groups;
     }
 
-    private List<FundMomentumRankDTO> calculateMomentumRanks(List<Fund> candidates, StrategyConfig config, LocalDate targetDate) {
+    private List<FundMomentumRankDTO> calculateMomentumRanks(List<Fund> candidates, StrategyConfig config, LocalDate targetDate, int limit) {
         int maxWindow = Math.max(config.getLongMomentumWindow(),
                 Math.max(config.getMaWindow(), config.getVolatilityWindow()));
         LocalDate queryStartDate = targetDate.minusDays(maxWindow + 30);
 
-        // 找到每个基金在 T-1 日及之前最新的净值日期，取最小值作为统一参考日
+        // 找到每个基金在目标日期及之前最新的净值日期，取最小值作为统一参考日
         List<LocalDate> latestDates = new ArrayList<>();
         for (Fund fund : candidates) {
             List<Nav> history = navDataRepository.findByDateRange(fund.getFundCode(), queryStartDate, targetDate);
@@ -152,17 +168,21 @@ public class DashboardAppService {
             rank.setLongMomentum(longMomentum.getValue());
             rank.setUpDaysRatio(upQuality.getUpDaysRatio());
             rank.setMomentumScore(momentumScore);
+            for (FundTag tag : fund.getTags()) {
+                rank.getTags().add(fundAssembler.toDTO(tag));
+            }
             ranks.add(rank);
         }
 
         ranks.sort(Comparator.comparing(FundMomentumRankDTO::getMomentumScore).reversed());
-        List<FundMomentumRankDTO> topRanks = new ArrayList<>();
-        for (int i = 0; i < Math.min(10, ranks.size()); i++) {
+        List<FundMomentumRankDTO> result = new ArrayList<>();
+        int resultSize = Math.min(limit, ranks.size());
+        for (int i = 0; i < resultSize; i++) {
             FundMomentumRankDTO rank = ranks.get(i);
             rank.setRank(i + 1);
-            topRanks.add(rank);
+            result.add(rank);
         }
-        return topRanks;
+        return result;
     }
 
     private BigDecimal calculateMomentumScore(BigDecimal shortMomentum,

@@ -1,13 +1,12 @@
 package com.hacker.code.adapter.job;
 
 import com.hacker.code.application.service.StrategyExecutionAppService;
+import com.hacker.code.domain.shared.util.TradeDateUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDate;
 
 @Slf4j
 @Component
@@ -18,7 +17,7 @@ public class StrategyJob implements CommandLineRunner {
 
     @Scheduled(cron = "0 35 15 ? * FRI")
     public void weeklyExecute() {
-        strategyExecutionAppService.executeWeeklyStrategy(LocalDate.now());
+        strategyExecutionAppService.executeWeeklyStrategy(TradeDateUtil.determineEffectiveTradeDate());
     }
 
     @Override

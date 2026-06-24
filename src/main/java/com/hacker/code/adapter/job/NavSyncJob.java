@@ -7,8 +7,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
-
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -18,9 +16,7 @@ public class NavSyncJob implements CommandLineRunner {
 
     @Scheduled(cron = "0 35 15 ? * MON-FRI")
     public void dailySync() {
-        LocalDate endDate = LocalDate.now();
-        LocalDate startDate = endDate.minusMonths(6);
-        fundDataSyncAppService.syncNavData(startDate, endDate);
+        fundDataSyncAppService.syncLatestNavData();
     }
 
     @Override

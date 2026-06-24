@@ -26,7 +26,6 @@ import java.util.Objects;
  */
 @Slf4j
 @Component
-@Primary
 @RequiredArgsConstructor
 public class EastMoneyKlineNavFetcher implements NavDataFetcher {
 
@@ -62,6 +61,7 @@ public class EastMoneyKlineNavFetcher implements NavDataFetcher {
     private String buildUrl(String secId, LocalDate startDate, LocalDate endDate) {
         return crawlerProperties.getEastMoneyKlineUrl()
                 + "?secid=" + secId
+                + "&ut=" + crawlerProperties.getEastMoneyUt()
                 + "&fields1=f1,f2,f3,f4,f5,f6"
                 + "&fields2=f51,f52,f53,f54,f55,f56"
                 + "&klt=101"

@@ -5,6 +5,7 @@ import com.hacker.code.application.dto.RebalanceAdviceDTO;
 import com.hacker.code.application.dto.StrategyResultDTO;
 import com.hacker.code.application.service.StrategyExecutionAppService;
 import com.hacker.code.domain.portfolio.valueobject.RebalanceAdvice;
+import com.hacker.code.domain.shared.util.TradeDateUtil;
 import com.hacker.code.domain.strategy.entity.StrategyResult;
 import com.hacker.code.domain.strategy.repository.StrategyResultRepository;
 import com.hacker.code.domain.strategy.valueobject.StrategyType;
@@ -27,7 +28,7 @@ public class StrategyController {
 
     @PostMapping("/execute")
     public RebalanceAdviceDTO execute(@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate tradeDate) {
-        LocalDate date = tradeDate == null ? LocalDate.now() : tradeDate;
+        LocalDate date = tradeDate == null ? TradeDateUtil.determineEffectiveTradeDate() : tradeDate;
         RebalanceAdvice advice = strategyExecutionAppService.executeWeeklyStrategy(date);
         return strategyAssembler.toDTO(advice);
     }

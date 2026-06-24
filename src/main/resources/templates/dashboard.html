@@ -66,6 +66,21 @@
         .momentum-negative { color: #389e0d; }
         .momentum-zero { color: #999; }
         .momentum-score { font-weight: 600; }
+        .rank-table { max-height: 600px; overflow-y: auto; }
+        .logic-section { margin-bottom: 28px; }
+        .logic-section h4 { margin: 0 0 14px; font-size: 17px; color: #1f1f1f; border-left: 4px solid #1890ff; padding-left: 10px; }
+        .logic-section p { margin: 0 0 10px; line-height: 1.7; color: #444; font-size: 14px; }
+        .logic-flow { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 16px 0; padding: 16px; background: #f6ffed; border-radius: 8px; }
+        .logic-flow-item { padding: 8px 14px; background: #fff; border: 1px solid #b7eb8f; border-radius: 6px; font-size: 14px; color: #389e0d; font-weight: 500; }
+        .logic-flow-arrow { color: #999; font-size: 16px; }
+        .logic-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+        .logic-table th, .logic-table td { padding: 10px 12px; text-align: left; border: 1px solid #e8e8e8; font-size: 13px; }
+        .logic-table th { background: #f0f5ff; color: #1f1f1f; font-weight: 600; }
+        .logic-table td { background: #fff; color: #444; }
+        .logic-highlight { padding: 14px 16px; background: #e6f7ff; border-left: 4px solid #1890ff; border-radius: 4px; margin: 12px 0; }
+        .logic-highlight p { margin: 0; color: #0958d9; font-size: 14px; line-height: 1.7; }
+        .logic-list { margin: 8px 0 0 18px; padding: 0; color: #444; font-size: 14px; line-height: 1.8; }
+        .tag-category { display: inline-block; padding: 3px 10px; border-radius: 4px; font-size: 12px; margin-right: 8px; margin-bottom: 6px; background: #f0f0f0; color: #555; }
     </style>
 </head>
 <body>
@@ -74,6 +89,8 @@
 
     <div class="tabs">
         <div class="tab" :class="{ active: activeTab === 'dashboard' }" @click="switchTab('dashboard')">策略看板</div>
+        <div class="tab" :class="{ active: activeTab === 'ranking' }" @click="switchTab('ranking')">全部动量排名</div>
+        <div class="tab" :class="{ active: activeTab === 'logic' }" @click="switchTab('logic')">策略逻辑</div>
         <div class="tab" :class="{ active: activeTab === 'funds' }" @click="switchTab('funds')">基金池管理</div>
         <div class="tab" :class="{ active: activeTab === 'tags' }" @click="switchTab('tags')">标签管理</div>
     </div>
@@ -99,11 +116,17 @@
                     <span class="metric-value">{{ totalWeight }}%</span>
                 </div>
             </div>
+            <div class="card">
+                <h3>策略执行</h3>
+                <button class="btn btn-primary" :disabled="executingStrategy" @click="executeStrategy">
+                    {{ executingStrategy ? '执行中...' : '立即执行策略' }}
+                </button>
+            </div>
         </div>
 
         <div class="grid">
             <div v-for="group in dashboard.momentumRankGroups" :key="group.strategyType" class="card" style="overflow-x: auto;">
-                <h3>{{ group.strategyName }} T-1 日动量分 TOP10（截至 {{ group.ranks[0]?.navDate || '-' }}）</h3>
+                <h3>{{ group.strategyName }} 动量分 TOP10（截至 {{ group.ranks[0]?.navDate || '-' }}）</h3>
                 <table v-if="group.ranks.length > 0">
                     <thead>
                     <tr>
@@ -170,6 +193,218 @@
             <div class="card">
                 <h3>回测回撤曲线</h3>
                 <div ref="drawdownChart" class="chart"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 全部动量排名 -->
+    <div v-if="activeTab === 'ranking'">
+        <div class="card" style="margin-bottom: 24px;">
+            <div class="toolbar">
+                <div class="filter-bar">
+                    <select class="form-select" v-model="rankTagFilter" style="width: 180px;">
+                        <option :value="null">全部标签</option>
+                        <option v-for="tag in tags" :key="tag.id" :value="tag.id">{{ tag.tagName }}</option>
+                    </select>
+                    <button class="btn" @click="loadAllMomentumRanks">刷新</button>
+                </div>
+            </div>
+        </div>
+        <div class="grid">
+            <div v-for="group in filteredAllMomentumRankGroups" :key="group.strategyType" class="card" style="overflow-x: auto; grid-column: 1 / -1;">
+                <h3>{{ group.strategyName }} 全部基金动量排名（截至 {{ group.ranks[0]?.navDate || '-' }}）</h3>
+                <div class="rank-table">
+                    <table v-if="group.ranks.length > 0">
+                        <thead>
+                        <tr>
+                            <th style="width: 60px;">排名</th>
+                            <th>基金</th>
+                            <th>动量分</th>
+                            <th>标签</th>
+                            <th>短期动量</th>
+                            <th>长期动量</th>
+                            <th>上涨占比</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="(item, index) in group.ranks" :key="item.fundCode">
+                            <td><span class="rank-badge" :class="{ top: index < 3 }">{{ index + 1 }}</span></td>
+                            <td>{{ item.fundName }} ({{ item.fundCode }})</td>
+                            <td :class="momentumClass(item.momentumScore)" class="momentum-score">{{ formatPercent(item.momentumScore) }}</td>
+                            <td>
+                                <span v-for="tag in item.tags" :key="tag.id"
+                                      class="tag-badge"
+                                      :style="{ background: tag.color || '#999' }">{{ tag.tagName }}</span>
+                                <span v-if="!item.tags || item.tags.length === 0" style="color: #999;">-</span>
+                            </td>
+                            <td :class="momentumClass(item.shortMomentum)">{{ formatPercent(item.shortMomentum) }}</td>
+                            <td :class="momentumClass(item.longMomentum)">{{ formatPercent(item.longMomentum) }}</td>
+                            <td>{{ formatRatio(item.upDaysRatio) }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div v-else class="empty">暂无动量数据，请先同步基金净值</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 策略逻辑 -->
+    <div v-if="activeTab === 'logic'">
+        <div class="card" style="grid-column: 1 / -1;">
+            <h3 style="margin-bottom: 20px;">ETF 动量轮动策略核心逻辑</h3>
+
+            <div class="logic-section">
+                <h4>一、策略核心理念</h4>
+                <p>本策略是一套基于 A 股 ETF 市场的趋势跟踪轮动策略，通过多层过滤与加权机制，在控制风险的前提下捕捉强势板块。</p>
+                <div class="logic-flow">
+                    <span class="logic-flow-item">不买跌的<br><small>绝对动量 &gt; 0</small></span>
+                    <span class="logic-flow-arrow">→</span>
+                    <span class="logic-flow-item">涨得稳的<br><small>上涨天数占比 &gt; 50%</small></span>
+                    <span class="logic-flow-arrow">→</span>
+                    <span class="logic-flow-item">买最强的<br><small>相对动量排序</small></span>
+                    <span class="logic-flow-arrow">→</span>
+                    <span class="logic-flow-item">稳的多买<br><small>低波加权</small></span>
+                    <span class="logic-flow-arrow">→</span>
+                    <span class="logic-flow-item">趋势确认<br><small>均线过滤</small></span>
+                    <span class="logic-flow-arrow">→</span>
+                    <span class="logic-flow-item">大盘风控<br><small>中证A500 120日均线</small></span>
+                </div>
+            </div>
+
+            <div class="logic-section">
+                <h4>二、五大核心因子</h4>
+                <table class="logic-table">
+                    <thead>
+                    <tr>
+                        <th style="width: 100px;">因子</th>
+                        <th style="width: 160px;">作用</th>
+                        <th>计算/过滤方式</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><strong>绝对动量</strong></td>
+                        <td>剔除弱势 ETF</td>
+                        <td>长期动量 &gt; 0 才纳入候选池</td>
+                    </tr>
+                    <tr>
+                        <td><strong>上涨质量</strong></td>
+                        <td>过滤“脉冲式上涨”</td>
+                        <td>窗口内上涨天数占比 &gt; 50%，稳步上涨才是真强势</td>
+                    </tr>
+                    <tr>
+                        <td><strong>相对动量</strong></td>
+                        <td>选出强势 ETF</td>
+                        <td>按长期动量降序排列，取前 N 名</td>
+                    </tr>
+                    <tr>
+                        <td><strong>低波因子</strong></td>
+                        <td>决定仓位分配</td>
+                        <td>权重 ∝ 1 / 波动率，波动越小分配越多</td>
+                    </tr>
+                    <tr>
+                        <td><strong>均线因子</strong></td>
+                        <td>趋势确认</td>
+                        <td>收盘价 &gt; N 日均线，确认涨势成立</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="logic-section">
+                <h4>三、双策略混用配置</h4>
+                <p>系统同时运行两套独立策略，分别计算后合并输出最终调仓建议。</p>
+                <table class="logic-table">
+                    <thead>
+                    <tr>
+                        <th>策略类型</th>
+                        <th>资金占比</th>
+                        <th>短期/长期动量窗口</th>
+                        <th>均线周期</th>
+                        <th>最大持仓</th>
+                        <th>单只上限</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><strong>平衡型 (BALANCED)</strong></td>
+                        <td>70%</td>
+                        <td>10 日 / 20 日</td>
+                        <td>60 日</td>
+                        <td>3 只</td>
+                        <td>40%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>积极型 (ACTIVE)</strong></td>
+                        <td>30%</td>
+                        <td>5 日 / 10 日</td>
+                        <td>20 日</td>
+                        <td>2 只</td>
+                        <td>50%</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="logic-section">
+                <h4>四、每周执行流程</h4>
+                <ol class="logic-list">
+                    <li><strong>数据准备</strong>：同步所有 ETF 最新净值，计算动量、波动率、均线及上涨天数占比。</li>
+                    <li><strong>四层筛选</strong>：绝对动量 &gt; 0 → 上涨天数占比 &gt; 50% → 收盘价 &gt; 均线 → 按相对动量排序。</li>
+                    <li><strong>独立计算两套策略</strong>：平衡型与积极型分别输出持仓建议。</li>
+                    <li><strong>大盘仓位调整</strong>：中证 A500 收盘价 &gt; 120 日均线为强势，否则为弱势；弱势时积极型清仓，平衡型仓位减半。</li>
+                    <li><strong>低波加权合并</strong>：波动越小权重越高，同一 ETF 保留各自策略权重，检查单只上限。</li>
+                    <li><strong>冷静期与止损检查</strong>：新买入 ETF 未满 3 个交易日不换仓（止损例外）；单只回撤 &gt; 8% 无条件清仓。</li>
+                </ol>
+            </div>
+
+            <div class="logic-section">
+                <h4>五、风控机制</h4>
+                <table class="logic-table">
+                    <thead>
+                    <tr>
+                        <th style="width: 100px;">规则</th>
+                        <th>触发条件</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><strong>止损</strong></td>
+                        <td>单只 ETF 自进入建议持仓以来，最高收盘净值回撤 &gt; 8%</td>
+                        <td>无条件清仓</td>
+                    </tr>
+                    <tr>
+                        <td><strong>单只上限</strong></td>
+                        <td>低波加权后权重超过策略配置上限</td>
+                        <td>截断并二次归一化</td>
+                    </tr>
+                    <tr>
+                        <td><strong>冷静期</strong></td>
+                        <td>新买入 ETF 未满 3 个交易日</td>
+                        <td>不换仓（止损例外）</td>
+                    </tr>
+                    <tr>
+                        <td><strong>大盘风控</strong></td>
+                        <td>中证 A500 ≤ 120 日均线</td>
+                        <td>积极型清仓，平衡型仓位减半</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="logic-section">
+                <h4>六、候选 ETF 池</h4>
+                <p>
+                    <span class="tag-category">宽基：510300 沪深300 / 510500 中证500 / 159949 创业板50 / 588000 科创50</span>
+                    <span class="tag-category">行业：512480 半导体 / 516100 新能源 / 512010 医药 / 512880 证券 / 512660 军工</span>
+                    <span class="tag-category">避险：511010 国债 / 518880 黄金</span>
+                </p>
+            </div>
+
+            <div class="logic-highlight">
+                <p><strong>一句话总结：</strong>用 70% 稳健仓位打底（平衡型）+ 30% 进攻仓位增强（积极型），通过“动量选股 + 上涨质量过滤 + 低波加权 + 均线过滤 + 大盘风控”五重机制，在控制风险的前提下争取跑赢市场。</p>
             </div>
         </div>
     </div>
@@ -279,7 +514,8 @@
                         <option value="WIDE_BASE">宽基</option>
                         <option value="SECTOR">行业</option>
                         <option value="BOND">债券</option>
-                        <option value="GOLD">黄金</option>
+                        <option value="GOLD">商品</option>
+                        <option value="OVERSEAS">海外</option>
                         <option value="OTHER">其他</option>
                     </select>
                 </div>
@@ -356,11 +592,14 @@
                     navCurve: [],
                     drawdownCurve: []
                 },
+                allMomentumRankGroups: [],
+                rankTagFilter: null,
                 navChart: null,
                 drawdownChart: null,
                 funds: [],
                 tags: [],
                 fundFilterTagId: null,
+                executingStrategy: false,
                 fundModal: {
                     visible: false,
                     isEdit: false,
@@ -378,6 +617,17 @@
                 return this.dashboard.positions
                     .reduce((sum, p) => sum + p.weight, 0)
                     .toFixed(2);
+            },
+            filteredAllMomentumRankGroups() {
+                if (!this.rankTagFilter) {
+                    return this.allMomentumRankGroups;
+                }
+                return this.allMomentumRankGroups.map(group => ({
+                    ...group,
+                    ranks: group.ranks.filter(item =>
+                        item.tags && item.tags.some(tag => tag.id === this.rankTagFilter)
+                    )
+                }));
             }
         },
         async mounted() {
@@ -400,6 +650,10 @@
                     await this.loadTags();
                 } else if (tab === 'dashboard') {
                     await this.loadDashboard();
+                } else if (tab === 'ranking') {
+                    await this.loadDashboard();
+                    await this.loadTags();
+                    await this.loadAllMomentumRanks();
                 }
             },
             async loadDashboard() {
@@ -411,6 +665,28 @@
                     }
                 } catch (e) {
                     console.error('加载看板数据失败', e);
+                }
+            },
+            async loadAllMomentumRanks() {
+                try {
+                    const res = await axios.get('/dashboard/api/momentum-ranks');
+                    this.allMomentumRankGroups = res.data;
+                } catch (e) {
+                    console.error('加载全部动量排名失败', e);
+                }
+            },
+            async executeStrategy() {
+                if (!confirm('确定要立即执行一次策略计算吗？')) return;
+                this.executingStrategy = true;
+                try {
+                    await axios.post('/api/strategy/execute');
+                    alert('策略执行成功');
+                    await this.loadDashboard();
+                } catch (e) {
+                    console.error('策略执行失败', e);
+                    alert('策略执行失败：' + (e.response?.data?.message || e.message));
+                } finally {
+                    this.executingStrategy = false;
                 }
             },
             formatPercent(value) {
@@ -452,7 +728,7 @@
                 }
             },
             fundTypeLabel(type) {
-                const map = { WIDE_BASE: '宽基', SECTOR: '行业', BOND: '债券', GOLD: '黄金', OTHER: '其他' };
+                const map = { WIDE_BASE: '宽基', SECTOR: '行业', BOND: '债券', GOLD: '商品', OVERSEAS: '海外', OTHER: '其他' };
                 return map[type] || type;
             },
             openFundModal(fund) {
