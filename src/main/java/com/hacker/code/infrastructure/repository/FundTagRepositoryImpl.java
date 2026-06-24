@@ -55,12 +55,15 @@ public class FundTagRepositoryImpl implements FundTagRepository {
     @Override
     public void update(FundTag tag) {
         LambdaQueryWrapper<FundTagPO> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(FundTagPO::getTagCode, tag.getTagCode());
+        wrapper.eq(FundTagPO::getId, tag.getId());
         fundTagMapper.update(toPO(tag), wrapper);
     }
 
     @Override
     public void deleteById(Long id) {
+        LambdaQueryWrapper<FundTagRelationPO> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(FundTagRelationPO::getTagId, id);
+        relationMapper.delete(wrapper);
         fundTagMapper.deleteById(id);
     }
 

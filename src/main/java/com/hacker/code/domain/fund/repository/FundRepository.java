@@ -11,6 +11,8 @@ public interface FundRepository {
 
     List<Fund> findAllEnabled();
 
+    List<Fund> findAll();
+
     List<Fund> findByTag(Long tagId);
 
     void save(Fund fund);

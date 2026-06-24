@@ -40,6 +40,13 @@ public class FundRepositoryImpl implements FundRepository {
     }
 
     @Override
+    public List<Fund> findAll() {
+        return fundMapper.selectList(null).stream()
+                .map(this::toDomain)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<Fund> findByTag(Long tagId) {
         return fundMapper.selectByTag(tagId).stream()
                 .map(this::toDomain)
