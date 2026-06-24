@@ -1,0 +1,47 @@
+
+server:
+  port: 8080
+
+spring:
+  application:
+    name: fund-momentum-strategy
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/momentum_strategy?useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: root
+    password: hanfugui
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    encoding: UTF-8
+    cache: false
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath:mapper/*.xml
+
+# 爬虫配置
+crawler:
+  sina-fund-url: https://finance.sina.com.cn/fund/quotes/
+  user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36
+  request-timeout: 30000
+  retry-count: 3
+
+# 策略默认参数
+strategy:
+  default:
+    momentum-window-short: 10
+    momentum-window-long: 20
+    ma-period: 60
+    volatility-window: 20
+    rebalance-freq: WEEKLY
+    max-positions: 3
+    single-weight-limit: 0.40
+    market-filter-switch: true
+    market-filter-ma: 120
+    market-filter-code: 000852  # 中证A500指数代码
