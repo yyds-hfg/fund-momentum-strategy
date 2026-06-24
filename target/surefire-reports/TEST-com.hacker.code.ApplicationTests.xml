@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.hacker.code.ApplicationTests" time="1.223" tests="1" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.hacker.code.ApplicationTests" time="6.55" tests="1" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="21"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
@@ -14,7 +14,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="CN"/>
     <property name="sun.boot.library.path" value="/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home/lib"/>
-    <property name="sun.java.command" value="/Users/hanfugui/code/fund-momentum-strategy/target/surefire/surefirebooter-20260624013246649_3.jar /Users/hanfugui/code/fund-momentum-strategy/target/surefire 2026-06-24T01-32-46_616-jvmRun1 surefire-20260624013246649_1tmp surefire_0-20260624013246649_2tmp"/>
+    <property name="sun.java.command" value="/Users/hanfugui/code/fund-momentum-strategy/target/surefire/surefirebooter-20260624130657035_3.jar /Users/hanfugui/code/fund-momentum-strategy/target/surefire 2026-06-24T13-06-57_008-jvmRun1 surefire-20260624130657035_1tmp surefire_0-20260624130657035_2tmp"/>
     <property name="http.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="/Users/hanfugui/code/fund-momentum-strategy/target/test-classes:/Users/hanfugui/code/fund-momentum-strategy/target/classes:/Users/hanfugui/.m2/repository/org/springframework/boot/spring-boot-starter-web/3.2.0/spring-boot-starter-web-3.2.0.jar:/Users/hanfugui/.m2/repository/org/springframework/boot/spring-boot-starter/3.2.0/spring-boot-starter-3.2.0.jar:/Users/hanfugui/.m2/repository/org/springframework/boot/spring-boot/3.2.0/spring-boot-3.2.0.jar:/Users/hanfugui/.m2/repository/org/springframework/boot/spring-boot-starter-logging/3.2.0/spring-boot-starter-logging-3.2.0.jar:/Users/hanfugui/.m2/repository/ch/qos/logback/logback-classic/1.4.11/logback-classic-1.4.11.jar:/Users/hanfugui/.m2/repository/ch/qos/logback/logback-core/1.4.11/logback-core-1.4.11.jar:/Users/hanfugui/.m2/repository/org/apache/logging/log4j/log4j-to-slf4j/2.21.1/log4j-to-slf4j-2.21.1.jar:/Users/hanfugui/.m2/repository/org/apache/logging/log4j/log4j-api/2.21.1/log4j-api-2.21.1.jar:/Users/hanfugui/.m2/repository/org/slf4j/jul-to-slf4j/2.0.9/jul-to-slf4j-2.0.9.jar:/Users/hanfugui/.m2/repository/jakarta/annotation/jakarta.annotation-api/2.1.1/jakarta.annotation-api-2.1.1.jar:/Users/hanfugui/.m2/repository/org/yaml/snakeyaml/2.2/snakeyaml-2.2.jar:/Users/hanfugui/.m2/repository/org/springframework/boot/spring-boot-starter-json/3.2.0/spring-boot-starter-json-3.2.0.jar:/Users/hanfugui/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.15.3/jackson-databind-2.15.3.jar:/Users/hanfugui/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.15.3/jackson-annotations-2.15.3.jar:/Users/hanfugui/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.15.3/jackson-core-2.15.3.jar:/Users/hanfugui/.m2/repository/com/fasterxml/jackson/datatype/jackson-datatype-jdk8/2.15.3/jackson-datatype-jdk8-2.15.3.jar:/Users/hanfugui/.m2/repository/com/fasterxml/jackson/datatype/jackson-datatype-jsr310/2.15.3/jackson-datatype-jsr310-2.15.3.jar:/Users/hanfugui/.m2/repository/com/fasterxml/jackson/module/jackson-module-parameter-names/2.15.3/jackson-module-parameter-names-2.15.3.jar:/Users/hanfugui/.m2/repository/org/springframework/boot/spring-boot-starter-tomcat/3.2.0/spring-boot-starter-tomcat-3.2.0.jar:/Users/hanfugui/.m2/repository/org/apache/tomcat/embed/tomcat-embed-core/10.1.16/tomcat-embed-core-10.1.16.jar:/Users/hanfugui/.m2/repository/org/apache/tomcat/embed/tomcat-embed-websocket/10.1.16/tomcat-embed-websocket-10.1.16.jar:/Users/hanfugui/.m2/repository/org/springframework/spring-web/6.1.1/spring-web-6.1.1.jar:/Users/hanfugui/.m2/repository/org/springframework/spring-beans/6.1.1/spring-beans-6.1.1.jar:/Users/hanfugui/.m2/repository/io/micrometer/micrometer-observation/1.12.0/micrometer-observation-1.12.0.jar:/Users/hanfugui/.m2/repository/io/micrometer/micrometer-commons/1.12.0/micrometer-commons-1.12.0.jar:/Users/hanfugui/.m2/repository/org/springframework/spring-webmvc/6.1.1/spring-webmvc-6.1.1.jar:/Users/hanfugui/.m2/repository/org/springframework/spring-aop/6.1.1/spring-aop-6.1.1.jar:/Users/hanfugui/.m2/repository/org/springframework/spring-context/6.1.1/spring-context-6.1.1.jar:/Users/hanfugui/.m2/repository/org/springframework/spring-expression/6.1.1/spring-expression-6.1.1.jar:/Users/hanfugui/.m2/repository/org/springframework/boot/spring-boot-starter-thymeleaf/3.2.0/spring-boot-starter-thymeleaf-3.2.0.jar:/Users/hanfugui/.m2/repository/org/thymeleaf/thymeleaf-spring6/3.1.2.RELEASE/thymeleaf-spring6-3.1.2.RELEASE.jar:/Users/hanfugui/.m2/repository/org/thymeleaf/thymeleaf/3.1.2.RELEASE/thymeleaf-3.1.2.RELEASE.jar:/Users/hanfugui/.m2/repository/org/attoparser/attoparser/2.0.7.RELEASE/attoparser-2.0.7.RELEASE.jar:/Users/hanfugui/.m2/repository/org/unbescape/unbescape/1.1.6.RELEASE/unbescape-1.1.6.RELEASE.jar:/Users/hanfugui/.m2/repository/org/slf4j/slf4j-api/2.0.9/slf4j-api-2.0.9.jar:/Users/hanfugui/.m2/repository/org/springframework/boot/spring-boot-starter-validation/3.2.0/spring-boot-starter-validation-3.2.0.jar:/Users/hanfugui/.m2/repository/org/apache/tomcat/embed/tomcat-embed-el/10.1.16/tomcat-embed-el-10.1.16.jar:/Users/hanfugui/.m2/repository/org/hibernate/validator/hibernate-validator/8.0.1.Final/hibernate-validator-8.0.1.Final.jar:/Users/hanfugui/.m2/repository/jakarta/validation/jakarta.validation-api/3.0.2/jakarta.validation-api-3.0.2.jar:/Users/hanfugui/.m2/repository/org/jboss/logging/jboss-logging/3.5.3.Final/jboss-logging-3.5.3.Final.jar:/Users/hanfugui/.m2/repository/com/fasterxml/classmate/1.6.0/classmate-1.6.0.jar:/Users/hanfugui/.m2/repository/com/baomidou/mybatis-plus-spring-boot3-starter/3.5.5/mybatis-plus-spring-boot3-starter-3.5.5.jar:/Users/hanfugui/.m2/repository/com/baomidou/mybatis-plus/3.5.5/mybatis-plus-3.5.5.jar:/Users/hanfugui/.m2/repository/com/baomidou/mybatis-plus-core/3.5.5/mybatis-plus-core-3.5.5.jar:/Users/hanfugui/.m2/repository/com/baomidou/mybatis-plus-annotation/3.5.5/mybatis-plus-annotation-3.5.5.jar:/Users/hanfugui/.m2/repository/com/baomidou/mybatis-plus-extension/3.5.5/mybatis-plus-extension-3.5.5.jar:/Users/hanfugui/.m2/repository/org/mybatis/mybatis/3.5.15/mybatis-3.5.15.jar:/Users/hanfugui/.m2/repository/com/github/jsqlparser/jsqlparser/4.6/jsqlparser-4.6.jar:/Users/hanfugui/.m2/repository/org/mybatis/mybatis-spring/3.0.3/mybatis-spring-3.0.3.jar:/Users/hanfugui/.m2/repository/com/baomidou/mybatis-plus-spring-boot-autoconfigure/3.5.5/mybatis-plus-spring-boot-autoconfigure-3.5.5.jar:/Users/hanfugui/.m2/repository/org/springframework/boot/spring-boot-autoconfigure/3.2.0/spring-boot-autoconfigure-3.2.0.jar:/Users/hanfugui/.m2/repository/org/springframework/boot/spring-boot-starter-jdbc/3.2.0/spring-boot-starter-jdbc-3.2.0.jar:/Users/hanfugui/.m2/repository/com/zaxxer/HikariCP/5.0.1/HikariCP-5.0.1.jar:/Users/hanfugui/.m2/repository/org/springframework/spring-jdbc/6.1.1/spring-jdbc-6.1.1.jar:/Users/hanfugui/.m2/repository/org/springframework/spring-tx/6.1.1/spring-tx-6.1.1.jar:/Users/hanfugui/.m2/repository/com/mysql/mysql-connector-j/8.1.0/mysql-connector-j-8.1.0.jar:/Users/hanfugui/.m2/repository/org/jsoup/jsoup/1.17.2/jsoup-1.17.2.jar:/Users/hanfugui/.m2/repository/org/projectlombok/lombok/1.18.30/lombok-1.18.30.jar:/Users/hanfugui/.m2/repository/org/springframework/boot/spring-boot-starter-test/3.2.0/spring-boot-starter-test-3.2.0.jar:/Users/hanfugui/.m2/repository/org/springframework/boot/spring-boot-test/3.2.0/spring-boot-test-3.2.0.jar:/Users/hanfugui/.m2/repository/org/springframework/boot/spring-boot-test-autoconfigure/3.2.0/spring-boot-test-autoconfigure-3.2.0.jar:/Users/hanfugui/.m2/repository/com/jayway/jsonpath/json-path/2.8.0/json-path-2.8.0.jar:/Users/hanfugui/.m2/repository/jakarta/xml/bind/jakarta.xml.bind-api/4.0.1/jakarta.xml.bind-api-4.0.1.jar:/Users/hanfugui/.m2/repository/jakarta/activation/jakarta.activation-api/2.1.2/jakarta.activation-api-2.1.2.jar:/Users/hanfugui/.m2/repository/net/minidev/json-smart/2.5.0/json-smart-2.5.0.jar:/Users/hanfugui/.m2/repository/net/minidev/accessors-smart/2.5.0/accessors-smart-2.5.0.jar:/Users/hanfugui/.m2/repository/org/ow2/asm/asm/9.3/asm-9.3.jar:/Users/hanfugui/.m2/repository/org/assertj/assertj-core/3.24.2/assertj-core-3.24.2.jar:/Users/hanfugui/.m2/repository/net/bytebuddy/byte-buddy/1.14.10/byte-buddy-1.14.10.jar:/Users/hanfugui/.m2/repository/org/awaitility/awaitility/4.2.0/awaitility-4.2.0.jar:/Users/hanfugui/.m2/repository/org/hamcrest/hamcrest/2.2/hamcrest-2.2.jar:/Users/hanfugui/.m2/repository/org/junit/jupiter/junit-jupiter/5.10.1/junit-jupiter-5.10.1.jar:/Users/hanfugui/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.10.1/junit-jupiter-api-5.10.1.jar:/Users/hanfugui/.m2/repository/org/opentest4j/opentest4j/1.3.0/opentest4j-1.3.0.jar:/Users/hanfugui/.m2/repository/org/junit/platform/junit-platform-commons/1.10.1/junit-platform-commons-1.10.1.jar:/Users/hanfugui/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/Users/hanfugui/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.10.1/junit-jupiter-params-5.10.1.jar:/Users/hanfugui/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.10.1/junit-jupiter-engine-5.10.1.jar:/Users/hanfugui/.m2/repository/org/junit/platform/junit-platform-engine/1.10.1/junit-platform-engine-1.10.1.jar:/Users/hanfugui/.m2/repository/org/mockito/mockito-core/5.7.0/mockito-core-5.7.0.jar:/Users/hanfugui/.m2/repository/net/bytebuddy/byte-buddy-agent/1.14.10/byte-buddy-agent-1.14.10.jar:/Users/hanfugui/.m2/repository/org/objenesis/objenesis/3.3/objenesis-3.3.jar:/Users/hanfugui/.m2/repository/org/mockito/mockito-junit-jupiter/5.7.0/mockito-junit-jupiter-5.7.0.jar:/Users/hanfugui/.m2/repository/org/skyscreamer/jsonassert/1.5.1/jsonassert-1.5.1.jar:/Users/hanfugui/.m2/repository/com/vaadin/external/google/android-json/0.0.20131108.vaadin1/android-json-0.0.20131108.vaadin1.jar:/Users/hanfugui/.m2/repository/org/springframework/spring-core/6.1.1/spring-core-6.1.1.jar:/Users/hanfugui/.m2/repository/org/springframework/spring-jcl/6.1.1/spring-jcl-6.1.1.jar:/Users/hanfugui/.m2/repository/org/springframework/spring-test/6.1.1/spring-test-6.1.1.jar:/Users/hanfugui/.m2/repository/org/xmlunit/xmlunit-core/2.9.1/xmlunit-core-2.9.1.jar:"/>
@@ -33,7 +33,7 @@
     <property name="FILE_LOG_CHARSET" value="UTF-8"/>
     <property name="java.awt.headless" value="true"/>
     <property name="apple.awt.application.name" value="ForkedBooter"/>
-    <property name="surefire.real.class.path" value="/Users/hanfugui/code/fund-momentum-strategy/target/surefire/surefirebooter-20260624013246649_3.jar"/>
+    <property name="surefire.real.class.path" value="/Users/hanfugui/code/fund-momentum-strategy/target/surefire/surefirebooter-20260624130657035_3.jar"/>
     <property name="user.script" value="Hans"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
@@ -48,11 +48,12 @@
     <property name="localRepository" value="/Users/hanfugui/.m2/repository"/>
     <property name="java.vendor.url.bug" value="https://bugreport.java.com/bugreport/"/>
     <property name="java.io.tmpdir" value="/var/folders/lh/4lsp9bhs62528pfbh5dj21n40000gn/T/"/>
+    <property name="com.zaxxer.hikari.pool_number" value="1"/>
     <property name="java.version" value="21.0.11"/>
     <property name="user.dir" value="/Users/hanfugui/code/fund-momentum-strategy"/>
     <property name="os.arch" value="aarch64"/>
     <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
-    <property name="PID" value="9955"/>
+    <property name="PID" value="17341"/>
     <property name="CONSOLE_LOG_CHARSET" value="UTF-8"/>
     <property name="native.encoding" value="UTF-8"/>
     <property name="java.library.path" value="/Users/hanfugui/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:."/>
@@ -65,9 +66,9 @@
     <property name="java.class.version" value="65.0"/>
     <property name="LOGGED_APPLICATION_NAME" value="[fund-momentum-strategy] "/>
   </properties>
-  <testcase name="contextLoads" classname="com.hacker.code.ApplicationTests" time="0.328">
-    <system-out><![CDATA[01:32:46.900 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.hacker.code.ApplicationTests]: ApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-01:32:46.934 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.hacker.code.Application for test class com.hacker.code.ApplicationTests
+  <testcase name="contextLoads" classname="com.hacker.code.ApplicationTests" time="0.316">
+    <system-out><![CDATA[13:06:57.277 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.hacker.code.ApplicationTests]: ApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+13:06:57.313 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.hacker.code.Application for test class com.hacker.code.ApplicationTests
 
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -77,15 +78,501 @@
  =========|_|==============|___/=/_/_/_/
  :: Spring Boot ::                (v3.2.0)
 
-2026-06-24T01:32:47.060+08:00  INFO 9955 --- [fund-momentum-strategy] [           main] com.hacker.code.ApplicationTests         : Starting ApplicationTests using Java 21.0.11 with PID 9955 (started by hanfugui in /Users/hanfugui/code/fund-momentum-strategy)
-2026-06-24T01:32:47.060+08:00  INFO 9955 --- [fund-momentum-strategy] [           main] com.hacker.code.ApplicationTests         : No active profile set, falling back to 1 default profile: "default"
+2026-06-24T13:06:57.432+08:00  INFO 17341 --- [fund-momentum-strategy] [           main] com.hacker.code.ApplicationTests         : Starting ApplicationTests using Java 21.0.11 with PID 17341 (started by hanfugui in /Users/hanfugui/code/fund-momentum-strategy)
+2026-06-24T13:06:57.432+08:00  INFO 17341 --- [fund-momentum-strategy] [           main] com.hacker.code.ApplicationTests         : No active profile set, falling back to 1 default profile: "default"
 Logging initialized using 'class org.apache.ibatis.logging.stdout.StdOutImpl' adapter.
-Initialization Sequence datacenterId:0 workerId:16
+Initialization Sequence datacenterId:0 workerId:26
  _ _   |_  _ _|_. ___ _ |    _ 
 | | |\/|_)(_| | |_\  |_)||_|_\ 
      /               |         
                         3.5.5 
-2026-06-24T01:32:47.732+08:00  INFO 9955 --- [fund-momentum-strategy] [           main] com.hacker.code.ApplicationTests         : Started ApplicationTests in 0.755 seconds (process running for 1.051)
+2026-06-24T13:06:58.110+08:00  INFO 17341 --- [fund-momentum-strategy] [           main] com.hacker.code.ApplicationTests         : Started ApplicationTests in 0.76 seconds (process running for 1.047)
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@3e0a9b1d] was not registered for synchronization because synchronization is not active
+2026-06-24T13:06:58.136+08:00  INFO 17341 --- [fund-momentum-strategy] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-06-24T13:06:58.195+08:00  INFO 17341 --- [fund-momentum-strategy] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@6aa6c17
+2026-06-24T13:06:58.195+08:00  INFO 17341 --- [fund-momentum-strategy] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+JDBC Connection [HikariProxyConnection@321080009 wrapping com.mysql.cj.jdbc.ConnectionImpl@6aa6c17] will not be managed by Spring
+==>  Preparing: SELECT id,fund_code,fund_name,fund_type,listed_date,status,create_time,update_time FROM fund WHERE (status = ?)
+==> Parameters: 1(Integer)
+<==    Columns: id, fund_code, fund_name, fund_type, listed_date, status, create_time, update_time
+<==        Row: 1, 510300, 沪深300ETF, WIDE_BASE, null, 1, 2026-06-24 01:37:56, 2026-06-24 01:37:56
+<==        Row: 2, 510500, 中证500ETF, WIDE_BASE, null, 1, 2026-06-24 01:37:56, 2026-06-24 01:37:56
+<==        Row: 3, 159949, 创业板50ETF, WIDE_BASE, null, 1, 2026-06-24 01:37:56, 2026-06-24 01:37:56
+<==        Row: 4, 588000, 科创50ETF, WIDE_BASE, null, 1, 2026-06-24 01:37:56, 2026-06-24 01:37:56
+<==        Row: 5, 512480, 半导体ETF, SECTOR, null, 1, 2026-06-24 01:37:56, 2026-06-24 01:37:56
+<==        Row: 6, 516100, 新能源ETF, SECTOR, null, 1, 2026-06-24 01:37:56, 2026-06-24 01:37:56
+<==        Row: 7, 512010, 医药ETF, SECTOR, null, 1, 2026-06-24 01:37:56, 2026-06-24 01:37:56
+<==        Row: 8, 512880, 证券ETF, SECTOR, null, 1, 2026-06-24 01:37:56, 2026-06-24 01:37:56
+<==        Row: 9, 512660, 军工ETF, SECTOR, null, 1, 2026-06-24 01:37:56, 2026-06-24 01:37:56
+<==        Row: 10, 511010, 国债ETF, BOND, null, 1, 2026-06-24 01:37:56, 2026-06-24 01:37:56
+<==        Row: 11, 518880, 黄金ETF, GOLD, null, 1, 2026-06-24 01:37:56, 2026-06-24 01:37:56
+<==        Row: 12, 000852, 中证A500, WIDE_BASE, null, 1, 2026-06-24 01:37:56, 2026-06-24 12:56:14
+<==      Total: 12
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@3e0a9b1d]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@6c830ebd] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@368384503 wrapping com.mysql.cj.jdbc.ConnectionImpl@6aa6c17] will not be managed by Spring
+==>  Preparing: SELECT t.* FROM fund_tag t INNER JOIN fund_tag_relation r ON t.id = r.tag_id WHERE r.fund_code = ?
+==> Parameters: 510300(String)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@6c830ebd]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@410382cb] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@966745519 wrapping com.mysql.cj.jdbc.ConnectionImpl@6aa6c17] will not be managed by Spring
+==>  Preparing: SELECT t.* FROM fund_tag t INNER JOIN fund_tag_relation r ON t.id = r.tag_id WHERE r.fund_code = ?
+==> Parameters: 510500(String)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@410382cb]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@29f3185c] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1958462067 wrapping com.mysql.cj.jdbc.ConnectionImpl@6aa6c17] will not be managed by Spring
+==>  Preparing: SELECT t.* FROM fund_tag t INNER JOIN fund_tag_relation r ON t.id = r.tag_id WHERE r.fund_code = ?
+==> Parameters: 159949(String)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@29f3185c]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@118fbaf0] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@546271589 wrapping com.mysql.cj.jdbc.ConnectionImpl@6aa6c17] will not be managed by Spring
+==>  Preparing: SELECT t.* FROM fund_tag t INNER JOIN fund_tag_relation r ON t.id = r.tag_id WHERE r.fund_code = ?
+==> Parameters: 588000(String)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@118fbaf0]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@693f2c89] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@84624228 wrapping com.mysql.cj.jdbc.ConnectionImpl@6aa6c17] will not be managed by Spring
+==>  Preparing: SELECT t.* FROM fund_tag t INNER JOIN fund_tag_relation r ON t.id = r.tag_id WHERE r.fund_code = ?
+==> Parameters: 512480(String)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@693f2c89]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@38054d01] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@684619244 wrapping com.mysql.cj.jdbc.ConnectionImpl@6aa6c17] will not be managed by Spring
+==>  Preparing: SELECT t.* FROM fund_tag t INNER JOIN fund_tag_relation r ON t.id = r.tag_id WHERE r.fund_code = ?
+==> Parameters: 516100(String)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@38054d01]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@9dc782d] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@463688018 wrapping com.mysql.cj.jdbc.ConnectionImpl@6aa6c17] will not be managed by Spring
+==>  Preparing: SELECT t.* FROM fund_tag t INNER JOIN fund_tag_relation r ON t.id = r.tag_id WHERE r.fund_code = ?
+==> Parameters: 512010(String)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@9dc782d]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@3ff8a3ad] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@1427089775 wrapping com.mysql.cj.jdbc.ConnectionImpl@6aa6c17] will not be managed by Spring
+==>  Preparing: SELECT t.* FROM fund_tag t INNER JOIN fund_tag_relation r ON t.id = r.tag_id WHERE r.fund_code = ?
+==> Parameters: 512880(String)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@3ff8a3ad]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@5d01b0d8] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@656311582 wrapping com.mysql.cj.jdbc.ConnectionImpl@6aa6c17] will not be managed by Spring
+==>  Preparing: SELECT t.* FROM fund_tag t INNER JOIN fund_tag_relation r ON t.id = r.tag_id WHERE r.fund_code = ?
+==> Parameters: 512660(String)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@5d01b0d8]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@61e14b53] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@834056391 wrapping com.mysql.cj.jdbc.ConnectionImpl@6aa6c17] will not be managed by Spring
+==>  Preparing: SELECT t.* FROM fund_tag t INNER JOIN fund_tag_relation r ON t.id = r.tag_id WHERE r.fund_code = ?
+==> Parameters: 511010(String)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@61e14b53]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7d1cb59f] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@382522044 wrapping com.mysql.cj.jdbc.ConnectionImpl@6aa6c17] will not be managed by Spring
+==>  Preparing: SELECT t.* FROM fund_tag t INNER JOIN fund_tag_relation r ON t.id = r.tag_id WHERE r.fund_code = ?
+==> Parameters: 518880(String)
+<==      Total: 0
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7d1cb59f]
+Creating a new SqlSession
+SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@6f7a20da] was not registered for synchronization because synchronization is not active
+JDBC Connection [HikariProxyConnection@2001912039 wrapping com.mysql.cj.jdbc.ConnectionImpl@6aa6c17] will not be managed by Spring
+==>  Preparing: SELECT t.* FROM fund_tag t INNER JOIN fund_tag_relation r ON t.id = r.tag_id WHERE r.fund_code = ?
+==> Parameters: 000852(String)
+<==    Columns: id, tag_code, tag_name, color, create_time
+<==        Row: 19, BASIC, 大盘基准, #3c5268, 2026-06-24 12:55:41
+<==      Total: 1
+Closing non transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@6f7a20da]
+2026-06-24T13:06:58.794+08:00 ERROR 17341 --- [fund-momentum-strategy] [           main] c.h.c.i.e.e.EastMoneyKlineNavFetcher     : Failed to fetch history NAV from EastMoney for 510300: I/O error on GET request for "https://push2his.eastmoney.com/api/qt/stock/kline/get": Unexpected end of file from server
+2026-06-24T13:06:58.794+08:00  INFO 17341 --- [fund-momentum-strategy] [           main] c.h.c.a.service.FundDataSyncAppService   : Synced 0 records for 510300
+2026-06-24T13:06:59.201+08:00 ERROR 17341 --- [fund-momentum-strategy] [           main] c.h.c.i.e.e.EastMoneyKlineNavFetcher     : Failed to fetch history NAV from EastMoney for 510500: I/O error on GET request for "https://push2his.eastmoney.com/api/qt/stock/kline/get": Unexpected end of file from server
+2026-06-24T13:06:59.201+08:00  INFO 17341 --- [fund-momentum-strategy] [           main] c.h.c.a.service.FundDataSyncAppService   : Synced 0 records for 510500
+2026-06-24T13:06:59.627+08:00 ERROR 17341 --- [fund-momentum-strategy] [           main] c.h.c.i.e.e.EastMoneyKlineNavFetcher     : Failed to fetch history NAV from EastMoney for 159949: I/O error on GET request for "https://push2his.eastmoney.com/api/qt/stock/kline/get": Unexpected end of file from server
+2026-06-24T13:06:59.627+08:00  INFO 17341 --- [fund-momentum-strategy] [           main] c.h.c.a.service.FundDataSyncAppService   : Synced 0 records for 159949
+2026-06-24T13:07:00.055+08:00 ERROR 17341 --- [fund-momentum-strategy] [           main] c.h.c.i.e.e.EastMoneyKlineNavFetcher     : Failed to fetch history NAV from EastMoney for 588000: I/O error on GET request for "https://push2his.eastmoney.com/api/qt/stock/kline/get": Unexpected end of file from server
+2026-06-24T13:07:00.055+08:00  INFO 17341 --- [fund-momentum-strategy] [           main] c.h.c.a.service.FundDataSyncAppService   : Synced 0 records for 588000
+2026-06-24T13:07:00.488+08:00 ERROR 17341 --- [fund-momentum-strategy] [           main] c.h.c.i.e.e.EastMoneyKlineNavFetcher     : Failed to fetch history NAV from EastMoney for 512480: I/O error on GET request for "https://push2his.eastmoney.com/api/qt/stock/kline/get": Unexpected end of file from server
+2026-06-24T13:07:00.489+08:00  INFO 17341 --- [fund-momentum-strategy] [           main] c.h.c.a.service.FundDataSyncAppService   : Synced 0 records for 512480
+2026-06-24T13:07:00.913+08:00 ERROR 17341 --- [fund-momentum-strategy] [           main] c.h.c.i.e.e.EastMoneyKlineNavFetcher     : Failed to fetch history NAV from EastMoney for 516100: I/O error on GET request for "https://push2his.eastmoney.com/api/qt/stock/kline/get": Unexpected end of file from server
+2026-06-24T13:07:00.913+08:00  INFO 17341 --- [fund-momentum-strategy] [           main] c.h.c.a.service.FundDataSyncAppService   : Synced 0 records for 516100
+2026-06-24T13:07:01.325+08:00 ERROR 17341 --- [fund-momentum-strategy] [           main] c.h.c.i.e.e.EastMoneyKlineNavFetcher     : Failed to fetch history NAV from EastMoney for 512010: I/O error on GET request for "https://push2his.eastmoney.com/api/qt/stock/kline/get": Unexpected end of file from server
+2026-06-24T13:07:01.325+08:00  INFO 17341 --- [fund-momentum-strategy] [           main] c.h.c.a.service.FundDataSyncAppService   : Synced 0 records for 512010
+2026-06-24T13:07:01.749+08:00 ERROR 17341 --- [fund-momentum-strategy] [           main] c.h.c.i.e.e.EastMoneyKlineNavFetcher     : Failed to fetch history NAV from EastMoney for 512880: I/O error on GET request for "https://push2his.eastmoney.com/api/qt/stock/kline/get": Unexpected end of file from server
+2026-06-24T13:07:01.749+08:00  INFO 17341 --- [fund-momentum-strategy] [           main] c.h.c.a.service.FundDataSyncAppService   : Synced 0 records for 512880
+2026-06-24T13:07:02.171+08:00 ERROR 17341 --- [fund-momentum-strategy] [           main] c.h.c.i.e.e.EastMoneyKlineNavFetcher     : Failed to fetch history NAV from EastMoney for 512660: I/O error on GET request for "https://push2his.eastmoney.com/api/qt/stock/kline/get": Unexpected end of file from server
+2026-06-24T13:07:02.171+08:00  INFO 17341 --- [fund-momentum-strategy] [           main] c.h.c.a.service.FundDataSyncAppService   : Synced 0 records for 512660
+2026-06-24T13:07:02.593+08:00 ERROR 17341 --- [fund-momentum-strategy] [           main] c.h.c.i.e.e.EastMoneyKlineNavFetcher     : Failed to fetch history NAV from EastMoney for 511010: I/O error on GET request for "https://push2his.eastmoney.com/api/qt/stock/kline/get": Unexpected end of file from server
+2026-06-24T13:07:02.594+08:00  INFO 17341 --- [fund-momentum-strategy] [           main] c.h.c.a.service.FundDataSyncAppService   : Synced 0 records for 511010
+2026-06-24T13:07:02.964+08:00 ERROR 17341 --- [fund-momentum-strategy] [           main] c.h.c.i.e.e.EastMoneyKlineNavFetcher     : Failed to fetch history NAV from EastMoney for 518880: I/O error on GET request for "https://push2his.eastmoney.com/api/qt/stock/kline/get": Unexpected end of file from server
+2026-06-24T13:07:02.964+08:00  INFO 17341 --- [fund-momentum-strategy] [           main] c.h.c.a.service.FundDataSyncAppService   : Synced 0 records for 518880
+2026-06-24T13:07:03.398+08:00 ERROR 17341 --- [fund-momentum-strategy] [           main] c.h.c.i.e.e.EastMoneyKlineNavFetcher     : Failed to fetch history NAV from EastMoney for 000852: I/O error on GET request for "https://push2his.eastmoney.com/api/qt/stock/kline/get": Unexpected end of file from server
+2026-06-24T13:07:03.398+08:00  INFO 17341 --- [fund-momentum-strategy] [           main] c.h.c.a.service.FundDataSyncAppService   : Synced 0 records for 000852
+2026-06-24T13:07:03.398+08:00  INFO 17341 --- [fund-momentum-strategy] [           main] c.h.c.a.service.FundDataSyncAppService   : NAV sync completed. Total: 12, Success: 0, Failed: 12, Records: 0
+2026-06-24T13:07:03.402+08:00  INFO 17341 --- [fund-momentum-strategy] [           main] c.h.c.a.s.StrategyExecutionAppService    : Executing weekly strategy for 2026-06-24
+Creating a new SqlSession
+Registering transaction synchronization for SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7]
+JDBC Connection [HikariProxyConnection@1163107288 wrapping com.mysql.cj.jdbc.ConnectionImpl@6aa6c17] will be managed by Spring
+==>  Preparing: SELECT id,fund_code,fund_name,fund_type,listed_date,status,create_time,update_time FROM fund WHERE (status = ?)
+==> Parameters: 1(Integer)
+<==    Columns: id, fund_code, fund_name, fund_type, listed_date, status, create_time, update_time
+<==        Row: 1, 510300, 沪深300ETF, WIDE_BASE, null, 1, 2026-06-24 01:37:56, 2026-06-24 01:37:56
+<==        Row: 2, 510500, 中证500ETF, WIDE_BASE, null, 1, 2026-06-24 01:37:56, 2026-06-24 01:37:56
+<==        Row: 3, 159949, 创业板50ETF, WIDE_BASE, null, 1, 2026-06-24 01:37:56, 2026-06-24 01:37:56
+<==        Row: 4, 588000, 科创50ETF, WIDE_BASE, null, 1, 2026-06-24 01:37:56, 2026-06-24 01:37:56
+<==        Row: 5, 512480, 半导体ETF, SECTOR, null, 1, 2026-06-24 01:37:56, 2026-06-24 01:37:56
+<==        Row: 6, 516100, 新能源ETF, SECTOR, null, 1, 2026-06-24 01:37:56, 2026-06-24 01:37:56
+<==        Row: 7, 512010, 医药ETF, SECTOR, null, 1, 2026-06-24 01:37:56, 2026-06-24 01:37:56
+<==        Row: 8, 512880, 证券ETF, SECTOR, null, 1, 2026-06-24 01:37:56, 2026-06-24 01:37:56
+<==        Row: 9, 512660, 军工ETF, SECTOR, null, 1, 2026-06-24 01:37:56, 2026-06-24 01:37:56
+<==        Row: 10, 511010, 国债ETF, BOND, null, 1, 2026-06-24 01:37:56, 2026-06-24 01:37:56
+<==        Row: 11, 518880, 黄金ETF, GOLD, null, 1, 2026-06-24 01:37:56, 2026-06-24 01:37:56
+<==        Row: 12, 000852, 中证A500, WIDE_BASE, null, 1, 2026-06-24 01:37:56, 2026-06-24 12:56:14
+<==      Total: 12
+Releasing transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7]
+Fetched SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7] from current transaction
+==>  Preparing: SELECT t.* FROM fund_tag t INNER JOIN fund_tag_relation r ON t.id = r.tag_id WHERE r.fund_code = ?
+==> Parameters: 510300(String)
+<==      Total: 0
+Releasing transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7]
+Fetched SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7] from current transaction
+==>  Preparing: SELECT t.* FROM fund_tag t INNER JOIN fund_tag_relation r ON t.id = r.tag_id WHERE r.fund_code = ?
+==> Parameters: 510500(String)
+<==      Total: 0
+Releasing transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7]
+Fetched SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7] from current transaction
+==>  Preparing: SELECT t.* FROM fund_tag t INNER JOIN fund_tag_relation r ON t.id = r.tag_id WHERE r.fund_code = ?
+==> Parameters: 159949(String)
+<==      Total: 0
+Releasing transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7]
+Fetched SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7] from current transaction
+==>  Preparing: SELECT t.* FROM fund_tag t INNER JOIN fund_tag_relation r ON t.id = r.tag_id WHERE r.fund_code = ?
+==> Parameters: 588000(String)
+<==      Total: 0
+Releasing transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7]
+Fetched SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7] from current transaction
+==>  Preparing: SELECT t.* FROM fund_tag t INNER JOIN fund_tag_relation r ON t.id = r.tag_id WHERE r.fund_code = ?
+==> Parameters: 512480(String)
+<==      Total: 0
+Releasing transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7]
+Fetched SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7] from current transaction
+==>  Preparing: SELECT t.* FROM fund_tag t INNER JOIN fund_tag_relation r ON t.id = r.tag_id WHERE r.fund_code = ?
+==> Parameters: 516100(String)
+<==      Total: 0
+Releasing transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7]
+Fetched SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7] from current transaction
+==>  Preparing: SELECT t.* FROM fund_tag t INNER JOIN fund_tag_relation r ON t.id = r.tag_id WHERE r.fund_code = ?
+==> Parameters: 512010(String)
+<==      Total: 0
+Releasing transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7]
+Fetched SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7] from current transaction
+==>  Preparing: SELECT t.* FROM fund_tag t INNER JOIN fund_tag_relation r ON t.id = r.tag_id WHERE r.fund_code = ?
+==> Parameters: 512880(String)
+<==      Total: 0
+Releasing transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7]
+Fetched SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7] from current transaction
+==>  Preparing: SELECT t.* FROM fund_tag t INNER JOIN fund_tag_relation r ON t.id = r.tag_id WHERE r.fund_code = ?
+==> Parameters: 512660(String)
+<==      Total: 0
+Releasing transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7]
+Fetched SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7] from current transaction
+==>  Preparing: SELECT t.* FROM fund_tag t INNER JOIN fund_tag_relation r ON t.id = r.tag_id WHERE r.fund_code = ?
+==> Parameters: 511010(String)
+<==      Total: 0
+Releasing transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7]
+Fetched SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7] from current transaction
+==>  Preparing: SELECT t.* FROM fund_tag t INNER JOIN fund_tag_relation r ON t.id = r.tag_id WHERE r.fund_code = ?
+==> Parameters: 518880(String)
+<==      Total: 0
+Releasing transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7]
+Fetched SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7] from current transaction
+==>  Preparing: SELECT t.* FROM fund_tag t INNER JOIN fund_tag_relation r ON t.id = r.tag_id WHERE r.fund_code = ?
+==> Parameters: 000852(String)
+<==    Columns: id, tag_code, tag_name, color, create_time
+<==        Row: 19, BASIC, 大盘基准, #3c5268, 2026-06-24 12:55:41
+<==      Total: 1
+Releasing transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7]
+Fetched SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7] from current transaction
+==>  Preparing: SELECT * FROM strategy_config WHERE status = 1
+==> Parameters: 
+<==    Columns: id, strategy_type, short_momentum_window, long_momentum_window, up_days_threshold, ma_window, volatility_window, max_holding_count, single_weight_cap, rebalancing_frequency, cooling_period_days, allocation_ratio, status, create_time, update_time
+<==        Row: 1, BALANCED, 10, 20, 0.5000, 60, 20, 3, 0.4000, WEEKLY, 3, 0.7000, 1, 2026-06-24 01:37:57, 2026-06-24 01:37:57
+<==        Row: 2, ACTIVE, 5, 10, 0.5000, 20, 10, 2, 0.5000, WEEKLY, 3, 0.3000, 1, 2026-06-24 01:37:57, 2026-06-24 01:37:57
+<==      Total: 2
+Releasing transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7]
+Fetched SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7] from current transaction
+==>  Preparing: SELECT * FROM fund_nav WHERE fund_code = ? AND nav_date BETWEEN ? AND ? ORDER BY nav_date ASC
+==> Parameters: 510300(String), 2026-03-26(LocalDate), 2026-06-24(LocalDate)
+<==    Columns: id, fund_code, nav_date, open_nav, high_nav, low_nav, close_nav, volume, create_time
+<==        Row: 59, 510300, 2026-03-26, 4.5360, 4.5470, 4.4770, 4.4880, 4742424, 2026-06-24 12:32:39
+<==        Row: 60, 510300, 2026-03-27, 4.4500, 4.5300, 4.4450, 4.5080, 5626908, 2026-06-24 12:32:39
+<==        Row: 61, 510300, 2026-03-30, 4.4620, 4.5050, 4.4530, 4.5000, 5439943, 2026-06-24 12:32:39
+<==        Row: 62, 510300, 2026-03-31, 4.5010, 4.5290, 4.4620, 4.4630, 5305656, 2026-06-24 12:32:39
+<==        Row: 63, 510300, 2026-04-01, 4.5200, 4.5420, 4.5010, 4.5340, 5012281, 2026-06-24 12:32:39
+<==        Row: 64, 510300, 2026-04-02, 4.5210, 4.5260, 4.4700, 4.4890, 4663511, 2026-06-24 12:32:39
+<==        Row: 65, 510300, 2026-04-03, 4.4950, 4.5060, 4.4460, 4.4540, 4261096, 2026-06-24 12:32:39
+<==        Row: 66, 510300, 2026-04-07, 4.4550, 4.4700, 4.4310, 4.4460, 4285686, 2026-06-24 12:32:39
+<==        Row: 67, 510300, 2026-04-08, 4.5190, 4.6040, 4.5170, 4.6020, 9968846, 2026-06-24 12:32:39
+<==        Row: 68, 510300, 2026-04-09, 4.5730, 4.5860, 4.5600, 4.5720, 7049553, 2026-06-24 12:32:39
+<==        Row: 69, 510300, 2026-04-10, 4.5880, 4.6640, 4.5880, 4.6420, 9063873, 2026-06-24 12:32:39
+<==        Row: 70, 510300, 2026-04-13, 4.6290, 4.6600, 4.6230, 4.6520, 3928926, 2026-06-24 12:32:39
+<==        Row: 71, 510300, 2026-04-14, 4.6790, 4.7120, 4.6630, 4.7120, 4276571, 2026-06-24 12:32:39
+<==        Row: 72, 510300, 2026-04-15, 4.7320, 4.7460, 4.6840, 4.6940, 6759806, 2026-06-24 12:32:39
+<==        Row: 73, 510300, 2026-04-16, 4.7040, 4.7470, 4.7000, 4.7460, 8532344, 2026-06-24 12:32:39
+<==        Row: 74, 510300, 2026-04-17, 4.7370, 4.7500, 4.7220, 4.7390, 7361501, 2026-06-24 12:32:39
+<==        Row: 75, 510300, 2026-04-20, 4.7350, 4.7770, 4.7280, 4.7650, 7624578, 2026-06-24 12:32:39
+<==        Row: 76, 510300, 2026-04-21, 4.7640, 4.7860, 4.7300, 4.7760, 6361081, 2026-06-24 12:32:39
+<==        Row: 77, 510300, 2026-04-22, 4.7600, 4.8130, 4.7560, 4.8110, 10125926, 2026-06-24 12:32:39
+<==        Row: 78, 510300, 2026-04-23, 4.8200, 4.8340, 4.7720, 4.8010, 10085181, 2026-06-24 12:32:39
+<==        Row: 79, 510300, 2026-04-24, 4.7850, 4.7980, 4.7500, 4.7820, 7193226, 2026-06-24 12:32:39
+<==        Row: 80, 510300, 2026-04-27, 4.7860, 4.8100, 4.7730, 4.7820, 9280360, 2026-06-24 12:32:39
+<==        Row: 81, 510300, 2026-04-28, 4.7660, 4.7900, 4.7570, 4.7700, 8644202, 2026-06-24 12:32:39
+<==        Row: 82, 510300, 2026-04-29, 4.7550, 4.8280, 4.7550, 4.8210, 12796798, 2026-06-24 12:32:39
+<==        Row: 83, 510300, 2026-04-30, 4.8300, 4.8410, 4.8080, 4.8240, 16517864, 2026-06-24 12:32:39
+<==        Row: 84, 510300, 2026-05-06, 4.8660, 4.9140, 4.8520, 4.8880, 18677828, 2026-06-24 12:32:39
+<==        Row: 85, 510300, 2026-05-07, 4.9050, 4.9140, 4.8790, 4.9120, 20946226, 2026-06-24 12:32:39
+<==        Row: 86, 510300, 2026-05-08, 4.8900, 4.9020, 4.8620, 4.8860, 12535649, 2026-06-24 12:32:39
+<==        Row: 87, 510300, 2026-05-11, 4.9110, 4.9800, 4.9000, 4.9660, 21165218, 2026-06-24 12:32:39
+<==        Row: 88, 510300, 2026-05-12, 4.9750, 4.9870, 4.9440, 4.9630, 10021705, 2026-06-24 12:32:39
+<==        Row: 89, 510300, 2026-05-13, 4.9400, 5.0230, 4.9390, 5.0170, 12726150, 2026-06-24 12:32:39
+<==        Row: 90, 510300, 2026-05-14, 5.0370, 5.0410, 4.9310, 4.9410, 10281646, 2026-06-24 12:32:39
+<==        Row: 91, 510300, 2026-05-15, 4.9350, 4.9540, 4.8520, 4.8780, 10479024, 2026-06-24 12:32:39
+<==        Row: 92, 510300, 2026-05-18, 4.8550, 4.8850, 4.8190, 4.8520, 5835764, 2026-06-24 12:32:39
+<==        Row: 93, 510300, 2026-05-19, 4.8430, 4.8740, 4.7890, 4.8690, 9674999, 2026-06-24 12:32:39
+<==        Row: 94, 510300, 2026-05-20, 4.8450, 4.8820, 4.8400, 4.8710, 9597201, 2026-06-24 12:32:39
+<==        Row: 95, 510300, 2026-05-21, 4.8970, 4.9540, 4.8010, 4.8080, 12055773, 2026-06-24 12:32:39
+<==        Row: 96, 510300, 2026-05-22, 4.8280, 4.8680, 4.8070, 4.8620, 13250518, 2026-06-24 12:32:39
+<==        Row: 97, 510300, 2026-05-25, 4.8800, 4.9380, 4.8720, 4.9370, 16250559, 2026-06-24 12:32:39
+<==        Row: 98, 510300, 2026-05-26, 4.9120, 4.9750, 4.9100, 4.9720, 9686752, 2026-06-24 12:32:39
+<==        Row: 99, 510300, 2026-05-27, 4.9630, 4.9930, 4.9130, 4.9320, 6405215, 2026-06-24 12:32:39
+<==        Row: 100, 510300, 2026-05-28, 4.9170, 4.9480, 4.8660, 4.9320, 4396498, 2026-06-24 12:32:39
+<==        Row: 101, 510300, 2026-05-29, 4.9460, 4.9780, 4.9000, 4.9230, 6566854, 2026-06-24 12:32:39
+<==        Row: 102, 510300, 2026-06-01, 4.9230, 4.9400, 4.8610, 4.8680, 4990927, 2026-06-24 12:32:39
+<==        Row: 103, 510300, 2026-06-02, 4.8670, 4.9560, 4.8560, 4.9360, 6809437, 2026-06-24 12:32:39
+<==        Row: 104, 510300, 2026-06-03, 4.9380, 5.0160, 4.9280, 4.9650, 7604619, 2026-06-24 12:32:39
+<==        Row: 105, 510300, 2026-06-04, 4.9190, 4.9610, 4.9100, 4.9260, 6097283, 2026-06-24 12:32:39
+<==        Row: 106, 510300, 2026-06-05, 4.9090, 4.9480, 4.8250, 4.8430, 6182927, 2026-06-24 12:32:39
+<==        Row: 107, 510300, 2026-06-08, 4.7900, 4.8080, 4.7050, 4.7390, 9232724, 2026-06-24 12:32:39
+<==        Row: 108, 510300, 2026-06-09, 4.7640, 4.8280, 4.7410, 4.8260, 4361645, 2026-06-24 12:32:39
+<==        Row: 109, 510300, 2026-06-10, 4.7900, 4.8140, 4.7510, 4.7840, 3931623, 2026-06-24 12:32:39
+<==        Row: 110, 510300, 2026-06-11, 4.7660, 4.7930, 4.7180, 4.7510, 4160688, 2026-06-24 12:32:39
+<==        Row: 111, 510300, 2026-06-12, 4.8100, 4.8460, 4.7890, 4.8180, 7808859, 2026-06-24 12:32:39
+<==        Row: 112, 510300, 2026-06-15, 4.8580, 4.9200, 4.8390, 4.9190, 16233007, 2026-06-24 12:32:39
+<==        Row: 113, 510300, 2026-06-16, 4.9200, 4.9330, 4.8930, 4.9100, 9085294, 2026-06-24 12:32:39
+<==        Row: 114, 510300, 2026-06-17, 4.8980, 4.9600, 4.8940, 4.9580, 13911870, 2026-06-24 12:32:39
+<==        Row: 115, 510300, 2026-06-18, 4.9430, 5.0010, 4.9410, 4.9840, 12933430, 2026-06-24 12:32:39
+<==        Row: 116, 510300, 2026-06-22, 4.9830, 5.0950, 4.9540, 5.0910, 19131578, 2026-06-24 12:32:39
+<==        Row: 117, 510300, 2026-06-23, 5.0790, 5.0950, 4.9150, 4.9420, 26173354, 2026-06-24 12:32:39
+<==        Row: 118, 510300, 2026-06-24, 4.9290, 4.9690, 4.9160, 4.9470, 9037354, 2026-06-24 12:32:39
+<==      Total: 60
+Releasing transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7]
+Fetched SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7] from current transaction
+==>  Preparing: SELECT * FROM fund_nav WHERE fund_code = ? AND nav_date BETWEEN ? AND ? ORDER BY nav_date ASC
+==> Parameters: 510500(String), 2026-03-26(LocalDate), 2026-06-24(LocalDate)
+<==    Columns: id, fund_code, nav_date, open_nav, high_nav, low_nav, close_nav, volume, create_time
+<==        Row: 177, 510500, 2026-03-26, 7.7920, 7.8350, 7.6810, 7.7000, 3201844, 2026-06-24 12:33:49
+<==        Row: 178, 510500, 2026-03-27, 7.5800, 7.8520, 7.5800, 7.8030, 3963090, 2026-06-24 12:33:49
+<==        Row: 179, 510500, 2026-03-30, 7.7060, 7.8360, 7.6650, 7.8180, 4782422, 2026-06-24 12:33:49
+<==        Row: 180, 510500, 2026-03-31, 7.8050, 7.8600, 7.6800, 7.6830, 3683999, 2026-06-24 12:33:49
+<==        Row: 181, 510500, 2026-04-01, 7.8150, 7.8500, 7.7550, 7.8090, 3566686, 2026-06-24 12:33:49
+<==        Row: 182, 510500, 2026-04-02, 7.7710, 7.8090, 7.6190, 7.6720, 4864342, 2026-06-24 12:33:49
+<==        Row: 183, 510500, 2026-04-03, 7.6970, 7.7070, 7.5810, 7.6030, 2407769, 2026-06-24 12:33:49
+<==        Row: 184, 510500, 2026-04-07, 7.6170, 7.7010, 7.6000, 7.6290, 3281318, 2026-06-24 12:33:49
+<==        Row: 185, 510500, 2026-04-08, 7.8200, 8.0290, 7.8150, 8.0260, 11550045, 2026-06-24 12:33:49
+<==        Row: 186, 510500, 2026-04-09, 7.9610, 8.0090, 7.9080, 7.9640, 6428258, 2026-06-24 12:33:49
+<==        Row: 187, 510500, 2026-04-10, 8.0150, 8.1490, 8.0150, 8.0350, 3800349, 2026-06-24 12:33:49
+<==        Row: 188, 510500, 2026-04-13, 7.9850, 8.0590, 7.9780, 8.0280, 4777283, 2026-06-24 12:33:49
+<==        Row: 189, 510500, 2026-04-14, 8.1100, 8.1620, 8.0670, 8.1590, 4368138, 2026-06-24 12:33:49
+<==        Row: 190, 510500, 2026-04-15, 8.2200, 8.2350, 8.0950, 8.1110, 4083180, 2026-06-24 12:33:49
+<==        Row: 191, 510500, 2026-04-16, 8.1300, 8.2710, 8.1250, 8.2530, 4879686, 2026-06-24 12:33:49
+<==        Row: 192, 510500, 2026-04-17, 8.2320, 8.3120, 8.2100, 8.2900, 4629737, 2026-06-24 12:33:49
+<==        Row: 193, 510500, 2026-04-20, 8.2810, 8.3940, 8.2780, 8.3550, 9125416, 2026-06-24 12:33:49
+<==        Row: 194, 510500, 2026-04-21, 8.3510, 8.3510, 8.2560, 8.3310, 4613444, 2026-06-24 12:33:49
+<==        Row: 195, 510500, 2026-04-22, 8.2830, 8.4570, 8.2830, 8.4550, 6383224, 2026-06-24 12:33:49
+<==        Row: 196, 510500, 2026-04-23, 8.4600, 8.4740, 8.2960, 8.3750, 6939803, 2026-06-24 12:33:49
+<==        Row: 197, 510500, 2026-04-24, 8.3210, 8.3800, 8.2420, 8.3230, 4371594, 2026-06-24 12:33:49
+<==        Row: 198, 510500, 2026-04-27, 8.3200, 8.3980, 8.2920, 8.3680, 6275188, 2026-06-24 12:33:49
+<==        Row: 199, 510500, 2026-04-28, 8.3460, 8.3560, 8.2470, 8.2730, 6369387, 2026-06-24 12:33:49
+<==        Row: 200, 510500, 2026-04-29, 8.2400, 8.4360, 8.2340, 8.4220, 8789675, 2026-06-24 12:33:49
+<==        Row: 201, 510500, 2026-04-30, 8.4100, 8.4500, 8.3700, 8.4300, 7793619, 2026-06-24 12:33:49
+<==        Row: 202, 510500, 2026-05-06, 8.5190, 8.7020, 8.5180, 8.6580, 10254482, 2026-06-24 12:33:49
+<==        Row: 203, 510500, 2026-05-07, 8.7020, 8.7780, 8.6690, 8.7710, 12291601, 2026-06-24 12:33:49
+<==        Row: 204, 510500, 2026-05-08, 8.7150, 8.7880, 8.6910, 8.7690, 11110986, 2026-06-24 12:33:49
+<==        Row: 205, 510500, 2026-05-11, 8.8380, 8.9450, 8.7880, 8.9120, 6608744, 2026-06-24 12:33:49
+<==        Row: 206, 510500, 2026-05-12, 8.9200, 8.9270, 8.8210, 8.8620, 5103981, 2026-06-24 12:33:49
+<==        Row: 207, 510500, 2026-05-13, 8.8000, 9.0210, 8.8000, 9.0090, 5154451, 2026-06-24 12:33:49
+<==        Row: 208, 510500, 2026-05-14, 9.0490, 9.0490, 8.7600, 8.7720, 8902588, 2026-06-24 12:33:49
+<==        Row: 209, 510500, 2026-05-15, 8.7600, 8.8090, 8.5530, 8.6120, 13136592, 2026-06-24 12:33:49
+<==        Row: 210, 510500, 2026-05-18, 8.5590, 8.6960, 8.5510, 8.6310, 4808791, 2026-06-24 12:33:49
+<==        Row: 211, 510500, 2026-05-19, 8.6130, 8.7090, 8.4810, 8.7030, 7097897, 2026-06-24 12:33:49
+<==        Row: 212, 510500, 2026-05-20, 8.6520, 8.7600, 8.6260, 8.7480, 5067923, 2026-06-24 12:33:49
+<==        Row: 213, 510500, 2026-05-21, 8.8000, 8.8870, 8.4840, 8.5030, 5345049, 2026-06-24 12:33:49
+<==        Row: 214, 510500, 2026-05-22, 8.5530, 8.6840, 8.5100, 8.6580, 7929375, 2026-06-24 12:33:49
+<==        Row: 215, 510500, 2026-05-25, 8.7080, 8.7900, 8.6190, 8.7860, 6085135, 2026-06-24 12:33:49
+<==        Row: 216, 510500, 2026-05-26, 8.7430, 8.7690, 8.6170, 8.7520, 2414019, 2026-06-24 12:33:49
+<==        Row: 217, 510500, 2026-05-27, 8.7400, 8.8210, 8.5800, 8.6140, 3302420, 2026-06-24 12:33:49
+<==        Row: 218, 510500, 2026-05-28, 8.5750, 8.6940, 8.5060, 8.6490, 3322216, 2026-06-24 12:33:49
+<==        Row: 219, 510500, 2026-05-29, 8.6600, 8.6810, 8.3870, 8.4430, 3279447, 2026-06-24 12:33:49
+<==        Row: 220, 510500, 2026-06-01, 8.4340, 8.5320, 8.3540, 8.3700, 4083694, 2026-06-24 12:33:49
+<==        Row: 221, 510500, 2026-06-02, 8.3680, 8.4800, 8.2380, 8.4060, 4588094, 2026-06-24 12:33:49
+<==        Row: 222, 510500, 2026-06-03, 8.4000, 8.5650, 8.3800, 8.4550, 3267377, 2026-06-24 12:33:49
+<==        Row: 223, 510500, 2026-06-04, 8.3710, 8.4890, 8.3710, 8.4480, 2959299, 2026-06-24 12:33:49
+<==        Row: 224, 510500, 2026-06-05, 8.4150, 8.5000, 8.3140, 8.3390, 4320457, 2026-06-24 12:33:49
+<==        Row: 225, 510500, 2026-06-08, 8.1600, 8.2330, 7.9830, 8.0680, 4687884, 2026-06-24 12:33:49
+<==        Row: 226, 510500, 2026-06-09, 8.1200, 8.2850, 8.0580, 8.2700, 3622747, 2026-06-24 12:33:49
+<==        Row: 227, 510500, 2026-06-10, 8.1840, 8.2400, 8.0780, 8.1710, 2792841, 2026-06-24 12:33:49
+<==        Row: 228, 510500, 2026-06-11, 8.1330, 8.1920, 8.0680, 8.1330, 1815580, 2026-06-24 12:33:49
+<==        Row: 229, 510500, 2026-06-12, 8.2970, 8.3700, 8.2110, 8.2420, 3133578, 2026-06-24 12:33:49
+<==        Row: 230, 510500, 2026-06-15, 8.3220, 8.5500, 8.3120, 8.5440, 7767758, 2026-06-24 12:33:49
+<==        Row: 231, 510500, 2026-06-16, 8.5500, 8.6680, 8.5250, 8.6320, 3195350, 2026-06-24 12:33:49
+<==        Row: 232, 510500, 2026-06-17, 8.6020, 8.7660, 8.5800, 8.7630, 1986424, 2026-06-24 12:33:49
+<==        Row: 233, 510500, 2026-06-18, 8.7260, 8.8630, 8.7220, 8.8280, 2529609, 2026-06-24 12:33:49
+<==        Row: 234, 510500, 2026-06-22, 8.8400, 9.0100, 8.7480, 9.0070, 3701087, 2026-06-24 12:33:49
+<==        Row: 235, 510500, 2026-06-23, 8.9800, 9.0280, 8.7580, 8.8150, 4233461, 2026-06-24 12:33:49
+<==        Row: 236, 510500, 2026-06-24, 8.7760, 8.9020, 8.7560, 8.8880, 1908718, 2026-06-24 12:33:49
+<==      Total: 60
+Releasing transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7]
+Fetched SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7] from current transaction
+==>  Preparing: SELECT * FROM fund_nav WHERE fund_code = ? AND nav_date BETWEEN ? AND ? ORDER BY nav_date ASC
+==> Parameters: 159949(String), 2026-03-26(LocalDate), 2026-06-24(LocalDate)
+<==    Columns: id, fund_code, nav_date, open_nav, high_nav, low_nav, close_nav, volume, create_time
+<==        Row: 295, 159949, 2026-03-26, 1.5650, 1.5860, 1.5450, 1.5490, 7444246, 2026-06-24 12:44:09
+<==        Row: 296, 159949, 2026-03-27, 1.5370, 1.5690, 1.5270, 1.5550, 9971208, 2026-06-24 12:44:09
+<==        Row: 297, 159949, 2026-03-30, 1.5320, 1.5500, 1.5210, 1.5440, 7672290, 2026-06-24 12:44:09
+<==        Row: 298, 159949, 2026-03-31, 1.5420, 1.5480, 1.5010, 1.5030, 8733208, 2026-06-24 12:44:09
+<==        Row: 299, 159949, 2026-04-01, 1.5340, 1.5390, 1.5100, 1.5300, 7679074, 2026-06-24 12:44:09
+<==        Row: 300, 159949, 2026-04-02, 1.5230, 1.5230, 1.4870, 1.4930, 7386767, 2026-06-24 12:44:09
+<==        Row: 301, 159949, 2026-04-03, 1.5070, 1.5100, 1.4850, 1.4850, 4867006, 2026-06-24 12:44:09
+<==        Row: 302, 159949, 2026-04-07, 1.4920, 1.5000, 1.4740, 1.4910, 5166538, 2026-06-24 12:44:09
+<==        Row: 303, 159949, 2026-04-08, 1.5350, 1.5850, 1.5310, 1.5850, 11352148, 2026-06-24 12:44:09
+<==        Row: 304, 159949, 2026-04-09, 1.5700, 1.5800, 1.5600, 1.5720, 6670394, 2026-06-24 12:44:09
+<==        Row: 305, 159949, 2026-04-10, 1.5830, 1.6510, 1.5830, 1.6360, 13114834, 2026-06-24 12:44:09
+<==        Row: 306, 159949, 2026-04-13, 1.6320, 1.6640, 1.6270, 1.6540, 8709516, 2026-06-24 12:44:09
+<==        Row: 307, 159949, 2026-04-14, 1.6690, 1.6980, 1.6620, 1.6980, 10557742, 2026-06-24 12:44:09
+<==        Row: 308, 159949, 2026-04-15, 1.7150, 1.7270, 1.6600, 1.6760, 13590534, 2026-06-24 12:44:09
+<==        Row: 309, 159949, 2026-04-16, 1.6820, 1.7340, 1.6740, 1.7330, 10321167, 2026-06-24 12:44:09
+<==        Row: 310, 159949, 2026-04-17, 1.7450, 1.7650, 1.7300, 1.7620, 9970425, 2026-06-24 12:44:09
+<==        Row: 311, 159949, 2026-04-20, 1.7480, 1.7710, 1.7410, 1.7610, 10931088, 2026-06-24 12:44:09
+<==        Row: 312, 159949, 2026-04-21, 1.7530, 1.7740, 1.7310, 1.7650, 7994667, 2026-06-24 12:44:09
+<==        Row: 313, 159949, 2026-04-22, 1.7560, 1.8100, 1.7560, 1.8050, 10696591, 2026-06-24 12:44:09
+<==        Row: 314, 159949, 2026-04-23, 1.8110, 1.8250, 1.7700, 1.7940, 10805449, 2026-06-24 12:44:09
+<==        Row: 315, 159949, 2026-04-24, 1.7700, 1.7790, 1.7380, 1.7610, 11313268, 2026-06-24 12:44:09
+<==        Row: 316, 159949, 2026-04-27, 1.7660, 1.7700, 1.7400, 1.7480, 7990678, 2026-06-24 12:44:09
+<==        Row: 317, 159949, 2026-04-28, 1.7300, 1.7400, 1.7090, 1.7170, 17396148, 2026-06-24 12:44:09
+<==        Row: 318, 159949, 2026-04-29, 1.7100, 1.7680, 1.7090, 1.7650, 9855043, 2026-06-24 12:44:09
+<==        Row: 319, 159949, 2026-04-30, 1.7710, 1.7840, 1.7490, 1.7590, 10133006, 2026-06-24 12:44:09
+<==        Row: 320, 159949, 2026-05-06, 1.7970, 1.8280, 1.7790, 1.8090, 9605782, 2026-06-24 12:44:09
+<==        Row: 321, 159949, 2026-05-07, 1.8220, 1.8420, 1.7980, 1.8380, 8324182, 2026-06-24 12:44:09
+<==        Row: 322, 159949, 2026-05-08, 1.8220, 1.8420, 1.8150, 1.8210, 7072594, 2026-06-24 12:44:09
+<==        Row: 323, 159949, 2026-05-11, 1.8350, 1.8910, 1.8180, 1.8880, 8370147, 2026-06-24 12:44:09
+<==        Row: 324, 159949, 2026-05-12, 1.9000, 1.9030, 1.8720, 1.8870, 9806011, 2026-06-24 12:44:09
+<==        Row: 325, 159949, 2026-05-13, 1.8720, 1.9500, 1.8710, 1.9440, 10171590, 2026-06-24 12:44:09
+<==        Row: 326, 159949, 2026-05-14, 1.9710, 1.9760, 1.8950, 1.9060, 13602961, 2026-06-24 12:44:09
+<==        Row: 327, 159949, 2026-05-15, 1.9090, 1.9290, 1.8620, 1.8920, 14820065, 2026-06-24 12:44:09
+<==        Row: 328, 159949, 2026-05-18, 1.8730, 1.9090, 1.8700, 1.8870, 11135469, 2026-06-24 12:44:09
+<==        Row: 329, 159949, 2026-05-19, 1.8770, 1.8820, 1.8280, 1.8760, 12794657, 2026-06-24 12:44:09
+<==        Row: 330, 159949, 2026-05-20, 1.8600, 1.8980, 1.8600, 1.8840, 10348396, 2026-06-24 12:44:09
+<==        Row: 331, 159949, 2026-05-21, 1.8980, 1.9320, 1.8380, 1.8400, 13362886, 2026-06-24 12:44:09
+<==        Row: 332, 159949, 2026-05-22, 1.8580, 1.9020, 1.8550, 1.8960, 12019429, 2026-06-24 12:44:09
+<==        Row: 333, 159949, 2026-05-25, 1.9120, 1.9390, 1.8790, 1.9350, 9842369, 2026-06-24 12:44:09
+<==        Row: 334, 159949, 2026-05-26, 1.9230, 1.9600, 1.9210, 1.9540, 10971423, 2026-06-24 12:44:09
+<==        Row: 335, 159949, 2026-05-27, 1.9510, 2.0110, 1.9450, 1.9620, 18457059, 2026-06-24 12:44:09
+<==        Row: 336, 159949, 2026-05-28, 1.9580, 2.0100, 1.9220, 2.0030, 16152192, 2026-06-24 12:44:09
+<==        Row: 337, 159949, 2026-05-29, 2.0100, 2.0250, 1.9510, 1.9650, 18883657, 2026-06-24 12:44:09
+<==        Row: 338, 159949, 2026-06-01, 1.9640, 1.9880, 1.9140, 1.9180, 14194216, 2026-06-24 12:44:09
+<==        Row: 339, 159949, 2026-06-02, 1.9330, 1.9910, 1.9190, 1.9800, 13724898, 2026-06-24 12:44:09
+<==        Row: 340, 159949, 2026-06-03, 1.9950, 2.0680, 1.9860, 2.0170, 14519448, 2026-06-24 12:44:09
+<==        Row: 341, 159949, 2026-06-04, 1.9860, 2.0120, 1.9780, 1.9970, 8021733, 2026-06-24 12:44:09
+<==        Row: 342, 159949, 2026-06-05, 1.9890, 2.0080, 1.9110, 1.9270, 17788589, 2026-06-24 12:44:09
+<==        Row: 343, 159949, 2026-06-08, 1.8550, 1.9010, 1.8390, 1.8520, 19838807, 2026-06-24 12:44:09
+<==        Row: 344, 159949, 2026-06-09, 1.8820, 1.9320, 1.8610, 1.9290, 13441852, 2026-06-24 12:44:09
+<==        Row: 345, 159949, 2026-06-10, 1.9000, 1.9150, 1.8570, 1.8720, 11819179, 2026-06-24 12:44:09
+<==        Row: 346, 159949, 2026-06-11, 1.8690, 1.9010, 1.8160, 1.8480, 10855137, 2026-06-24 12:44:09
+<==        Row: 347, 159949, 2026-06-12, 1.8970, 1.8990, 1.8510, 1.8550, 8323885, 2026-06-24 12:44:09
+<==        Row: 348, 159949, 2026-06-15, 1.8910, 1.9570, 1.8580, 1.9570, 10562338, 2026-06-24 12:44:09
+<==        Row: 349, 159949, 2026-06-16, 1.9640, 2.0080, 1.9600, 1.9860, 7549630, 2026-06-24 12:44:09
+<==        Row: 350, 159949, 2026-06-17, 1.9730, 2.0140, 1.9640, 2.0120, 8450599, 2026-06-24 12:44:09
+<==        Row: 351, 159949, 2026-06-18, 2.0000, 2.0660, 2.0000, 2.0580, 9989870, 2026-06-24 12:44:09
+<==        Row: 352, 159949, 2026-06-22, 2.0610, 2.1120, 2.0470, 2.1120, 14645458, 2026-06-24 12:44:09
+<==        Row: 353, 159949, 2026-06-23, 2.1000, 2.1070, 2.0100, 2.0270, 11977306, 2026-06-24 12:44:09
+<==        Row: 354, 159949, 2026-06-24, 2.0160, 2.0450, 2.0070, 2.0290, 5437992, 2026-06-24 12:44:09
+<==      Total: 60
+Releasing transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7]
+Fetched SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7] from current transaction
+==>  Preparing: SELECT * FROM fund_nav WHERE fund_code = ? AND nav_date BETWEEN ? AND ? ORDER BY nav_date ASC
+==> Parameters: 588000(String), 2026-03-26(LocalDate), 2026-06-24(LocalDate)
+<==      Total: 0
+Releasing transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7]
+Fetched SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7] from current transaction
+==>  Preparing: SELECT * FROM fund_nav WHERE fund_code = ? AND nav_date BETWEEN ? AND ? ORDER BY nav_date ASC
+==> Parameters: 512480(String), 2026-03-26(LocalDate), 2026-06-24(LocalDate)
+<==      Total: 0
+Releasing transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7]
+Fetched SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7] from current transaction
+==>  Preparing: SELECT * FROM fund_nav WHERE fund_code = ? AND nav_date BETWEEN ? AND ? ORDER BY nav_date ASC
+==> Parameters: 516100(String), 2026-03-26(LocalDate), 2026-06-24(LocalDate)
+<==      Total: 0
+Releasing transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7]
+Fetched SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7] from current transaction
+==>  Preparing: SELECT * FROM fund_nav WHERE fund_code = ? AND nav_date BETWEEN ? AND ? ORDER BY nav_date ASC
+==> Parameters: 512010(String), 2026-03-26(LocalDate), 2026-06-24(LocalDate)
+<==      Total: 0
+Releasing transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7]
+Fetched SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7] from current transaction
+==>  Preparing: SELECT * FROM fund_nav WHERE fund_code = ? AND nav_date BETWEEN ? AND ? ORDER BY nav_date ASC
+==> Parameters: 512880(String), 2026-03-26(LocalDate), 2026-06-24(LocalDate)
+<==      Total: 0
+Releasing transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7]
+Fetched SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7] from current transaction
+==>  Preparing: SELECT * FROM fund_nav WHERE fund_code = ? AND nav_date BETWEEN ? AND ? ORDER BY nav_date ASC
+==> Parameters: 512660(String), 2026-03-26(LocalDate), 2026-06-24(LocalDate)
+<==      Total: 0
+Releasing transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7]
+Fetched SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7] from current transaction
+==>  Preparing: SELECT * FROM fund_nav WHERE fund_code = ? AND nav_date BETWEEN ? AND ? ORDER BY nav_date ASC
+==> Parameters: 511010(String), 2026-03-26(LocalDate), 2026-06-24(LocalDate)
+<==      Total: 0
+Releasing transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7]
+Fetched SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7] from current transaction
+==>  Preparing: SELECT * FROM fund_nav WHERE fund_code = ? AND nav_date BETWEEN ? AND ? ORDER BY nav_date ASC
+==> Parameters: 518880(String), 2026-03-26(LocalDate), 2026-06-24(LocalDate)
+<==      Total: 0
+Releasing transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7]
+Fetched SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7] from current transaction
+==>  Preparing: SELECT * FROM fund_nav WHERE fund_code = ? AND nav_date BETWEEN ? AND ? ORDER BY nav_date ASC
+==> Parameters: 000852(String), 2026-01-25(LocalDate), 2026-06-24(LocalDate)
+<==      Total: 0
+Releasing transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7]
+2026-06-24T13:07:03.443+08:00  INFO 17341 --- [fund-momentum-strategy] [           main] c.h.c.a.s.StrategyExecutionAppService    : Market status on 2026-06-24: WEAK
+Fetched SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7] from current transaction
+Releasing transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7]
+Fetched SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7] from current transaction
+==>  Preparing: INSERT INTO strategy_result ( trade_date, strategy_type, market_status, total_weight ) VALUES ( ?, ?, ?, ? )
+==> Parameters: 2026-06-24(LocalDate), BALANCED(String), WEAK(String), 0(BigDecimal)
+<==    Updates: 1
+Releasing transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7]
+2026-06-24T13:07:03.448+08:00  INFO 17341 --- [fund-momentum-strategy] [           main] c.h.c.a.s.StrategyExecutionAppService    : ACTIVE strategy has zero allocation under WEAK
+Fetched SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7] from current transaction
+==>  Preparing: INSERT INTO strategy_result ( trade_date, strategy_type, market_status, total_weight ) VALUES ( ?, ?, ?, ? )
+==> Parameters: 2026-06-24(LocalDate), ACTIVE(String), WEAK(String), 0(BigDecimal)
+<==    Updates: 1
+Releasing transactional SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7]
+2026-06-24T13:07:03.449+08:00  INFO 17341 --- [fund-momentum-strategy] [           main] c.h.c.a.s.StrategyExecutionAppService    : Strategy execution completed. Sub-results: 2
+Transaction synchronization committing SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7]
+Transaction synchronization deregistering SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7]
+Transaction synchronization closing SqlSession [org.apache.ibatis.session.defaults.DefaultSqlSession@7619fbe7]
 ]]></system-out>
     <system-err><![CDATA[WARNING: A Java agent has been loaded dynamically (/Users/hanfugui/.m2/repository/net/bytebuddy/byte-buddy-agent/1.14.10/byte-buddy-agent-1.14.10.jar)
 WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning

@@ -12,5 +12,6 @@ public class DashboardDTO {
     private LocalDate tradeDate;
     private String marketStatus;
     private List<PositionDTO> positions = new ArrayList<>();
+    private List<FundMomentumRanksGroupDTO> momentumRankGroups = new ArrayList<>();
     private List<BacktestRecordDTO> backtestRecords = new ArrayList<>();
 }

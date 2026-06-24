@@ -11,7 +11,11 @@
         * { box-sizing: border-box; }
         body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f0f2f5; }
         #app { max-width: 1400px; margin: 0 auto; padding: 24px; }
-        h1 { margin: 0 0 24px; color: #1f1f1f; }
+        h1 { margin: 0 0 16px; color: #1f1f1f; }
+        .tabs { display: flex; gap: 8px; margin-bottom: 24px; border-bottom: 1px solid #e8e8e8; }
+        .tab { padding: 10px 20px; cursor: pointer; border-bottom: 2px solid transparent; color: #666; font-size: 14px; }
+        .tab:hover { color: #1890ff; }
+        .tab.active { color: #1890ff; border-bottom-color: #1890ff; font-weight: 500; }
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin-bottom: 24px; }
         .card { background: #fff; border-radius: 8px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
         .card h3 { margin: 0 0 16px; font-size: 16px; color: #333; }
@@ -24,98 +28,311 @@
         table { width: 100%; border-collapse: collapse; }
         th, td { padding: 12px; text-align: left; border-bottom: 1px solid #f0f0f0; }
         th { background: #fafafa; font-weight: 600; }
-        tr:hover { background: #fafafa; cursor: pointer; }
+        tr:hover { background: #fafafa; }
+        tr.clickable { cursor: pointer; }
         .selected { background: #e6f7ff !important; }
         .chart { width: 100%; height: 360px; }
         .empty { color: #999; text-align: center; padding: 40px; }
+        .toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; gap: 12px; flex-wrap: wrap; }
+        .filter-bar { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+        .btn { padding: 8px 16px; border-radius: 4px; border: 1px solid #d9d9d9; background: #fff; cursor: pointer; font-size: 14px; color: #333; }
+        .btn:hover { border-color: #1890ff; color: #1890ff; }
+        .btn-primary { background: #1890ff; border-color: #1890ff; color: #fff; }
+        .btn-primary:hover { background: #40a9ff; border-color: #40a9ff; color: #fff; }
+        .btn-danger { background: #ff4d4f; border-color: #ff4d4f; color: #fff; }
+        .btn-danger:hover { background: #ff7875; border-color: #ff7875; color: #fff; }
+        .btn-small { padding: 4px 10px; font-size: 13px; }
+        .tag-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; margin-right: 6px; margin-bottom: 4px; color: #fff; }
+        .status-enabled { color: #389e0d; }
+        .status-disabled { color: #999; }
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); display: flex; align-items: center; justify-content: center; z-index: 1000; }
+        .modal { background: #fff; border-radius: 8px; width: 520px; max-width: 90%; max-height: 90vh; overflow: auto; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .modal-header { padding: 16px 20px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center; }
+        .modal-header h3 { margin: 0; font-size: 16px; }
+        .modal-close { cursor: pointer; font-size: 18px; color: #999; background: none; border: none; }
+        .modal-close:hover { color: #333; }
+        .modal-body { padding: 20px; }
+        .modal-footer { padding: 12px 20px; border-top: 1px solid #f0f0f0; display: flex; justify-content: flex-end; gap: 10px; }
+        .form-group { margin-bottom: 16px; }
+        .form-label { display: block; margin-bottom: 6px; font-size: 14px; color: #333; }
+        .form-control, .form-select { width: 100%; padding: 8px 12px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px; }
+        .form-control:focus, .form-select:focus { outline: none; border-color: #1890ff; }
+        .checkbox-group { display: flex; flex-wrap: wrap; gap: 12px; }
+        .checkbox-item { display: flex; align-items: center; gap: 6px; font-size: 14px; }
+        .color-preview { display: inline-block; width: 16px; height: 16px; border-radius: 4px; vertical-align: middle; margin-right: 8px; border: 1px solid #e8e8e8; }
+        .rank-badge { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background: #f0f0f0; color: #333; font-size: 13px; font-weight: 600; }
+        .rank-badge.top { background: #fff1f0; color: #cf1322; }
+        .momentum-positive { color: #cf1322; }
+        .momentum-negative { color: #389e0d; }
+        .momentum-zero { color: #999; }
+        .momentum-score { font-weight: 600; }
     </style>
 </head>
 <body>
 <div id="app">
     <h1>ETF 动量轮动策略看板</h1>
 
-    <div class="grid">
-        <div class="card">
-            <h3>最新交易日</h3>
-            <div class="metric">
-                <span class="metric-value">{{ dashboard.tradeDate || '-' }}</span>
+    <div class="tabs">
+        <div class="tab" :class="{ active: activeTab === 'dashboard' }" @click="switchTab('dashboard')">策略看板</div>
+        <div class="tab" :class="{ active: activeTab === 'funds' }" @click="switchTab('funds')">基金池管理</div>
+        <div class="tab" :class="{ active: activeTab === 'tags' }" @click="switchTab('tags')">标签管理</div>
+    </div>
+
+    <!-- 策略看板 -->
+    <div v-if="activeTab === 'dashboard'">
+        <div class="grid">
+            <div class="card">
+                <h3>最新交易日</h3>
+                <div class="metric">
+                    <span class="metric-value">{{ dashboard.tradeDate || '-' }}</span>
+                </div>
+            </div>
+            <div class="card">
+                <h3>大盘状态</h3>
+                <span class="tag" :class="dashboard.marketStatus">
+                    {{ dashboard.marketStatus === 'STRONG' ? '强势' : dashboard.marketStatus === 'WEAK' ? '弱势' : '-' }}
+                </span>
+            </div>
+            <div class="card">
+                <h3>当前总仓位</h3>
+                <div class="metric">
+                    <span class="metric-value">{{ totalWeight }}%</span>
+                </div>
             </div>
         </div>
-        <div class="card">
-            <h3>大盘状态</h3>
-            <span class="tag" :class="dashboard.marketStatus">
-                {{ dashboard.marketStatus === 'STRONG' ? '强势' : dashboard.marketStatus === 'WEAK' ? '弱势' : '-' }}
-            </span>
+
+        <div class="grid">
+            <div v-for="group in dashboard.momentumRankGroups" :key="group.strategyType" class="card" style="overflow-x: auto;">
+                <h3>{{ group.strategyName }} T-1 日动量分 TOP10（截至 {{ group.ranks[0]?.navDate || '-' }}）</h3>
+                <table v-if="group.ranks.length > 0">
+                    <thead>
+                    <tr>
+                        <th style="width: 60px;">排名</th>
+                        <th>基金</th>
+                        <th>动量分</th>
+                        <th>收盘净值</th>
+                        <th>短期动量</th>
+                        <th>长期动量</th>
+                        <th>上涨占比</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="item in group.ranks" :key="item.fundCode">
+                        <td><span class="rank-badge" :class="{ top: item.rank <= 3 }">{{ item.rank }}</span></td>
+                        <td>{{ item.fundName }} ({{ item.fundCode }})</td>
+                        <td :class="momentumClass(item.momentumScore)" class="momentum-score">{{ formatPercent(item.momentumScore) }}</td>
+                        <td>{{ item.closeNav?.toFixed(4) || '-' }}</td>
+                        <td :class="momentumClass(item.shortMomentum)">{{ formatPercent(item.shortMomentum) }}</td>
+                        <td :class="momentumClass(item.longMomentum)">{{ formatPercent(item.longMomentum) }}</td>
+                        <td>{{ formatRatio(item.upDaysRatio) }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div v-else class="empty">暂无动量数据，请先同步基金净值</div>
+            </div>
         </div>
-        <div class="card">
-            <h3>当前总仓位</h3>
-            <div class="metric">
-                <span class="metric-value">{{ totalWeight }}%</span>
+
+        <div class="grid">
+            <div class="card" style="grid-column: 1 / -1;">
+                <h3>回测记录</h3>
+                <table v-if="dashboard.backtestRecords.length > 0">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>区间</th>
+                        <th>年化收益</th>
+                        <th>最大回撤</th>
+                        <th>夏普比率</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="record in dashboard.backtestRecords" :key="record.id"
+                        class="clickable"
+                        :class="{ selected: selectedBacktestId === record.id }"
+                        @click="loadBacktestDetail(record.id)">
+                        <td>{{ record.id }}</td>
+                        <td>{{ record.startDate }} ~ {{ record.endDate }}</td>
+                        <td>{{ (record.annualReturn * 100).toFixed(2) }}%</td>
+                        <td>{{ (record.maxDrawdown * 100).toFixed(2) }}%</td>
+                        <td>{{ record.sharpeRatio?.toFixed(2) || '-' }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div v-else class="empty">暂无回测记录，请先执行回测</div>
+            </div>
+        </div>
+
+        <div class="grid" v-if="backtestDetail.navCurve.length > 0">
+            <div class="card">
+                <h3>回测净值曲线</h3>
+                <div ref="navChart" class="chart"></div>
+            </div>
+            <div class="card">
+                <h3>回测回撤曲线</h3>
+                <div ref="drawdownChart" class="chart"></div>
             </div>
         </div>
     </div>
 
-    <div class="grid">
+    <!-- 基金池管理 -->
+    <div v-if="activeTab === 'funds'">
         <div class="card">
-            <h3>持仓权重分布</h3>
-            <div ref="pieChart" class="chart"></div>
-            <div v-if="dashboard.positions.length === 0" class="empty">暂无持仓建议</div>
-        </div>
-        <div class="card">
-            <h3>最新持仓明细</h3>
-            <table v-if="dashboard.positions.length > 0">
-                <thead>
-                <tr><th>基金</th><th>策略</th><th>权重</th></tr>
-                </thead>
-                <tbody>
-                <tr v-for="pos in dashboard.positions" :key="pos.fundCode + pos.sourceStrategy">
-                    <td>{{ pos.fundName }} ({{ pos.fundCode }})</td>
-                    <td>{{ pos.sourceStrategy === 'BALANCED' ? '平衡型' : '积极型' }}</td>
-                    <td>{{ (pos.weight * 100).toFixed(2) }}%</td>
-                </tr>
-                </tbody>
-            </table>
-            <div v-else class="empty">暂无持仓建议</div>
-        </div>
-    </div>
+            <div class="toolbar">
+                <div class="filter-bar">
+                    <select class="form-select" v-model="fundFilterTagId" @change="loadFunds" style="width: 180px;">
+                        <option :value="null">全部标签</option>
+                        <option v-for="tag in tags" :key="tag.id" :value="tag.id">{{ tag.tagName }}</option>
+                    </select>
+                    <button class="btn" @click="loadFunds">刷新</button>
+                </div>
+                <button class="btn btn-primary" @click="openFundModal()">+ 新增基金</button>
+            </div>
 
-    <div class="grid">
-        <div class="card" style="grid-column: 1 / -1;">
-            <h3>回测记录</h3>
-            <table v-if="dashboard.backtestRecords.length > 0">
+            <table v-if="funds.length > 0">
                 <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>区间</th>
-                    <th>年化收益</th>
-                    <th>最大回撤</th>
-                    <th>夏普比率</th>
+                    <th>基金代码</th>
+                    <th>基金名称</th>
+                    <th>类型</th>
+                    <th>状态</th>
+                    <th>标签</th>
+                    <th style="width: 140px;">操作</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="record in dashboard.backtestRecords" :key="record.id"
-                    :class="{ selected: selectedBacktestId === record.id }"
-                    @click="loadBacktestDetail(record.id)">
-                    <td>{{ record.id }}</td>
-                    <td>{{ record.startDate }} ~ {{ record.endDate }}</td>
-                    <td>{{ (record.annualReturn * 100).toFixed(2) }}%</td>
-                    <td>{{ (record.maxDrawdown * 100).toFixed(2) }}%</td>
-                    <td>{{ record.sharpeRatio?.toFixed(2) || '-' }}</td>
+                <tr v-for="fund in funds" :key="fund.fundCode">
+                    <td>{{ fund.fundCode }}</td>
+                    <td>{{ fund.fundName }}</td>
+                    <td>{{ fundTypeLabel(fund.fundType) }}</td>
+                    <td :class="fund.status === 1 ? 'status-enabled' : 'status-disabled'">
+                        {{ fund.status === 1 ? '启用' : '禁用' }}
+                    </td>
+                    <td>
+                        <span v-for="tag in fund.tags" :key="tag.id"
+                              class="tag-badge"
+                              :style="{ background: tag.color || '#999' }">{{ tag.tagName }}</span>
+                        <span v-if="fund.tags.length === 0" style="color: #999;">-</span>
+                    </td>
+                    <td>
+                        <button class="btn btn-small" @click="openFundModal(fund)">编辑</button>
+                        <button class="btn btn-small btn-danger" @click="deleteFund(fund)" style="margin-left: 8px;">删除</button>
+                    </td>
                 </tr>
                 </tbody>
             </table>
-            <div v-else class="empty">暂无回测记录，请先执行回测</div>
+            <div v-else class="empty">暂无基金数据</div>
         </div>
     </div>
 
-    <div class="grid" v-if="backtestDetail.navCurve.length > 0">
+    <!-- 标签管理 -->
+    <div v-if="activeTab === 'tags'">
         <div class="card">
-            <h3>回测净值曲线</h3>
-            <div ref="navChart" class="chart"></div>
+            <div class="toolbar">
+                <button class="btn" @click="loadTags">刷新</button>
+                <button class="btn btn-primary" @click="openTagModal()">+ 新增标签</button>
+            </div>
+
+            <table v-if="tags.length > 0">
+                <thead>
+                <tr>
+                    <th>颜色</th>
+                    <th>标签编码</th>
+                    <th>标签名称</th>
+                    <th style="width: 140px;">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="tag in tags" :key="tag.id">
+                    <td><span class="color-preview" :style="{ background: tag.color || '#999' }"></span></td>
+                    <td>{{ tag.tagCode }}</td>
+                    <td>{{ tag.tagName }}</td>
+                    <td>
+                        <button class="btn btn-small" @click="openTagModal(tag)">编辑</button>
+                        <button class="btn btn-small btn-danger" @click="deleteTag(tag)" style="margin-left: 8px;">删除</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div v-else class="empty">暂无标签数据</div>
         </div>
-        <div class="card">
-            <h3>回测回撤曲线</h3>
-            <div ref="drawdownChart" class="chart"></div>
+    </div>
+
+    <!-- 基金编辑弹窗 -->
+    <div v-if="fundModal.visible" class="modal-overlay" @click.self="closeFundModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>{{ fundModal.isEdit ? '编辑基金' : '新增基金' }}</h3>
+                <button class="modal-close" @click="closeFundModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">基金代码</label>
+                    <input class="form-control" v-model="fundModal.form.fundCode" :disabled="fundModal.isEdit" placeholder="如 510300">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">基金名称</label>
+                    <input class="form-control" v-model="fundModal.form.fundName" placeholder="如 沪深300ETF">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">基金类型</label>
+                    <select class="form-select" v-model="fundModal.form.fundType">
+                        <option value="WIDE_BASE">宽基</option>
+                        <option value="SECTOR">行业</option>
+                        <option value="BOND">债券</option>
+                        <option value="GOLD">黄金</option>
+                        <option value="OTHER">其他</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">状态</label>
+                    <select class="form-select" v-model="fundModal.form.status">
+                        <option :value="1">启用</option>
+                        <option :value="0">禁用</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">标签</label>
+                    <div class="checkbox-group">
+                        <label v-for="tag in tags" :key="tag.id" class="checkbox-item">
+                            <input type="checkbox" :value="tag.id" v-model="fundModal.form.tagIds">
+                            <span>{{ tag.tagName }}</span>
+                        </label>
+                    </div>
+                    <div v-if="tags.length === 0" style="color: #999; font-size: 13px;">暂无标签，请先在「标签管理」中创建</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" @click="closeFundModal">取消</button>
+                <button class="btn btn-primary" @click="saveFund">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 标签编辑弹窗 -->
+    <div v-if="tagModal.visible" class="modal-overlay" @click.self="closeTagModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>{{ tagModal.isEdit ? '编辑标签' : '新增标签' }}</h3>
+                <button class="modal-close" @click="closeTagModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">标签编码</label>
+                    <input class="form-control" v-model="tagModal.form.tagCode" placeholder="如 TECH">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">标签名称</label>
+                    <input class="form-control" v-model="tagModal.form.tagName" placeholder="如 科技">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">颜色</label>
+                    <input class="form-control" type="color" v-model="tagModal.form.color" style="width: 80px; height: 36px; padding: 2px;">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" @click="closeTagModal">取消</button>
+                <button class="btn btn-primary" @click="saveTag">保存</button>
+            </div>
         </div>
     </div>
 </div>
@@ -126,10 +343,12 @@
     createApp({
         data() {
             return {
+                activeTab: 'dashboard',
                 dashboard: {
                     tradeDate: null,
                     marketStatus: null,
                     positions: [],
+                    momentumRankGroups: [],
                     backtestRecords: []
                 },
                 selectedBacktestId: null,
@@ -137,9 +356,21 @@
                     navCurve: [],
                     drawdownCurve: []
                 },
-                pieChart: null,
                 navChart: null,
-                drawdownChart: null
+                drawdownChart: null,
+                funds: [],
+                tags: [],
+                fundFilterTagId: null,
+                fundModal: {
+                    visible: false,
+                    isEdit: false,
+                    form: { fundCode: '', fundName: '', fundType: 'WIDE_BASE', status: 1, tagIds: [] }
+                },
+                tagModal: {
+                    visible: false,
+                    isEdit: false,
+                    form: { id: null, tagCode: '', tagName: '', color: '#1890ff' }
+                }
             };
         },
         computed: {
@@ -152,7 +383,6 @@
         async mounted() {
             await this.loadDashboard();
             this.$nextTick(() => {
-                this.initPieChart();
                 window.addEventListener('resize', this.handleResize);
             });
         },
@@ -161,34 +391,168 @@
             this.disposeCharts();
         },
         methods: {
+            async switchTab(tab) {
+                this.activeTab = tab;
+                if (tab === 'funds') {
+                    await this.loadTags();
+                    await this.loadFunds();
+                } else if (tab === 'tags') {
+                    await this.loadTags();
+                } else if (tab === 'dashboard') {
+                    await this.loadDashboard();
+                }
+            },
             async loadDashboard() {
                 try {
                     const res = await axios.get('/dashboard/api/data');
                     this.dashboard = res.data;
-                    this.updatePieChart();
+                    if (!this.dashboard.momentumRankGroups) {
+                        this.dashboard.momentumRankGroups = [];
+                    }
                 } catch (e) {
                     console.error('加载看板数据失败', e);
                 }
             },
-            initPieChart() {
-                this.pieChart = echarts.init(this.$refs.pieChart);
-                this.updatePieChart();
+            formatPercent(value) {
+                if (value === null || value === undefined) return '-';
+                const num = Number(value);
+                return (num >= 0 ? '+' : '') + num.toFixed(2) + '%';
             },
-            updatePieChart() {
-                if (!this.pieChart) return;
-                const data = this.dashboard.positions.map(p => ({
-                    name: p.fundName,
-                    value: parseFloat((p.weight * 100).toFixed(2))
-                }));
-                this.pieChart.setOption({
-                    tooltip: { trigger: 'item', formatter: '{b}: {c}%' },
-                    series: [{
-                        type: 'pie',
-                        radius: ['40%', '70%'],
-                        data: data,
-                        label: { formatter: '{b}\n{c}%' }
-                    }]
-                });
+            formatRatio(value) {
+                if (value === null || value === undefined) return '-';
+                return (Number(value) * 100).toFixed(2) + '%';
+            },
+            momentumClass(value) {
+                if (value === null || value === undefined) return 'momentum-zero';
+                const num = Number(value);
+                if (num > 0) return 'momentum-positive';
+                if (num < 0) return 'momentum-negative';
+                return 'momentum-zero';
+            },
+            async loadFunds() {
+                try {
+                    const params = { includeDisabled: true };
+                    if (this.fundFilterTagId) {
+                        params.tagId = this.fundFilterTagId;
+                    }
+                    const res = await axios.get('/api/funds', { params });
+                    this.funds = res.data;
+                } catch (e) {
+                    console.error('加载基金列表失败', e);
+                    alert('加载基金列表失败');
+                }
+            },
+            async loadTags() {
+                try {
+                    const res = await axios.get('/api/funds/tags');
+                    this.tags = res.data;
+                } catch (e) {
+                    console.error('加载标签列表失败', e);
+                    alert('加载标签列表失败');
+                }
+            },
+            fundTypeLabel(type) {
+                const map = { WIDE_BASE: '宽基', SECTOR: '行业', BOND: '债券', GOLD: '黄金', OTHER: '其他' };
+                return map[type] || type;
+            },
+            openFundModal(fund) {
+                if (fund) {
+                    this.fundModal.isEdit = true;
+                    this.fundModal.form = {
+                        fundCode: fund.fundCode,
+                        fundName: fund.fundName,
+                        fundType: fund.fundType,
+                        status: fund.status,
+                        tagIds: fund.tags.map(t => t.id)
+                    };
+                } else {
+                    this.fundModal.isEdit = false;
+                    this.fundModal.form = { fundCode: '', fundName: '', fundType: 'WIDE_BASE', status: 1, tagIds: [] };
+                }
+                this.fundModal.visible = true;
+            },
+            closeFundModal() {
+                this.fundModal.visible = false;
+            },
+            async saveFund() {
+                const form = this.fundModal.form;
+                if (!form.fundCode || !form.fundName) {
+                    alert('请填写基金代码和名称');
+                    return;
+                }
+                const dto = {
+                    fundCode: form.fundCode,
+                    fundName: form.fundName,
+                    fundType: form.fundType,
+                    status: form.status,
+                    tags: form.tagIds.map(id => ({ id }))
+                };
+                try {
+                    if (this.fundModal.isEdit) {
+                        await axios.put(`/api/funds/${form.fundCode}`, dto);
+                    } else {
+                        await axios.post('/api/funds', dto);
+                    }
+                    this.closeFundModal();
+                    await this.loadFunds();
+                } catch (e) {
+                    console.error('保存基金失败', e);
+                    alert('保存基金失败：' + (e.response?.data?.message || e.message));
+                }
+            },
+            async deleteFund(fund) {
+                if (!confirm(`确定删除基金 ${fund.fundName}（${fund.fundCode}）吗？`)) return;
+                try {
+                    await axios.delete(`/api/funds/${fund.fundCode}`);
+                    await this.loadFunds();
+                } catch (e) {
+                    console.error('删除基金失败', e);
+                    alert('删除基金失败');
+                }
+            },
+            openTagModal(tag) {
+                if (tag) {
+                    this.tagModal.isEdit = true;
+                    this.tagModal.form = { id: tag.id, tagCode: tag.tagCode, tagName: tag.tagName, color: tag.color || '#1890ff' };
+                } else {
+                    this.tagModal.isEdit = false;
+                    this.tagModal.form = { id: null, tagCode: '', tagName: '', color: '#1890ff' };
+                }
+                this.tagModal.visible = true;
+            },
+            closeTagModal() {
+                this.tagModal.visible = false;
+            },
+            async saveTag() {
+                const form = this.tagModal.form;
+                if (!form.tagCode || !form.tagName) {
+                    alert('请填写标签编码和名称');
+                    return;
+                }
+                try {
+                    if (this.tagModal.isEdit) {
+                        await axios.put(`/api/funds/tags/${form.id}`, form);
+                    } else {
+                        await axios.post('/api/funds/tags', form);
+                    }
+                    this.closeTagModal();
+                    await this.loadTags();
+                    await this.loadFunds();
+                } catch (e) {
+                    console.error('保存标签失败', e);
+                    alert('保存标签失败：' + (e.response?.data?.message || e.message));
+                }
+            },
+            async deleteTag(tag) {
+                if (!confirm(`确定删除标签 ${tag.tagName} 吗？引用该标签的基金将自动解绑。`)) return;
+                try {
+                    await axios.delete(`/api/funds/tags/${tag.id}`);
+                    await this.loadTags();
+                    await this.loadFunds();
+                } catch (e) {
+                    console.error('删除标签失败', e);
+                    alert('删除标签失败');
+                }
             },
             async loadBacktestDetail(id) {
                 this.selectedBacktestId = id;
@@ -235,12 +599,10 @@
                 });
             },
             handleResize() {
-                this.pieChart && this.pieChart.resize();
                 this.navChart && this.navChart.resize();
                 this.drawdownChart && this.drawdownChart.resize();
             },
             disposeCharts() {
-                this.pieChart && this.pieChart.dispose();
                 this.navChart && this.navChart.dispose();
                 this.drawdownChart && this.drawdownChart.dispose();
             }

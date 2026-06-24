@@ -50,6 +50,7 @@ com/hacker/code/domain/strategy/valueobject/ScreenedETF$ScreenedETFBuilder.class
 com/hacker/code/infrastructure/persistence/po/FundTagRelationPO.class
 com/hacker/code/domain/fund/repository/NavDataRepository.class
 com/hacker/code/domain/fund/repository/FundTagRepository.class
+com/hacker/code/application/dto/FundMomentumRankDTO.class
 com/hacker/code/infrastructure/mapper/StrategyPositionMapper.class
 com/hacker/code/infrastructure/mapper/StrategyConfigMapper.class
 com/hacker/code/infrastructure/persistence/po/StrategyConfigPO.class
@@ -75,6 +76,7 @@ com/hacker/code/infrastructure/mapper/BacktestRecordMapper.class
 com/hacker/code/domain/shared/event/StrategyCalculatedEvent.class
 com/hacker/code/adapter/job/NavSyncJob.class
 com/hacker/code/domain/strategy/valueobject/Volatility.class
+com/hacker/code/application/dto/FundMomentumRanksGroupDTO.class
 com/hacker/code/domain/strategy/valueobject/MarketStatus.class
 com/hacker/code/application/dto/DashboardDTO.class
 com/hacker/code/application/dto/PositionDTO.class
