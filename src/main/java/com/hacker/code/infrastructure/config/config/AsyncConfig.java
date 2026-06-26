@@ -1,4 +1,4 @@
-package com.hacker.code.config;
+package com.hacker.code.infrastructure.config.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
