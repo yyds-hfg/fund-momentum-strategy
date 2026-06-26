@@ -54,6 +54,14 @@ public class FundRepositoryImpl implements FundRepository {
     }
 
     @Override
+    public List<Fund> findByConditions(Long tagId, String keyword, String fundType, boolean includeDisabled) {
+        Integer status = includeDisabled ? null : FundStatus.ENABLED.getCode();
+        return fundMapper.selectByCondition(tagId, keyword, fundType, status).stream()
+                .map(this::toDomain)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public void save(Fund fund) {
         fundMapper.insert(toPO(fund));
     }

@@ -65,6 +65,17 @@
         .momentum-positive { color: #cf1322; }
         .momentum-negative { color: #389e0d; }
         .momentum-zero { color: #999; }
+        .rank-change-up { color: #cf1322; }
+        .rank-change-down { color: #389e0d; }
+        .rank-change-neutral { color: #999; }
+        .trend-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 500; white-space: nowrap; }
+        .trend-SHARP_UP { background: #fff1f0; color: #cf1322; }
+        .trend-UP { background: #fff2e8; color: #d46b08; }
+        .trend-FLAT_UP { background: #fffbe6; color: #ad8b00; }
+        .trend-FLAT { background: #f5f5f5; color: #595959; }
+        .trend-FLAT_DOWN { background: #f6ffed; color: #389e0d; }
+        .trend-DOWN { background: #e6f7ff; color: #096dd9; }
+        .trend-SHARP_DOWN { background: #f0f5ff; color: #1d39c4; }
         .momentum-score { font-weight: 600; }
         .rank-table { max-height: 600px; overflow-y: auto; }
         .logic-section { margin-bottom: 28px; }
@@ -259,9 +270,58 @@
         <div class="card" style="margin-bottom: 24px;">
             <div class="toolbar">
                 <div class="filter-bar">
-                    <select class="form-select" v-model="rankTagFilter" style="width: 180px;">
-                        <option :value="null">全部标签</option>
-                        <option v-for="tag in tags" :key="tag.id" :value="tag.id">{{ tag.tagName }}</option>
+                    <div class="checkbox-group" style="align-items: center;">
+                        <label class="checkbox-item">
+                            <input type="checkbox" :checked="rankTagFilter.length === 0" @change="rankTagFilter = []">
+                            全部标签
+                        </label>
+                        <label v-for="tag in tags" :key="tag.id" class="checkbox-item">
+                            <input type="checkbox" :value="tag.id" v-model="rankTagFilter">
+                            {{ tag.tagName }}
+                        </label>
+                    </div>
+                    <select class="form-select" v-model="rankChangeFilter" style="width: 150px;">
+                        <option :value="null">全部排名变化</option>
+                        <option value="up">只看上升</option>
+                        <option value="down">只看下降</option>
+                    </select>
+                    <select class="form-select" v-model="minRankChange" style="width: 150px;">
+                        <option :value="null">变化幅度不限</option>
+                        <option :value="3">变化 ≥ 3 名</option>
+                        <option :value="5">变化 ≥ 5 名</option>
+                        <option :value="10">变化 ≥ 10 名</option>
+                    </select>
+                    <select class="form-select" v-model="minShortMomentum" style="width: 150px;">
+                        <option :value="null">短期动量不限</option>
+                        <option :value="0">短期动量 ≥ 0%</option>
+                        <option :value="2">短期动量 ≥ 2%</option>
+                        <option :value="5">短期动量 ≥ 5%</option>
+                        <option :value="10">短期动量 ≥ 10%</option>
+                        <option :value="20">短期动量 ≥ 20%</option>
+                    </select>
+                    <select class="form-select" v-model="minLongMomentum" style="width: 150px;">
+                        <option :value="null">长期动量不限</option>
+                        <option :value="0">长期动量 ≥ 0%</option>
+                        <option :value="2">长期动量 ≥ 2%</option>
+                        <option :value="5">长期动量 ≥ 5%</option>
+                        <option :value="10">长期动量 ≥ 10%</option>
+                        <option :value="20">长期动量 ≥ 20%</option>
+                    </select>
+                    <select class="form-select" v-model="minMomentumScore" style="width: 150px;">
+                        <option :value="null">动量分不限</option>
+                        <option :value="0">动量分 ≥ 0</option>
+                        <option :value="2">动量分 ≥ 2</option>
+                        <option :value="5">动量分 ≥ 5</option>
+                        <option :value="10">动量分 ≥ 10</option>
+                        <option :value="20">动量分 ≥ 20</option>
+                    </select>
+                    <select class="form-select" v-model="trendFilter" style="width: 150px;">
+                        <option :value="null">全部趋势</option>
+                        <option value="up">上升相关</option>
+                        <option value="down">下降相关</option>
+                        <option value="sharp_up">急剧上升</option>
+                        <option value="sharp_down">急剧下降</option>
+                        <option value="flat">平缓</option>
                     </select>
                     <button class="btn" @click="loadAllMomentumRanks">刷新</button>
                 </div>
@@ -277,6 +337,12 @@
                             <th style="width: 60px;">排名</th>
                             <th>基金</th>
                             <th>动量分</th>
+                            <th style="width: 110px;">7日排名变化</th>
+                            <th style="width: 90px;">趋势</th>
+                            <th style="width: 80px;">7日斜率</th>
+                            <th style="width: 80px;">14日斜率</th>
+                            <th style="width: 80px;">20日斜率</th>
+                            <th style="width: 70px;">σ</th>
                             <th>标签</th>
                             <th>短期动量</th>
                             <th>长期动量</th>
@@ -288,6 +354,22 @@
                             <td><span class="rank-badge" :class="{ top: index < 3 }">{{ index + 1 }}</span></td>
                             <td>{{ item.fundName }} ({{ item.fundCode }})</td>
                             <td :class="momentumClass(item.momentumScore)" class="momentum-score">{{ formatPercent(item.momentumScore) }}</td>
+                            <td :class="rankChangeClass(item.rankChange)" style="font-weight: 500;">
+                                <span v-if="item.rankChange === null">-</span>
+                                <span v-else-if="item.rankChange > 0">↑ +{{ item.rankChange }}</span>
+                                <span v-else-if="item.rankChange < 0">↓ {{ item.rankChange }}</span>
+                                <span v-else>→ 0</span>
+                            </td>
+                            <td>
+                                <span v-if="item.momentumTrend" class="trend-badge" :class="trendClass(item.momentumTrend)" :title="item.momentumTrendDesc">
+                                    {{ item.momentumTrendLabel }}
+                                </span>
+                                <span v-else style="color: #999;">-</span>
+                            </td>
+                            <td :class="momentumClass(item.slope7d)">{{ formatSlope(item.slope7d) }}</td>
+                            <td :class="momentumClass(item.slope14d)">{{ formatSlope(item.slope14d) }}</td>
+                            <td :class="momentumClass(item.slope20d)">{{ formatSlope(item.slope20d) }}</td>
+                            <td>{{ formatSigma(item.sigma) }}</td>
                             <td>
                                 <span v-for="tag in item.tags" :key="tag.id"
                                       class="tag-badge"
@@ -353,7 +435,7 @@
                     <tr>
                         <td><strong>相对动量</strong></td>
                         <td>选出强势 ETF</td>
-                        <td>按长期动量降序排列，取前 N 名</td>
+                        <td>按综合动量分排序，并结合 7/14/20 日斜率与趋势状态判断动能方向</td>
                     </tr>
                     <tr>
                         <td><strong>低波因子</strong></td>
@@ -460,8 +542,72 @@
                 </p>
             </div>
 
+            <div class="logic-section">
+                <h4>七、动量排名怎么看与怎么用</h4>
+                <p>「全部动量排名」是把每只 ETF 的短期、长期动能、上涨质量综合成一个<strong>动量分</strong>后排序的结果，用于快速判断当前谁最强。下面是各字段含义和参考用法：</p>
+                <table class="logic-table">
+                    <thead>
+                    <tr>
+                        <th style="width: 110px;">字段</th>
+                        <th style="width: 260px;">含义</th>
+                        <th>怎么看 / 怎么用</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><strong>排名</strong></td>
+                        <td>按动量分从高到低排序</td>
+                        <td>排名越靠前，当前相对动能越强。一般优先关注前 10 名。</td>
+                    </tr>
+                    <tr>
+                        <td><strong>动量分</strong></td>
+                        <td>综合得分 = 长期×0.6 + 短期×0.3 + 上涨占比×100×0.1</td>
+                        <td>正值代表整体向上，负值代表走弱。数值越高，当前强势程度越高。</td>
+                    </tr>
+                    <tr>
+                        <td><strong>7日排名变化</strong></td>
+                        <td>相对 7 日前排名升降几名</td>
+                        <td>正数表示排名上升（↑），负数表示下降（↓）。变化大说明近期相对强弱在快速切换。</td>
+                    </tr>
+                    <tr>
+                        <td><strong>趋势</strong></td>
+                        <td>7 种状态：急剧上升 / 上升 / 平缓上升 / 平缓 / 平缓下降 / 下降 / 急剧下降</td>
+                        <td>鼠标悬停可看文字描述。优先关注「急剧上升」「上升」；对「急剧下降」保持谨慎。趋势由 7/14/20 日斜率加权得出，比单日涨跌更稳。</td>
+                    </tr>
+                    <tr>
+                        <td><strong>7/14/20日斜率</strong></td>
+                        <td>动量分在最近 7/14/20 个交易日的日均变化</td>
+                        <td>斜率为正说明动量在增强，为负说明在衰减。7日 &gt; 14日 &gt; 20日，代表加速；反之代表动能放缓。</td>
+                    </tr>
+                    <tr>
+                        <td><strong>σ</strong></td>
+                        <td>该基金近期动量分变化的波动标准差</td>
+                        <td>σ 是该基金自己的“正常波动”基准。趋势判定已经相对 σ 做了标准化，σ 越大说明该基金日常抖动越大，看趋势比看绝对斜率更可靠。</td>
+                    </tr>
+                    <tr>
+                        <td><strong>短期/长期动量</strong></td>
+                        <td>短周期 / 长周期窗口内的涨跌幅</td>
+                        <td>长期 &gt; 0 是基本门槛；短期大幅领先长期，可能处于加速段。</td>
+                    </tr>
+                    <tr>
+                        <td><strong>上涨占比</strong></td>
+                        <td>窗口内上涨交易日占比</td>
+                        <td>&gt; 50% 说明走势比较稳，脉冲式上涨会被过滤。</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <p style="margin-top: 12px;"><strong>使用建议：</strong></p>
+                <ol class="logic-list">
+                    <li><strong>先看排名 + 趋势：</strong>优先选择排名靠前且趋势为「急剧上升」或「上升」的 ETF。</li>
+                    <li><strong>再用斜率确认：</strong>7 日斜率 &gt; 14 日 &gt; 20 日，说明短期强于中期，动能仍在加强；如果 7 日斜率明显低于 14/20 日，可能是短期回调或上涨放缓。</li>
+                    <li><strong>结合 7 日排名变化：</strong>趋势向上 + 排名大幅上升，是较强的共振信号；趋势向下 + 排名下降，建议回避。</li>
+                    <li><strong>善用筛选器：</strong>可以用「趋势」「短期动量」「长期动量」「动量分」快速过滤出符合自己标准的标的。</li>
+                    <li><strong>ranking 只是参考：</strong>每周五实际调仓还会叠加均线过滤、上涨质量、低波加权、大盘风控和止损规则，排名靠前的 ETF 不一定会直接入选最终持仓。</li>
+                </ol>
+            </div>
+
             <div class="logic-highlight">
-                <p><strong>一句话总结：</strong>用 70% 稳健仓位打底（平衡型）+ 30% 进攻仓位增强（积极型），通过“动量选股 + 上涨质量过滤 + 低波加权 + 均线过滤 + 大盘风控”五重机制，在控制风险的前提下争取跑赢市场。</p>
+                <p><strong>一句话总结：</strong>用 70% 稳健仓位打底（平衡型）+ 30% 进攻仓位增强（积极型），通过“动量选股 + 趋势跟踪 + 上涨质量过滤 + 低波加权 + 均线过滤 + 大盘风控”六重机制，在控制风险的前提下争取跑赢市场。</p>
             </div>
         </div>
     </div>
@@ -471,6 +617,16 @@
         <div class="card">
             <div class="toolbar">
                 <div class="filter-bar">
+                    <input class="form-control" v-model="fundSearchKeyword" @keyup.enter="loadFunds" placeholder="搜索代码/名称" style="width: 180px;" />
+                    <select class="form-select" v-model="fundSearchType" @change="loadFunds" style="width: 150px;">
+                        <option :value="null">全部类型</option>
+                        <option value="WIDE_BASE">宽基</option>
+                        <option value="SECTOR">行业</option>
+                        <option value="BOND">债券</option>
+                        <option value="GOLD">商品</option>
+                        <option value="OVERSEAS">海外</option>
+                        <option value="OTHER">其他</option>
+                    </select>
                     <select class="form-select" v-model="fundFilterTagId" @change="loadFunds" style="width: 180px;">
                         <option :value="null">全部标签</option>
                         <option v-for="tag in tags" :key="tag.id" :value="tag.id">{{ tag.tagName }}</option>
@@ -654,7 +810,13 @@
                     drawdownCurve: []
                 },
                 allMomentumRankGroups: [],
-                rankTagFilter: null,
+                rankTagFilter: [],
+                rankChangeFilter: null,
+                minRankChange: null,
+                minShortMomentum: null,
+                minLongMomentum: null,
+                minMomentumScore: null,
+                trendFilter: null,
                 navChart: null,
                 drawdownChart: null,
                 volumeChart: null,
@@ -662,6 +824,8 @@
                 funds: [],
                 tags: [],
                 fundFilterTagId: null,
+                fundSearchKeyword: '',
+                fundSearchType: null,
                 executingStrategy: false,
                 fundModal: {
                     visible: false,
@@ -689,14 +853,43 @@
                 return medium + small;
             },
             filteredAllMomentumRankGroups() {
-                if (!this.rankTagFilter) {
-                    return this.allMomentumRankGroups;
-                }
+                const minShort = this.minShortMomentum === null ? null : Number(this.minShortMomentum);
+                const minLong = this.minLongMomentum === null ? null : Number(this.minLongMomentum);
+                const minScore = this.minMomentumScore === null ? null : Number(this.minMomentumScore);
+                const minChange = this.minRankChange === null ? null : Number(this.minRankChange);
+                const selectedTagIds = new Set(this.rankTagFilter.map(id => Number(id)));
+                const trendSets = {
+                    'up': ['UP', 'FLAT_UP', 'SHARP_UP'],
+                    'down': ['DOWN', 'FLAT_DOWN', 'SHARP_DOWN'],
+                    'sharp_up': ['SHARP_UP'],
+                    'sharp_down': ['SHARP_DOWN'],
+                    'flat': ['FLAT']
+                };
+                const allowedTrends = this.trendFilter ? trendSets[this.trendFilter] : null;
                 return this.allMomentumRankGroups.map(group => ({
                     ...group,
-                    ranks: group.ranks.filter(item =>
-                        item.tags && item.tags.some(tag => tag.id === this.rankTagFilter)
-                    )
+                    ranks: group.ranks.filter(item => {
+                        const tagMatch = selectedTagIds.size === 0 ||
+                            (item.tags && item.tags.some(tag => selectedTagIds.has(Number(tag.id))));
+                        let changeMatch = true;
+                        if (this.rankChangeFilter === 'up') {
+                            changeMatch = item.rankChange !== null && item.rankChange > 0;
+                        } else if (this.rankChangeFilter === 'down') {
+                            changeMatch = item.rankChange !== null && item.rankChange < 0;
+                        }
+                        if (changeMatch && minChange !== null && item.rankChange !== null) {
+                            changeMatch = Math.abs(item.rankChange) >= minChange;
+                        }
+                        const shortMatch = minShort === null ||
+                            (item.shortMomentum !== null && Number(item.shortMomentum) >= minShort);
+                        const longMatch = minLong === null ||
+                            (item.longMomentum !== null && Number(item.longMomentum) >= minLong);
+                        const scoreMatch = minScore === null ||
+                            (item.momentumScore !== null && Number(item.momentumScore) >= minScore);
+                        const trendMatch = allowedTrends === null ||
+                            (item.momentumTrend !== null && allowedTrends.includes(item.momentumTrend));
+                        return tagMatch && changeMatch && shortMatch && longMatch && scoreMatch && trendMatch;
+                    })
                 }));
             }
         },
@@ -779,6 +972,24 @@
                 if (num < 0) return 'momentum-negative';
                 return 'momentum-zero';
             },
+            rankChangeClass(value) {
+                if (value === null || value === undefined) return 'rank-change-neutral';
+                if (value > 0) return 'rank-change-up';
+                if (value < 0) return 'rank-change-down';
+                return 'rank-change-neutral';
+            },
+            formatSlope(value) {
+                if (value === null || value === undefined) return '-';
+                const num = Number(value);
+                return (num >= 0 ? '+' : '') + num.toFixed(2);
+            },
+            formatSigma(value) {
+                if (value === null || value === undefined) return '-';
+                return Number(value).toFixed(2);
+            },
+            trendClass(trend) {
+                return trend ? 'trend-' + trend : '';
+            },
             formatMoney(value) {
                 if (value === null || value === undefined) return '-';
                 const num = Number(value) / 100000000; // 转换为亿元
@@ -797,6 +1008,12 @@
                     const params = { includeDisabled: true };
                     if (this.fundFilterTagId) {
                         params.tagId = this.fundFilterTagId;
+                    }
+                    if (this.fundSearchKeyword && this.fundSearchKeyword.trim()) {
+                        params.keyword = this.fundSearchKeyword.trim();
+                    }
+                    if (this.fundSearchType) {
+                        params.fundType = this.fundSearchType;
                     }
                     const res = await axios.get('/api/funds', { params });
                     this.funds = res.data;

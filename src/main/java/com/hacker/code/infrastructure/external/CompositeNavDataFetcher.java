@@ -4,6 +4,7 @@ import com.hacker.code.domain.fund.service.NavDataFetcher;
 import com.hacker.code.domain.fund.valueobject.Nav;
 import com.hacker.code.infrastructure.external.eastmoney.EastMoneyKlineNavFetcher;
 import com.hacker.code.infrastructure.external.sina.SinaFinanceNavClient;
+import com.hacker.code.infrastructure.external.tencent.TencentKlineNavFetcher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Primary;
@@ -25,6 +26,7 @@ import java.util.List;
 public class CompositeNavDataFetcher implements NavDataFetcher {
 
     private final EastMoneyKlineNavFetcher eastMoneyFetcher;
+    private final TencentKlineNavFetcher tencentFetcher;
     private final SinaFinanceNavClient sinaFetcher;
 
     @Override
@@ -34,7 +36,13 @@ public class CompositeNavDataFetcher implements NavDataFetcher {
             return history;
         }
 
-        log.warn("EastMoney 获取 {} 历史净值失败，回退到新浪最新行情", fundCode);
+        log.warn("EastMoney 获取 {} 历史净值失败，尝试腾讯财经兜底", fundCode);
+        history = tencentFetcher.fetchHistory(fundCode, startDate, endDate);
+        if (!history.isEmpty()) {
+            return history;
+        }
+
+        log.warn("腾讯财经获取 {} 历史净值失败，回退到新浪最新行情", fundCode);
         Nav latest = sinaFetcher.fetchLatest(fundCode);
         if (latest != null) {
             List<Nav> fallback = new ArrayList<>();
@@ -47,6 +55,10 @@ public class CompositeNavDataFetcher implements NavDataFetcher {
     @Override
     public Nav fetchLatest(String fundCode) {
         Nav nav = eastMoneyFetcher.fetchLatest(fundCode);
+        if (nav != null) {
+            return nav;
+        }
+        nav = tencentFetcher.fetchLatest(fundCode);
         if (nav != null) {
             return nav;
         }

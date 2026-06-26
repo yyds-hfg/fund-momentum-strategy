@@ -15,4 +15,9 @@ public interface FundMapper extends BaseMapper<FundPO> {
             "INNER JOIN fund_tag_relation r ON f.fund_code = r.fund_code " +
             "WHERE r.tag_id = #{tagId} AND f.status = 1")
     List<FundPO> selectByTag(@Param("tagId") Long tagId);
+
+    List<FundPO> selectByCondition(@Param("tagId") Long tagId,
+                                   @Param("keyword") String keyword,
+                                   @Param("fundType") String fundType,
+                                   @Param("status") Integer status);
 }

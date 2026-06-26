@@ -34,15 +34,10 @@ public class FundController {
 
     @GetMapping
     public List<FundDTO> list(@RequestParam(required = false) Long tagId,
+                              @RequestParam(required = false) String keyword,
+                              @RequestParam(required = false) String fundType,
                               @RequestParam(required = false, defaultValue = "false") boolean includeDisabled) {
-        List<Fund> funds;
-        if (tagId != null) {
-            funds = fundRepository.findByTag(tagId);
-        } else if (includeDisabled) {
-            funds = fundRepository.findAll();
-        } else {
-            funds = fundRepository.findAllEnabled();
-        }
+        List<Fund> funds = fundRepository.findByConditions(tagId, keyword, fundType, includeDisabled);
         return funds.stream().map(fundAssembler::toDTO).collect(Collectors.toList());
     }
 

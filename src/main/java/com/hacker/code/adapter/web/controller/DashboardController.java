@@ -41,7 +41,7 @@ public class DashboardController {
     @GetMapping("/api/momentum-ranks")
     @ResponseBody
     public List<FundMomentumRanksGroupDTO> allMomentumRanks() {
-        return dashboardAppService.getAllMomentumRankGroupsForLatestTradeDate();
+        return dashboardAppService.getAllMomentumRankGroupsForRealtime();
     }
 
     @GetMapping("/api/backtest/{id}")

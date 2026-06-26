@@ -12,8 +12,10 @@ import com.hacker.code.domain.fund.valueobject.FundTag;
 import com.hacker.code.domain.fund.valueobject.Nav;
 import com.hacker.code.domain.portfolio.valueobject.RebalanceAdvice;
 import com.hacker.code.domain.shared.util.TradeDateUtil;
+import com.hacker.code.domain.strategy.entity.FundMomentumTrend;
 import com.hacker.code.domain.strategy.entity.StrategyConfig;
 import com.hacker.code.domain.strategy.repository.BacktestRecordRepository;
+import com.hacker.code.domain.strategy.repository.FundMomentumTrendRepository;
 import com.hacker.code.domain.strategy.repository.StrategyConfigRepository;
 import com.hacker.code.domain.strategy.service.MomentumCalculator;
 import com.hacker.code.domain.strategy.service.UpQualityCalculator;
@@ -47,6 +49,7 @@ public class DashboardAppService {
     private final FundDomainService fundDomainService;
     private final NavDataRepository navDataRepository;
     private final StrategyConfigRepository strategyConfigRepository;
+    private final FundMomentumTrendRepository momentumTrendRepository;
     private final MomentumCalculator momentumCalculator;
     private final UpQualityCalculator upQualityCalculator;
 
@@ -114,16 +117,38 @@ public class DashboardAppService {
         return getAllMomentumRankGroups(TradeDateUtil.determineEffectiveTradeDate());
     }
 
+    /**
+     * 实时参考排名：使用当前日期作为目标，允许各基金使用各自最新可用净值日期，
+     * 用于盘中或收盘后尽早查看最新动量排名。
+     */
+    public List<FundMomentumRanksGroupDTO> getAllMomentumRankGroupsForRealtime() {
+        return buildMomentumRankGroups(LocalDate.now(), Integer.MAX_VALUE);
+    }
+
     private List<FundMomentumRanksGroupDTO> buildMomentumRankGroups(LocalDate tradeDate, int limit) {
         List<Fund> candidates = fundDomainService.getCandidatePool().stream()
                 .filter(fund -> !"000852".equals(fund.getFundCode()))
                 .collect(Collectors.toList());
 
         LocalDate targetDate = tradeDate;
+        LocalDate prevDate = targetDate.minusDays(7);
 
         List<FundMomentumRanksGroupDTO> groups = new ArrayList<>();
         for (StrategyConfig config : strategyConfigRepository.findAllEnabled()) {
+            // 当前排名
             List<FundMomentumRankDTO> ranks = calculateMomentumRanks(candidates, config, targetDate, limit);
+            // 7 日前全量排名，用于计算名次变化
+            List<FundMomentumRankDTO> prevRanks = calculateMomentumRanks(candidates, config, prevDate, Integer.MAX_VALUE);
+            Map<String, Integer> prevRankMap = prevRanks.stream()
+                    .filter(r -> r.getRank() != null)
+                    .collect(Collectors.toMap(FundMomentumRankDTO::getFundCode, FundMomentumRankDTO::getRank));
+            for (FundMomentumRankDTO rank : ranks) {
+                Integer prevRank = prevRankMap.get(rank.getFundCode());
+                if (prevRank != null) {
+                    rank.setRankChange(prevRank - rank.getRank());
+                }
+            }
+
             FundMomentumRanksGroupDTO group = new FundMomentumRanksGroupDTO();
             group.setStrategyType(config.getStrategyType().name());
             group.setStrategyName(config.getStrategyType().getDescription());
@@ -153,6 +178,11 @@ public class DashboardAppService {
                 .min(Comparator.naturalOrder())
                 .orElse(targetDate);
 
+        List<FundMomentumTrend> trends = momentumTrendRepository.findByStrategyTypeAndTradeDate(
+                config.getStrategyType(), referenceDate);
+        Map<String, FundMomentumTrend> trendMap = trends.stream()
+                .collect(Collectors.toMap(FundMomentumTrend::getFundCode, t -> t));
+
         List<FundMomentumRankDTO> ranks = new ArrayList<>();
         for (Fund fund : candidates) {
             List<Nav> navHistory = navDataRepository.findByDateRange(fund.getFundCode(), queryStartDate, targetDate);
@@ -181,6 +211,18 @@ public class DashboardAppService {
             rank.setLongMomentum(longMomentum.getValue());
             rank.setUpDaysRatio(upQuality.getUpDaysRatio());
             rank.setMomentumScore(momentumScore);
+
+            FundMomentumTrend trend = trendMap.get(fund.getFundCode());
+            if (trend != null) {
+                rank.setMomentumTrend(trend.getTrend().name());
+                rank.setMomentumTrendLabel(trend.getTrend().getLabel());
+                rank.setMomentumTrendDesc(trend.getDescription());
+                rank.setSlope7d(trend.getSlope7());
+                rank.setSlope14d(trend.getSlope14());
+                rank.setSlope20d(trend.getSlope20());
+                rank.setSigma(trend.getSigma());
+            }
+
             for (FundTag tag : fund.getTags()) {
                 rank.getTags().add(fundAssembler.toDTO(tag));
             }
