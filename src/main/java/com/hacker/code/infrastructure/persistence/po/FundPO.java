@@ -21,6 +21,8 @@ public class FundPO {
 
     private String fundType;
 
+    private String description;
+
     private LocalDate listedDate;
 
     private Integer status;

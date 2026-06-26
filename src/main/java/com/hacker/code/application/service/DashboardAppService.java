@@ -2,13 +2,11 @@ package com.hacker.code.application.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hacker.code.application.assembler.FundAssembler;
 import com.hacker.code.application.assembler.StrategyAssembler;
 import com.hacker.code.application.dto.*;
 import com.hacker.code.domain.fund.entity.Fund;
 import com.hacker.code.domain.fund.repository.NavDataRepository;
 import com.hacker.code.domain.fund.service.FundDomainService;
-import com.hacker.code.domain.fund.valueobject.FundTag;
 import com.hacker.code.domain.fund.valueobject.Nav;
 import com.hacker.code.domain.portfolio.valueobject.RebalanceAdvice;
 import com.hacker.code.domain.shared.util.TradeDateUtil;
@@ -18,8 +16,10 @@ import com.hacker.code.domain.strategy.repository.BacktestRecordRepository;
 import com.hacker.code.domain.strategy.repository.FundMomentumTrendRepository;
 import com.hacker.code.domain.strategy.repository.StrategyConfigRepository;
 import com.hacker.code.domain.strategy.service.MomentumCalculator;
+import com.hacker.code.domain.strategy.service.MovingAverageCalculator;
 import com.hacker.code.domain.strategy.service.UpQualityCalculator;
 import com.hacker.code.domain.strategy.valueobject.Momentum;
+import com.hacker.code.domain.strategy.valueobject.MovingAverage;
 import com.hacker.code.domain.strategy.valueobject.UpQuality;
 import com.hacker.code.infrastructure.persistence.po.BacktestRecordPO;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +43,6 @@ public class DashboardAppService {
     private final StrategyExecutionAppService strategyExecutionAppService;
     private final MarketDataAppService marketDataAppService;
     private final StrategyAssembler strategyAssembler;
-    private final FundAssembler fundAssembler;
     private final BacktestRecordRepository backtestRecordRepository;
     private final ObjectMapper objectMapper;
     private final FundDomainService fundDomainService;
@@ -51,6 +50,7 @@ public class DashboardAppService {
     private final StrategyConfigRepository strategyConfigRepository;
     private final FundMomentumTrendRepository momentumTrendRepository;
     private final MomentumCalculator momentumCalculator;
+    private final MovingAverageCalculator movingAverageCalculator;
     private final UpQualityCalculator upQualityCalculator;
 
     public DashboardDTO getDashboardData() {
@@ -203,6 +203,8 @@ public class DashboardAppService {
             FundMomentumRankDTO rank = new FundMomentumRankDTO();
             rank.setFundCode(fund.getFundCode());
             rank.setFundName(fund.getFundName());
+            rank.setFundType(fund.getFundType().name());
+            rank.setDescription(fund.getDescription());
             rank.setNavDate(latest.getDate());
             rank.setCloseNav(latest.getCloseNav());
             BigDecimal momentumScore = calculateMomentumScore(
@@ -212,20 +214,29 @@ public class DashboardAppService {
             rank.setUpDaysRatio(upQuality.getUpDaysRatio());
             rank.setMomentumScore(momentumScore);
 
+            if (trimmed.size() >= 5) {
+                MovingAverage ma5 = movingAverageCalculator.calculate(trimmed, 5);
+                rank.setMa5(ma5.getValue());
+                rank.setMa5Status(calculateMaStatus(latest.getCloseNav(), ma5.getValue()));
+            }
+            if (trimmed.size() >= 10) {
+                MovingAverage ma10 = movingAverageCalculator.calculate(trimmed, 10);
+                rank.setMa10(ma10.getValue());
+                rank.setMa10Status(calculateMaStatus(latest.getCloseNav(), ma10.getValue()));
+            }
+            if (trimmed.size() >= 20) {
+                MovingAverage ma20 = movingAverageCalculator.calculate(trimmed, 20);
+                rank.setMa20(ma20.getValue());
+                rank.setMa20Status(calculateMaStatus(latest.getCloseNav(), ma20.getValue()));
+            }
+
             FundMomentumTrend trend = trendMap.get(fund.getFundCode());
             if (trend != null) {
                 rank.setMomentumTrend(trend.getTrend().name());
                 rank.setMomentumTrendLabel(trend.getTrend().getLabel());
                 rank.setMomentumTrendDesc(trend.getDescription());
-                rank.setSlope7d(trend.getSlope7());
-                rank.setSlope14d(trend.getSlope14());
-                rank.setSlope20d(trend.getSlope20());
-                rank.setSigma(trend.getSigma());
             }
 
-            for (FundTag tag : fund.getTags()) {
-                rank.getTags().add(fundAssembler.toDTO(tag));
-            }
             ranks.add(rank);
         }
 
@@ -248,6 +259,26 @@ public class DashboardAppService {
                 .add(shortMomentum.multiply(new BigDecimal("0.3")))
                 .add(upDaysRatio.multiply(BigDecimal.valueOf(100)).multiply(new BigDecimal("0.1")))
                 .setScale(4, RoundingMode.HALF_UP);
+    }
+
+    private String calculateMaStatus(BigDecimal closeNav, BigDecimal maValue) {
+        if (maValue == null || maValue.compareTo(BigDecimal.ZERO) == 0) {
+            return null;
+        }
+        BigDecimal deviation = closeNav.subtract(maValue)
+                .divide(maValue, 6, RoundingMode.HALF_UP)
+                .multiply(BigDecimal.valueOf(100));
+        double d = deviation.doubleValue();
+        if (d < 0) {
+            return "跌破";
+        }
+        if (d < 1.0) {
+            return "站上";
+        }
+        if (d < 4.0) {
+            return "突破";
+        }
+        return "强势突破";
     }
 
     private List<Nav> trimToDate(List<Nav> navHistory, LocalDate referenceDate) {

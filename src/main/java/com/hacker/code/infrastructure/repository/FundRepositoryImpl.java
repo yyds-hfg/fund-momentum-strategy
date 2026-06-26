@@ -3,7 +3,6 @@ package com.hacker.code.infrastructure.repository;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.hacker.code.domain.fund.entity.Fund;
 import com.hacker.code.domain.fund.repository.FundRepository;
-import com.hacker.code.domain.fund.repository.FundTagRepository;
 import com.hacker.code.domain.fund.valueobject.FundStatus;
 import com.hacker.code.domain.fund.valueobject.FundType;
 import com.hacker.code.infrastructure.mapper.FundMapper;
@@ -20,7 +19,6 @@ import java.util.stream.Collectors;
 public class FundRepositoryImpl implements FundRepository {
 
     private final FundMapper fundMapper;
-    private final FundTagRepository fundTagRepository;
 
     @Override
     public Optional<Fund> findByCode(String fundCode) {
@@ -47,16 +45,9 @@ public class FundRepositoryImpl implements FundRepository {
     }
 
     @Override
-    public List<Fund> findByTag(Long tagId) {
-        return fundMapper.selectByTag(tagId).stream()
-                .map(this::toDomain)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Fund> findByConditions(Long tagId, String keyword, String fundType, boolean includeDisabled) {
+    public List<Fund> findByConditions(String keyword, List<String> fundTypes, boolean includeDisabled) {
         Integer status = includeDisabled ? null : FundStatus.ENABLED.getCode();
-        return fundMapper.selectByCondition(tagId, keyword, fundType, status).stream()
+        return fundMapper.selectByCondition(keyword, fundTypes, status).stream()
                 .map(this::toDomain)
                 .collect(Collectors.toList());
     }
@@ -92,9 +83,9 @@ public class FundRepositoryImpl implements FundRepository {
         fund.setFundCode(po.getFundCode());
         fund.setFundName(po.getFundName());
         fund.setFundType(FundType.valueOf(po.getFundType()));
+        fund.setDescription(po.getDescription());
         fund.setListedDate(po.getListedDate());
         fund.setStatus(po.getStatus() == FundStatus.ENABLED.getCode() ? FundStatus.ENABLED : FundStatus.DISABLED);
-        fundTagRepository.findByFundCode(po.getFundCode()).forEach(fund::addTag);
         return fund;
     }
 
@@ -103,6 +94,7 @@ public class FundRepositoryImpl implements FundRepository {
         po.setFundCode(fund.getFundCode());
         po.setFundName(fund.getFundName());
         po.setFundType(fund.getFundType().name());
+        po.setDescription(fund.getDescription());
         po.setListedDate(fund.getListedDate());
         po.setStatus(fund.getStatus() == FundStatus.ENABLED ? FundStatus.ENABLED.getCode() : FundStatus.DISABLED.getCode());
         return po;

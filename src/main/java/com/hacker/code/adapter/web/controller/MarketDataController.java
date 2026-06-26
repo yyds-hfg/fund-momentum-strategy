@@ -20,8 +20,8 @@ public class MarketDataController {
 
     @PostMapping("/sync")
     public MarketDataSyncResult sync(
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+            @RequestParam(name = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(name = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
         if (startDate != null && endDate != null) {
             return marketDataAppService.syncMarketDataHistory(startDate, endDate);
         }
@@ -30,23 +30,23 @@ public class MarketDataController {
 
     @GetMapping("/overview")
     public MarketOverviewDTO overview(
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate tradeDate) {
+            @RequestParam(name = "tradeDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate tradeDate) {
         LocalDate date = tradeDate == null ? TradeDateUtil.determineEffectiveTradeDate() : tradeDate;
         return marketDataAppService.getMarketOverview(date);
     }
 
     @GetMapping("/volume-trend")
     public List<MarketOverviewDTO> volumeTrend(
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
-            @RequestParam(defaultValue = "60") int days) {
+            @RequestParam(name = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            @RequestParam(name = "days", defaultValue = "60") int days) {
         LocalDate date = endDate == null ? TradeDateUtil.determineEffectiveTradeDate() : endDate;
         return marketDataAppService.getVolumeTrend(date, days);
     }
 
     @GetMapping("/capital-flow-trend")
     public List<MarketOverviewDTO> capitalFlowTrend(
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
-            @RequestParam(defaultValue = "60") int days) {
+            @RequestParam(name = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            @RequestParam(name = "days", defaultValue = "60") int days) {
         LocalDate date = endDate == null ? TradeDateUtil.determineEffectiveTradeDate() : endDate;
         return marketDataAppService.getCapitalFlowTrend(date, days);
     }

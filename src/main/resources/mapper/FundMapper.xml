@@ -4,19 +4,16 @@
 
     <select id="selectByCondition" resultType="com.hacker.code.infrastructure.persistence.po.FundPO">
         SELECT f.* FROM fund f
-        <if test="tagId != null">
-            INNER JOIN fund_tag_relation r ON f.fund_code = r.fund_code
-        </if>
         <where>
-            <if test="tagId != null">
-                AND r.tag_id = #{tagId}
-            </if>
             <if test="keyword != null and keyword != ''">
                 AND (f.fund_code LIKE CONCAT('%', #{keyword}, '%')
                 OR f.fund_name LIKE CONCAT('%', #{keyword}, '%'))
             </if>
-            <if test="fundType != null and fundType != ''">
-                AND f.fund_type = #{fundType}
+            <if test="fundTypes != null and fundTypes.size() > 0">
+                AND f.fund_type IN
+                <foreach collection="fundTypes" item="type" open="(" separator="," close=")">
+                    #{type}
+                </foreach>
             </if>
             <if test="status != null">
                 AND f.status = #{status}

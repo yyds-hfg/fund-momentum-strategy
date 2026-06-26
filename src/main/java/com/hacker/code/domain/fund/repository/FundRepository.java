@@ -13,9 +13,7 @@ public interface FundRepository {
 
     List<Fund> findAll();
 
-    List<Fund> findByTag(Long tagId);
-
-    List<Fund> findByConditions(Long tagId, String keyword, String fundType, boolean includeDisabled);
+    List<Fund> findByConditions(String keyword, List<String> fundTypes, boolean includeDisabled);
 
     void save(Fund fund);
 

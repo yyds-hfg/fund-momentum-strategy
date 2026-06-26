@@ -27,7 +27,7 @@ public class StrategyController {
     private final StrategyAssembler strategyAssembler;
 
     @PostMapping("/execute")
-    public RebalanceAdviceDTO execute(@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate tradeDate) {
+    public RebalanceAdviceDTO execute(@RequestParam(name = "tradeDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate tradeDate) {
         LocalDate date = tradeDate == null ? TradeDateUtil.determineEffectiveTradeDate() : tradeDate;
         RebalanceAdvice advice = strategyExecutionAppService.executeWeeklyStrategy(date);
         return strategyAssembler.toDTO(advice);
@@ -43,7 +43,7 @@ public class StrategyController {
     }
 
     @GetMapping("/results")
-    public List<StrategyResultDTO> results(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate tradeDate) {
+    public List<StrategyResultDTO> results(@RequestParam(name = "tradeDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate tradeDate) {
         return strategyResultRepository.findByDate(tradeDate).stream()
                 .map(strategyAssembler::toDTO)
                 .collect(Collectors.toList());

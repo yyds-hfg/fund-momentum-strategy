@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS fund (
     fund_code VARCHAR(20) NOT NULL COMMENT '基金代码',
     fund_name VARCHAR(100) NOT NULL COMMENT '基金名称',
     fund_type VARCHAR(20) NOT NULL COMMENT '基金类型：WIDE_BASE/SECTOR/BOND/GOLD/OTHER',
+    description VARCHAR(500) COMMENT '基金描述',
     listed_date DATE COMMENT '上市日期',
     status TINYINT NOT NULL DEFAULT 1 COMMENT '0-禁用 1-启用',
     create_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -31,25 +32,6 @@ CREATE TABLE IF NOT EXISTS fund_nav (
     UNIQUE KEY uk_fund_nav (fund_code, nav_date),
     KEY idx_fund_code_date (fund_code, nav_date)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='基金净值数据';
-
--- ETF 标签定义
-CREATE TABLE IF NOT EXISTS fund_tag (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    tag_code VARCHAR(50) NOT NULL COMMENT '标签编码',
-    tag_name VARCHAR(100) NOT NULL COMMENT '标签名称',
-    color VARCHAR(20) COMMENT '前端展示颜色',
-    create_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE KEY uk_tag_code (tag_code)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='ETF 标签定义';
-
--- ETF 与标签多对多关系
-CREATE TABLE IF NOT EXISTS fund_tag_relation (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    fund_code VARCHAR(20) NOT NULL COMMENT '基金代码',
-    tag_id BIGINT NOT NULL COMMENT '标签 ID',
-    UNIQUE KEY uk_fund_tag (fund_code, tag_id),
-    KEY idx_tag_id (tag_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='ETF 标签关联';
 
 -- 策略配置
 CREATE TABLE IF NOT EXISTS strategy_config (

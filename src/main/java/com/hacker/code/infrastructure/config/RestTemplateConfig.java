@@ -3,6 +3,7 @@ package com.hacker.code.infrastructure.config;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
@@ -14,6 +15,7 @@ import java.time.Duration;
 public class RestTemplateConfig {
 
     @Bean
+    @Primary
     public RestTemplate restTemplate(RestTemplateBuilder builder, CrawlerProperties crawlerProperties) {
         return builder
                 .setConnectTimeout(Duration.ofMillis(crawlerProperties.getRequestTimeout()))
