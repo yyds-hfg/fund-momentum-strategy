@@ -46,7 +46,7 @@ public class DashboardController {
 
     @GetMapping("/api/backtest/{id}")
     @ResponseBody
-    public BacktestDetailDTO backtestDetail(@PathVariable Long id) {
+    public BacktestDetailDTO backtestDetail(@PathVariable(name = "id") Long id) {
         return dashboardAppService.getBacktestDetail(id);
     }
 }

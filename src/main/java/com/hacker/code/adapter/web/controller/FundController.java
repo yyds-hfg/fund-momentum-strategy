@@ -40,7 +40,7 @@ public class FundController {
     }
 
     @GetMapping("/{code}")
-    public FundDTO detail(@PathVariable String code) {
+    public FundDTO detail(@PathVariable(name = "code") String code) {
         return fundAssembler.toDTO(fundAppService.getFund(code));
     }
 
@@ -50,17 +50,17 @@ public class FundController {
     }
 
     @PutMapping("/{code}")
-    public void update(@PathVariable String code, @RequestBody FundDTO dto) {
+    public void update(@PathVariable(name = "code") String code, @RequestBody FundDTO dto) {
         fundAppService.updateFund(code, dto.getFundName(), dto.getFundType(), dto.getDescription(), dto.getStatus());
     }
 
     @DeleteMapping("/{code}")
-    public void delete(@PathVariable String code) {
+    public void delete(@PathVariable(name = "code") String code) {
         fundAppService.deleteFund(code);
     }
 
     @GetMapping("/{code}/nav")
-    public List<Nav> navHistory(@PathVariable String code,
+    public List<Nav> navHistory(@PathVariable(name = "code") String code,
                                 @RequestParam(name = "startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
                                 @RequestParam(name = "endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
         return navDataRepository.findByDateRange(code, startDate, endDate);
@@ -73,7 +73,7 @@ public class FundController {
     }
 
     @PostMapping("/{code}/sync")
-    public SyncResult syncFundNav(@PathVariable String code,
+    public SyncResult syncFundNav(@PathVariable(name = "code") String code,
                                   @RequestParam(name = "startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
                                   @RequestParam(name = "endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
         return fundDataSyncAppService.syncNavDataForFund(code, startDate, endDate);

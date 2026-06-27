@@ -5,7 +5,6 @@ import com.hacker.code.adapter.job.MomentumTrendJob;
 import com.hacker.code.adapter.job.NavSyncJob;
 import com.hacker.code.adapter.job.StrategyJob;
 import com.hacker.code.application.dto.RunJobResultDTO;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -18,16 +17,25 @@ import java.util.concurrent.Executor;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class BatchJobManualService {
 
     private final NavSyncJob navSyncJob;
     private final MarketDataSyncJob marketDataSyncJob;
     private final MomentumTrendJob momentumTrendJob;
     private final StrategyJob strategyJob;
-
-    @Qualifier("batchJobExecutor")
     private final Executor batchJobExecutor;
+
+    public BatchJobManualService(NavSyncJob navSyncJob,
+                                 MarketDataSyncJob marketDataSyncJob,
+                                 MomentumTrendJob momentumTrendJob,
+                                 StrategyJob strategyJob,
+                                 @Qualifier("batchJobExecutor") Executor batchJobExecutor) {
+        this.navSyncJob = navSyncJob;
+        this.marketDataSyncJob = marketDataSyncJob;
+        this.momentumTrendJob = momentumTrendJob;
+        this.strategyJob = strategyJob;
+        this.batchJobExecutor = batchJobExecutor;
+    }
 
     private final Map<String, Boolean> running = new ConcurrentHashMap<>();
 

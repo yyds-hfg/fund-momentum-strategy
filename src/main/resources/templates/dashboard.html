@@ -100,7 +100,11 @@
         .ma-status-break { background: #fff2e8; color: #d46b08; }
         .ma-status-strong { background: #fffbe6; color: #ad6800; }
         .momentum-score { font-weight: 600; }
-        .rank-table { max-height: 600px; overflow-y: auto; }
+        .rank-table { }
+        .sub-tabs { display: flex; gap: 8px; margin-bottom: 16px; border-bottom: 1px solid #e8e8e8; }
+        .sub-tab { padding: 10px 20px; cursor: pointer; border-bottom: 2px solid transparent; color: #666; font-size: 14px; }
+        .sub-tab:hover { color: #1890ff; }
+        .sub-tab.active { color: #1890ff; border-bottom-color: #1890ff; font-weight: 500; }
         .logic-section { margin-bottom: 28px; }
         .logic-section h4 { margin: 0 0 14px; font-size: 17px; color: #1f1f1f; border-left: 4px solid #1890ff; padding-left: 10px; }
         .logic-section p { margin: 0 0 10px; line-height: 1.7; color: #444; font-size: 14px; }
@@ -368,11 +372,15 @@
                 </div>
             </div>
         </div>
+        <div class="sub-tabs">
+            <div class="sub-tab" :class="{ active: activeRankGroup === 'ACTIVE' }" @click="activeRankGroup = 'ACTIVE'">积极型</div>
+            <div class="sub-tab" :class="{ active: activeRankGroup === 'BALANCED' }" @click="activeRankGroup = 'BALANCED'">平衡型</div>
+        </div>
         <div class="grid">
-            <div v-for="group in filteredAllMomentumRankGroups" :key="group.strategyType" class="card" style="overflow-x: auto; grid-column: 1 / -1;">
-                <h3>{{ group.strategyName }} 全部基金动量排名（截至 {{ group.ranks[0]?.navDate || '-' }}）</h3>
+            <div v-if="currentRankGroup" :key="currentRankGroup.strategyType" class="card" style="overflow-x: auto; grid-column: 1 / -1;">
+                <h3>{{ currentRankGroup.strategyName }} 全部基金动量排名（截至 {{ currentRankGroup.ranks[0]?.navDate || '-' }}）</h3>
                 <div class="rank-table">
-                    <table v-if="group.ranks.length > 0">
+                    <table v-if="currentRankGroup.ranks.length > 0">
                         <thead>
                         <tr>
                             <th style="width: 60px;">排名</th>
@@ -391,7 +399,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr v-for="(item, index) in group.ranks" :key="item.fundCode">
+                        <tr v-for="(item, index) in currentRankGroup.ranks" :key="item.fundCode">
                             <td><span class="rank-badge" :class="{ top: index < 3 }">{{ index + 1 }}</span></td>
                             <td>{{ item.fundName }} ({{ item.fundCode }})</td>
                             <td :class="momentumClass(item.momentumScore)" class="momentum-score">{{ formatPercent(item.momentumScore) }}</td>
@@ -438,6 +446,7 @@
                     <div v-else class="empty">暂无动量数据，请先同步基金净值</div>
                 </div>
             </div>
+            <div v-else class="card empty" style="grid-column: 1 / -1;">暂无该策略动量数据</div>
         </div>
     </div>
 
@@ -791,6 +800,7 @@
                     drawdownCurve: []
                 },
                 allMomentumRankGroups: [],
+                activeRankGroup: 'ACTIVE',
                 rankFundTypeFilter: [],
                 rankChangeFilter: null,
                 minRankChange: null,
@@ -873,6 +883,9 @@
                         return fundTypeMatch && changeMatch && shortMatch && longMatch && scoreMatch && trendMatch;
                     })
                 }));
+            },
+            currentRankGroup() {
+                return this.filteredAllMomentumRankGroups.find(g => g.strategyType === this.activeRankGroup);
             }
         },
         async mounted() {
