@@ -94,6 +94,13 @@
             pointer-events: none;
         }
         [data-tooltip]:hover::after { display: block; }
+        [data-tooltip].tooltip-multiline::after {
+            white-space: normal;
+            max-width: 360px;
+            width: max-content;
+            text-align: left;
+            line-height: 1.5;
+        }
         .ma-status { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 500; white-space: nowrap; position: relative; }
         .ma-status-below { background: #fff1f0; color: #cf1322; }
         .ma-status-above { background: #f6ffed; color: #389e0d; }
@@ -434,7 +441,7 @@
                                 <span v-else style="color: #999;">-</span>
                             </td>
                             <td>{{ fundTypeLabel(item.fundType) }}</td>
-                            <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" :title="item.description">
+                            <td class="tooltip-multiline" style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" :data-tooltip="item.description || '-'">
                                 {{ item.description || '-' }}
                             </td>
                             <td :class="momentumClass(item.shortMomentum)">{{ formatPercent(item.shortMomentum) }}</td>
@@ -714,7 +721,7 @@
                     <td :class="fund.status === 1 ? 'status-enabled' : 'status-disabled'">
                         {{ fund.status === 1 ? '启用' : '禁用' }}
                     </td>
-                    <td style="max-width: 240px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" :title="fund.description">
+                    <td class="tooltip-multiline" style="max-width: 240px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" :data-tooltip="fund.description || '-'">
                         {{ fund.description || '-' }}
                     </td>
                     <td>
