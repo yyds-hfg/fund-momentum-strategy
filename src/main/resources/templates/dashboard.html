@@ -380,8 +380,8 @@
             </div>
         </div>
         <div class="sub-tabs">
-            <div class="sub-tab" :class="{ active: activeRankGroup === 'ACTIVE' }" @click="activeRankGroup = 'ACTIVE'">积极型</div>
             <div class="sub-tab" :class="{ active: activeRankGroup === 'BALANCED' }" @click="activeRankGroup = 'BALANCED'">平衡型</div>
+            <div class="sub-tab" :class="{ active: activeRankGroup === 'ACTIVE' }" @click="activeRankGroup = 'ACTIVE'">积极型</div>
         </div>
         <div class="grid">
             <div v-if="currentRankGroup" :key="currentRankGroup.strategyType" class="card" style="overflow-x: auto; grid-column: 1 / -1;">
@@ -807,7 +807,7 @@
                     drawdownCurve: []
                 },
                 allMomentumRankGroups: [],
-                activeRankGroup: 'ACTIVE',
+                activeRankGroup: 'BALANCED',
                 rankFundTypeFilter: [],
                 rankChangeFilter: null,
                 minRankChange: null,

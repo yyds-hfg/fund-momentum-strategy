@@ -4,6 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum FundType {
+
     WIDE_BASE("宽基"),
     SECTOR("行业/主题"),
     BOND("债券"),
@@ -16,4 +17,5 @@ public enum FundType {
     FundType(String description) {
         this.description = description;
     }
+
 }

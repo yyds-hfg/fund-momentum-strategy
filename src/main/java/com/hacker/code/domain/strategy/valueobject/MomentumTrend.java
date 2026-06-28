@@ -1,6 +1,12 @@
 package com.hacker.code.domain.strategy.valueobject;
 
+
+import lombok.Getter;
+
+
+@Getter
 public enum MomentumTrend {
+
     SHARP_UP("急剧上升"),
     UP("上升"),
     FLAT_UP("平缓上升"),
@@ -15,7 +21,4 @@ public enum MomentumTrend {
         this.label = label;
     }
 
-    public String getLabel() {
-        return label;
-    }
 }

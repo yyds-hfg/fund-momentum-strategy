@@ -30,4 +30,5 @@ public class MarketEnvironmentService {
         boolean bullish = latest.getCloseNav().compareTo(ma.getValue()) > 0;
         return new MarketSignal(BENCHMARK_CODE, maWindow, bullish);
     }
+
 }

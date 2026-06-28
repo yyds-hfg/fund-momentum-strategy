@@ -14,4 +14,6 @@ public class Nav {
     BigDecimal lowNav;
     BigDecimal closeNav;
     Long volume;
+
 }
+

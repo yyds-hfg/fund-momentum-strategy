@@ -196,4 +196,5 @@ public class MomentumTrendCalculator {
     private String formatSigned(double value) {
         return (value >= 0 ? "+" : "") + String.format("%.2f", value);
     }
+
 }

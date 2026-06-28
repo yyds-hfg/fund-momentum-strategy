@@ -20,4 +20,5 @@ public class FundDomainService {
     public boolean isCandidate(String fundCode) {
         return fundRepository.exists(fundCode);
     }
+
 }

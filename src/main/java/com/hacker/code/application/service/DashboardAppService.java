@@ -155,6 +155,8 @@ public class DashboardAppService {
             group.setRanks(ranks);
             groups.add(group);
         }
+        // 全部动量排名优先展示平衡型
+        groups.sort(Comparator.comparing(g -> !"BALANCED".equals(g.getStrategyType())));
         return groups;
     }
 
