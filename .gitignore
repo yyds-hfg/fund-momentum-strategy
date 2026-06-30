@@ -41,4 +41,4 @@ target/
 ### Frontend build output ###
 frontend/node_modules/
 frontend/dist/
-src/main/resources/static/
+fund-admin/src/main/resources/static/
