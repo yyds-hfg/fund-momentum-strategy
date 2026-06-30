@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue'
 import { ElCard, ElRow, ElCol, ElTable, ElTableColumn, ElTag } from 'element-plus'
 import { useI18n } from '@/hooks/web/useI18n'
 import { getDashboardDataApi } from '@/api/dashboard'
-import type { DashboardData, PositionItem } from '@/api/dashboard/types'
+import type { DashboardData } from '@/api/dashboard/types'
 
 const { t } = useI18n()
 const loading = ref(false)
