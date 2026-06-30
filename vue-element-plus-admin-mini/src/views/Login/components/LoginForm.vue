@@ -51,7 +51,7 @@ const schema = reactive<FormSchema[]>([
   {
     field: 'username',
     label: t('login.username'),
-    // value: 'admin',
+    value: 'admin',
     component: 'Input',
     colProps: {
       span: 24
@@ -63,7 +63,7 @@ const schema = reactive<FormSchema[]>([
   {
     field: 'password',
     label: t('login.password'),
-    // value: 'admin',
+    value: 'admin',
     component: 'InputPassword',
     colProps: {
       span: 24
@@ -242,18 +242,19 @@ const signIn = async () => {
             userStore.setLoginInfo(undefined)
           }
           userStore.setRememberMe(unref(remember))
-          userStore.setUserInfo(res.data)
-          // 是否使用动态路由
-          if (appStore.getDynamicRouter) {
-            getRole()
-          } else {
-            await permissionStore.generateRoutes('static').catch(() => {})
-            permissionStore.getAddRouters.forEach((route) => {
-              addRoute(route as RouteRecordRaw) // 动态添加可访问路由表
-            })
-            permissionStore.setIsAddRouters(true)
-            push({ path: redirect.value || permissionStore.addRouters[0].path })
-          }
+          userStore.setToken(res.data.accessToken)
+          userStore.setUserInfo({
+            username: res.data.username,
+            nickname: res.data.nickname,
+            roles: res.data.roles || []
+          })
+          // 使用前端静态路由
+          await permissionStore.generateRoutes('static').catch(() => {})
+          permissionStore.getAddRouters.forEach((route) => {
+            addRoute(route as RouteRecordRaw) // 动态添加可访问路由表
+          })
+          permissionStore.setIsAddRouters(true)
+          push({ path: redirect.value || permissionStore.addRouters[0].path })
         }
       } finally {
         loading.value = false
