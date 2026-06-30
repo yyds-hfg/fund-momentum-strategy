@@ -34,3 +34,11 @@ target/
 
 ### Mac OS ###
 .DS_Store
+
+### Local Node.js ###
+.node/
+
+### Frontend build output ###
+frontend/node_modules/
+frontend/dist/
+src/main/resources/static/

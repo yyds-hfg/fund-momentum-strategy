@@ -21,11 +21,6 @@ public class DashboardController {
 
     private final DashboardAppService dashboardAppService;
 
-    @GetMapping
-    public String index() {
-        return "dashboard";
-    }
-
     @GetMapping("/api/data")
     @ResponseBody
     public DashboardDTO data() {

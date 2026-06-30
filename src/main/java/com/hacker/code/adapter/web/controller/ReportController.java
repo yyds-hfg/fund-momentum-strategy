@@ -8,7 +8,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -22,12 +21,6 @@ public class ReportController {
 
     private final ReportAppService reportAppService;
     private final StrategyAssembler strategyAssembler;
-
-    @GetMapping("/weekly")
-    public String weeklyReport(Model model) {
-        model.addAttribute("advice", strategyAssembler.toDTO(reportAppService.getLatestWeeklyReport()));
-        return "weekly-report";
-    }
 
     @GetMapping("/weekly/api")
     @ResponseBody
