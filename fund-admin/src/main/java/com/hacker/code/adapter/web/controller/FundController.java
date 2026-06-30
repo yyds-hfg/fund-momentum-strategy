@@ -1,5 +1,6 @@
 package com.hacker.code.adapter.web.controller;
 
+import com.hacker.code.adapter.web.common.PageResult;
 import com.hacker.code.application.assembler.FundAssembler;
 import com.hacker.code.application.dto.FundDTO;
 import com.hacker.code.application.dto.SyncResult;
@@ -37,6 +38,20 @@ public class FundController {
         List<String> typeList = parseFundTypes(fundTypes);
         List<Fund> funds = fundRepository.findByConditions(keyword, typeList, includeDisabled);
         return funds.stream().map(fundAssembler::toDTO).collect(Collectors.toList());
+    }
+
+    @GetMapping("/page")
+    public PageResult<FundDTO> page(@RequestParam(name = "keyword", required = false) String keyword,
+                                    @RequestParam(name = "fundTypes", required = false) String fundTypes,
+                                    @RequestParam(name = "includeDisabled", required = false, defaultValue = "false") boolean includeDisabled,
+                                    @RequestParam(name = "page", defaultValue = "1") long page,
+                                    @RequestParam(name = "size", defaultValue = "10") long size) {
+        List<String> typeList = parseFundTypes(fundTypes);
+        var fundPage = fundRepository.findByConditions(keyword, typeList, includeDisabled, page, size);
+        List<FundDTO> records = fundPage.getRecords().stream()
+                .map(fundAssembler::toDTO)
+                .collect(Collectors.toList());
+        return new PageResult<>(records, fundPage.getTotal(), fundPage.getSize(), fundPage.getCurrent());
     }
 
     @GetMapping("/{code}")

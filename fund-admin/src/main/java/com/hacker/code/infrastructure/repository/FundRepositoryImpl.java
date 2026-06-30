@@ -1,6 +1,8 @@
 package com.hacker.code.infrastructure.repository;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hacker.code.domain.fund.entity.Fund;
 import com.hacker.code.domain.fund.repository.FundRepository;
 import com.hacker.code.domain.fund.valueobject.FundStatus;
@@ -50,6 +52,19 @@ public class FundRepositoryImpl implements FundRepository {
         return fundMapper.selectByCondition(keyword, fundTypes, status).stream()
                 .map(this::toDomain)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public IPage<Fund> findByConditions(String keyword, List<String> fundTypes, boolean includeDisabled, long page, long size) {
+        Integer status = includeDisabled ? null : FundStatus.ENABLED.getCode();
+        Page<FundPO> pageParam = new Page<>(page, size);
+        IPage<FundPO> poPage = fundMapper.selectByConditionPage(pageParam, keyword, fundTypes, status);
+        List<Fund> records = poPage.getRecords().stream()
+                .map(this::toDomain)
+                .collect(Collectors.toList());
+        Page<Fund> resultPage = new Page<>(poPage.getCurrent(), poPage.getSize(), poPage.getTotal());
+        resultPage.setRecords(records);
+        return resultPage;
     }
 
     @Override

@@ -2,11 +2,11 @@ package com.hacker.code.adapter.web.controller;
 
 import com.hacker.code.application.assembler.StrategyAssembler;
 import com.hacker.code.application.dto.RebalanceAdviceDTO;
+import com.hacker.code.application.dto.StrategyConfigDTO;
 import com.hacker.code.application.dto.StrategyResultDTO;
+import com.hacker.code.application.service.StrategyConfigQueryService;
 import com.hacker.code.application.service.StrategyExecutionAppService;
-import com.hacker.code.domain.portfolio.valueobject.RebalanceAdvice;
 import com.hacker.code.domain.shared.util.TradeDateUtil;
-import com.hacker.code.domain.strategy.entity.StrategyResult;
 import com.hacker.code.domain.strategy.repository.StrategyResultRepository;
 import com.hacker.code.domain.strategy.valueobject.StrategyType;
 import lombok.RequiredArgsConstructor;
@@ -24,13 +24,13 @@ public class StrategyController {
 
     private final StrategyExecutionAppService strategyExecutionAppService;
     private final StrategyResultRepository strategyResultRepository;
+    private final StrategyConfigQueryService strategyConfigQueryService;
     private final StrategyAssembler strategyAssembler;
 
     @PostMapping("/execute")
     public RebalanceAdviceDTO execute(@RequestParam(name = "tradeDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate tradeDate) {
         LocalDate date = tradeDate == null ? TradeDateUtil.determineEffectiveTradeDate() : tradeDate;
-        RebalanceAdvice advice = strategyExecutionAppService.executeWeeklyStrategy(date);
-        return strategyAssembler.toDTO(advice);
+        return strategyAssembler.toDTO(strategyExecutionAppService.executeWeeklyStrategy(date));
     }
 
     @GetMapping("/latest")
@@ -47,5 +47,16 @@ public class StrategyController {
         return strategyResultRepository.findByDate(tradeDate).stream()
                 .map(strategyAssembler::toDTO)
                 .collect(Collectors.toList());
+    }
+
+    @GetMapping("/configs")
+    public List<StrategyConfigDTO> configs() {
+        return strategyConfigQueryService.findAllEnabled();
+    }
+
+    @PutMapping("/configs/{id}")
+    public void updateConfig(@PathVariable(name = "id") Long id, @RequestBody StrategyConfigDTO dto) {
+        dto.setId(id);
+        strategyConfigQueryService.update(dto);
     }
 }
