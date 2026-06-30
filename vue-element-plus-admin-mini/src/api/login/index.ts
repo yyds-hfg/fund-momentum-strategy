@@ -1,19 +1,11 @@
 import request from '@/axios'
-import type { UserLoginType } from './types'
+import type { UserLoginType, LoginResult } from './types'
 
-export interface LoginData {
-  accessToken: string
-  refreshToken: string
-  username: string
-  nickname: string
-  roles: string[]
-}
-
-export const loginApi = (data: UserLoginType): Promise<IResponse<LoginData>> => {
+export const loginApi = (data: UserLoginType): Promise<IResponse<LoginResult>> => {
   return request.post({ url: '/api/auth/login', data })
 }
 
-export const refreshTokenApi = (): Promise<IResponse<LoginData>> => {
+export const refreshTokenApi = (): Promise<IResponse<LoginResult>> => {
   return request.post({ url: '/api/auth/refresh' })
 }
 

@@ -1,7 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
 import type { App } from 'vue'
-import { Layout, getParentLayout } from '@/utils/routerHelper'
+import { Layout } from '@/utils/routerHelper'
 import { useI18n } from '@/hooks/web/useI18n'
 
 const { t } = useI18n()
@@ -10,7 +10,7 @@ export const constantRouterMap: AppRouteRecordRaw[] = [
   {
     path: '/',
     component: Layout,
-    redirect: '/level',
+    redirect: '/dashboard',
     name: 'Root',
     meta: {
       hidden: true
@@ -57,60 +57,110 @@ export const constantRouterMap: AppRouteRecordRaw[] = [
 
 export const asyncRouterMap: AppRouteRecordRaw[] = [
   {
-    path: '/level',
+    path: '/dashboard',
     component: Layout,
-    redirect: '/level/menu1/menu1-1/menu1-1-1',
-    name: 'Level',
+    redirect: '/dashboard/index',
+    name: 'Dashboard',
     meta: {
-      title: t('router.level'),
-      icon: 'carbon:skill-level-advanced'
+      title: t('router.dashboard'),
+      icon: 'ant-design:dashboard-outlined'
     },
     children: [
       {
-        path: 'menu1',
-        name: 'Menu1',
-        component: getParentLayout(),
-        redirect: '/level/menu1/menu1-1/menu1-1-1',
+        path: 'index',
+        name: 'DashboardIndex',
+        component: () => import('@/views/Dashboard/index.vue'),
         meta: {
-          title: t('router.menu1')
-        },
-        children: [
-          {
-            path: 'menu1-1',
-            name: 'Menu11',
-            component: getParentLayout(),
-            redirect: '/level/menu1/menu1-1/menu1-1-1',
-            meta: {
-              title: t('router.menu11'),
-              alwaysShow: true
-            },
-            children: [
-              {
-                path: 'menu1-1-1',
-                name: 'Menu111',
-                component: () => import('@/views/Level/Menu111.vue'),
-                meta: {
-                  title: t('router.menu111')
-                }
-              }
-            ]
-          },
-          {
-            path: 'menu1-2',
-            name: 'Menu12',
-            component: () => import('@/views/Level/Menu12.vue'),
-            meta: {
-              title: t('router.menu12')
-            }
-          }
-        ]
+          title: t('router.dashboard'),
+          noCache: true
+        }
+      }
+    ]
+  },
+  {
+    path: '/fund',
+    component: Layout,
+    redirect: '/fund/list',
+    name: 'Fund',
+    meta: {
+      title: t('router.fund'),
+      icon: 'ant-design:wallet-outlined'
+    },
+    children: [
+      {
+        path: 'list',
+        name: 'FundList',
+        component: () => import('@/views/Fund/list.vue'),
+        meta: {
+          title: t('router.fundList')
+        }
+      }
+    ]
+  },
+  {
+    path: '/strategy',
+    component: Layout,
+    redirect: '/strategy/config',
+    name: 'Strategy',
+    meta: {
+      title: t('router.strategy'),
+      icon: 'ant-design:line-chart-outlined'
+    },
+    children: [
+      {
+        path: 'config',
+        name: 'StrategyConfig',
+        component: () => import('@/views/Strategy/config.vue'),
+        meta: {
+          title: t('router.strategyConfig')
+        }
       },
       {
-        path: 'menu2',
-        name: 'Menu2',
-        component: () => import('@/views/Level/Menu2.vue'),
+        path: 'execute',
+        name: 'StrategyExecute',
+        component: () => import('@/views/Strategy/execute.vue'),
         meta: {
-          title: t('router.menu2')
+          title: t('router.strategyExecute')
+        }
+      }
+    ]
+  },
+  {
+    path: '/backtest',
+    component: Layout,
+    redirect: '/backtest/run',
+    name: 'Backtest',
+    meta: {
+      title: t('router.backtest'),
+      icon: 'ant-design:history-outlined'
+    },
+    children: [
+      {
+        path: 'run',
+        name: 'BacktestRun',
+        component: () => import('@/views/Backtest/run.vue'),
+        meta: {
+          title: t('router.backtestRun')
+        }
+      }
+    ]
+  },
+  {
+    path: '/report',
+    component: Layout,
+    redirect: '/report/weekly',
+    name: 'Report',
+    meta: {
+      title: t('router.report'),
+      icon: 'ant-design:file-text-outlined'
+    },
+    children: [
+      {
+        path: 'weekly',
+        name: 'ReportWeekly',
+        component: () => import('@/views/Report/weekly.vue'),
+        meta: {
+          title: t('router.weeklyReport')
         }
       }
     ]

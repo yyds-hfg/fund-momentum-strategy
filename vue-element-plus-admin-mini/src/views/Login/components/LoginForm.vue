@@ -4,12 +4,12 @@ import { Form, FormSchema } from '@/components/Form'
 import { useI18n } from '@/hooks/web/useI18n'
 import { ElCheckbox, ElLink } from 'element-plus'
 import { useForm } from '@/hooks/web/useForm'
-import { loginApi, getTestRoleApi, getAdminRoleApi } from '@/api/login'
+import { loginApi } from '@/api/login'
 import { useAppStore } from '@/store/modules/app'
 import { usePermissionStore } from '@/store/modules/permission'
 import { useRouter } from 'vue-router'
 import type { RouteLocationNormalizedLoaded, RouteRecordRaw } from 'vue-router'
-import { UserType } from '@/api/login/types'
+import { UserType, LoginResult } from '@/api/login/types'
 import { useValidator } from '@/hooks/web/useValidator'
 import { Icon } from '@/components/Icon'
 import { useUserStore } from '@/store/modules/user'
@@ -226,12 +226,13 @@ const signIn = async () => {
   await formRef?.validate(async (isValid) => {
     if (isValid) {
       loading.value = true
-      const formData = await getFormData<UserType>()
+      const formData = await getFormData<UserLoginType>()
 
       try {
         const res = await loginApi(formData)
 
-        if (res) {
+        if (res && res.data) {
+          const loginData = res.data as LoginResult
           // 是否记住我
           if (unref(remember)) {
             userStore.setLoginInfo({
@@ -242,12 +243,8 @@ const signIn = async () => {
             userStore.setLoginInfo(undefined)
           }
           userStore.setRememberMe(unref(remember))
-          userStore.setToken(res.data.accessToken)
-          userStore.setUserInfo({
-            username: res.data.username,
-            nickname: res.data.nickname,
-            roles: res.data.roles || []
-          })
+          userStore.setToken(loginData.token)
+          userStore.setUserInfo(loginData.userInfo)
           // 使用前端静态路由
           await permissionStore.generateRoutes('static').catch(() => {})
           permissionStore.getAddRouters.forEach((route) => {
@@ -261,31 +258,6 @@ const signIn = async () => {
       }
     }
   })
-}
-
-// 获取角色信息
-const getRole = async () => {
-  const formData = await getFormData<UserType>()
-  const params = {
-    roleName: formData.username
-  }
-  const res =
-    appStore.getDynamicRouter && appStore.getServerDynamicRouter
-      ? await getAdminRoleApi(params)
-      : await getTestRoleApi(params)
-  if (res) {
-    const routers = res.data || []
-    userStore.setRoleRouters(routers)
-    appStore.getDynamicRouter && appStore.getServerDynamicRouter
-      ? await permissionStore.generateRoutes('server', routers).catch(() => {})
-      : await permissionStore.generateRoutes('frontEnd', routers).catch(() => {})
-
-    permissionStore.getAddRouters.forEach((route) => {
-      addRoute(route as RouteRecordRaw) // 动态添加可访问路由表
-    })
-    permissionStore.setIsAddRouters(true)
-    push({ path: redirect.value || permissionStore.addRouters[0].path })
-  }
 }
 
 // 去注册页面
