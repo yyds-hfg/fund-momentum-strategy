@@ -9,6 +9,7 @@ import com.hacker.code.domain.strategy.entity.StrategyResult;
 import org.springframework.stereotype.Component;
 
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Component
 public class StrategyAssembler {
@@ -20,9 +21,11 @@ public class StrategyAssembler {
         dto.setStrategyType(enumName(result.getStrategyType(), Enum::name));
         dto.setMarketStatus(enumName(result.getMarketStatus(), Enum::name));
         dto.setTotalWeight(result.getTotalWeight());
-        for (Position position : result.getPositions()) {
-            dto.getPositions().add(toDTO(position));
-        }
+        dto.getPositions().addAll(
+                result.getPositions().stream()
+                        .map(this::toDTO)
+                        .collect(Collectors.toList())
+        );
         return dto;
     }
 
@@ -40,8 +43,17 @@ public class StrategyAssembler {
         RebalanceAdviceDTO dto = new RebalanceAdviceDTO();
         dto.setTradeDate(advice.getTradeDate());
         dto.setMarketStatus(enumName(advice.getMarketStatus(), Enum::name));
-        for (StrategyResult result : advice.getSubResults()) {
-            dto.getSubResults().add(toDTO(result));
+        dto.getSubResults().addAll(
+                advice.getSubResults().stream()
+                        .map(this::toDTO)
+                        .collect(Collectors.toList())
+        );
+        if (advice.getMergedPositions() != null) {
+            dto.getMergedPositions().addAll(
+                    advice.getMergedPositions().stream()
+                            .map(this::toDTO)
+                            .collect(Collectors.toList())
+            );
         }
         return dto;
     }

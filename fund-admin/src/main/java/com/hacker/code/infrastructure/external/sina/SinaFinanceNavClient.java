@@ -2,6 +2,7 @@ package com.hacker.code.infrastructure.external.sina;
 
 import com.hacker.code.domain.fund.service.NavDataFetcher;
 import com.hacker.code.domain.fund.valueobject.Nav;
+import com.hacker.code.domain.shared.util.MarketCodeUtil;
 import com.hacker.code.infrastructure.config.CrawlerProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -75,10 +76,6 @@ public class SinaFinanceNavClient implements NavDataFetcher {
     }
 
     private String resolveMarket(String fundCode) {
-        String code = fundCode.trim();
-        if (code.startsWith("6") || code.startsWith("5") || code.startsWith("58") || code.startsWith("68") || code.startsWith("88") || code.startsWith("89")) {
-            return "sh";
-        }
-        return "sz";
+        return MarketCodeUtil.sinaMarket(fundCode);
     }
 }

@@ -66,9 +66,11 @@ public class DashboardAppService {
         dashboard.setTotalWeight(dto.getSubResults().stream()
                 .map(StrategyResultDTO::getTotalWeight)
                 .reduce(BigDecimal.ZERO, BigDecimal::add));
-        dashboard.setPositions(dto.getSubResults().stream()
-                .flatMap(r -> r.getPositions().stream())
-                .collect(Collectors.toList()));
+        dashboard.setPositions(dto.getMergedPositions().isEmpty()
+                ? dto.getSubResults().stream()
+                        .flatMap(r -> r.getPositions().stream())
+                        .collect(Collectors.toList())
+                : dto.getMergedPositions());
         dashboard.setRecommendedPositions(dashboard.getPositions());
 
         // 市场数据（成交量 + 资金流向）
@@ -271,13 +273,13 @@ public class DashboardAppService {
                 .divide(maValue, 6, RoundingMode.HALF_UP)
                 .multiply(BigDecimal.valueOf(100));
         double d = deviation.doubleValue();
-        if (d < 0) {
+        if (d < -1.0) {
             return "跌破";
         }
-        if (d < 1.0) {
+        if (d <= 1.0) {
             return "站上";
         }
-        if (d < 4.0) {
+        if (d <= 4.0) {
             return "突破";
         }
         return "强势突破";

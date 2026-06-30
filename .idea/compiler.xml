@@ -8,14 +8,18 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="fund-admin" />
-        <module name="fund-momentum-strategy" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="fund-momentum-strategy" target="17" />
+      <module name="youlai-boot" target="17" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="fund-admin" options="-parameters" />
       <module name="fund-momentum-strategy" options="-parameters" />
+      <module name="youlai-boot" options="-parameters" />
     </option>
   </component>
 </project>

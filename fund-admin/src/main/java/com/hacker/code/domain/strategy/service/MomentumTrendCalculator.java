@@ -130,7 +130,6 @@ public class MomentumTrendCalculator {
         double sharpUp = 1.5 * effectiveSigma;
         double up = 0.5 * effectiveSigma;
         double flatUp = 0.1 * effectiveSigma;
-        double flat = 0.1 * effectiveSigma;
         double flatDown = -0.1 * effectiveSigma;
         double down = -0.5 * effectiveSigma;
         double sharpDown = -1.5 * effectiveSigma;
@@ -144,13 +143,13 @@ public class MomentumTrendCalculator {
         if (weightedSlope > flatUp) {
             return MomentumTrend.FLAT_UP;
         }
-        if (weightedSlope >= flatDown && weightedSlope <= flat) {
+        if (weightedSlope >= flatDown) {
             return MomentumTrend.FLAT;
         }
-        if (weightedSlope > sharpDown) {
+        if (weightedSlope > down) {
             return MomentumTrend.FLAT_DOWN;
         }
-        if (weightedSlope > down) {
+        if (weightedSlope > sharpDown) {
             return MomentumTrend.DOWN;
         }
         return MomentumTrend.SHARP_DOWN;

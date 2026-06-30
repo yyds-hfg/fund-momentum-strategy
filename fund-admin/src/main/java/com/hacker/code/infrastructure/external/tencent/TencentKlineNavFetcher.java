@@ -3,6 +3,7 @@ package com.hacker.code.infrastructure.external.tencent;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hacker.code.domain.fund.service.NavDataFetcher;
+import com.hacker.code.domain.shared.util.MarketCodeUtil;
 import com.hacker.code.domain.fund.valueobject.Nav;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -87,15 +88,6 @@ public class TencentKlineNavFetcher implements NavDataFetcher {
     }
 
     private String resolveSymbol(String fundCode) {
-        String code = fundCode.trim();
-        // 000852 为中证 1000 / A500 等指数代码，属于上证系列
-        if ("000852".equals(code)) {
-            return "sh000852";
-        }
-        if (code.startsWith("6") || code.startsWith("5") || code.startsWith("58")
-                || code.startsWith("68") || code.startsWith("88") || code.startsWith("89")) {
-            return "sh" + code;
-        }
-        return "sz" + code;
+        return MarketCodeUtil.tencentMarket(fundCode) + fundCode.trim();
     }
 }

@@ -74,11 +74,12 @@ public class StrategyExecutionAppService {
     public RebalanceAdvice calculateWeeklyStrategy(LocalDate tradeDate) {
         log.info("Calculating weekly strategy for {}", tradeDate);
 
+        List<StrategyConfig> configs = strategyConfigRepository.findAllEnabled();
         List<Fund> candidates = fundDomainService.getCandidatePool().stream()
                 .filter(fund -> !BENCHMARK_CODE.equals(fund.getFundCode()))
                 .collect(Collectors.toList());
 
-        int maxWindow = calculateMaxWindow();
+        int maxWindow = calculateMaxWindow(configs);
         LocalDate startDate = tradeDate.minusDays(maxWindow + 30);
         Map<String, List<Nav>> navHistoryMap = loadNavHistory(candidates, startDate, tradeDate);
 
@@ -86,9 +87,7 @@ public class StrategyExecutionAppService {
         MarketStatus marketStatus = marketSignal.isBullish() ? MarketStatus.STRONG : MarketStatus.WEAK;
         log.info("Market status on {}: {}", tradeDate, marketStatus);
 
-        List<StrategyConfig> configs = strategyConfigRepository.findAllEnabled();
         List<StrategyResult> subResults = new ArrayList<>();
-
         for (StrategyConfig config : configs) {
             StrategyResult result = calculateSingleStrategy(config, tradeDate, candidates, navHistoryMap, marketStatus);
             if (result != null) {
@@ -151,8 +150,8 @@ public class StrategyExecutionAppService {
                 ));
     }
 
-    private int calculateMaxWindow() {
-        return strategyConfigRepository.findAllEnabled().stream()
+    private int calculateMaxWindow(List<StrategyConfig> configs) {
+        return configs.stream()
                 .mapToInt(config -> Math.max(
                         Math.max(config.getShortMomentumWindow(), config.getLongMomentumWindow()),
                         Math.max(config.getMaWindow(), config.getVolatilityWindow())

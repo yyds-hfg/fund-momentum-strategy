@@ -56,17 +56,18 @@ class BacktestAppServiceTest {
         result.setTotalWeight(new BigDecimal("0.7"));
         result.addPosition(new Position("510300", "沪深300ETF", new BigDecimal("0.7"), StrategyType.BALANCED, "reason"));
 
-        RebalanceAdvice advice = new RebalanceAdvice(d1, MarketStatus.STRONG, List.of(result));
+        RebalanceAdvice advice = new RebalanceAdvice(d1, MarketStatus.STRONG, List.of(result),
+                List.of(new Position("510300", "沪深300ETF", new BigDecimal("0.7"), StrategyType.MERGED, "merged reason")));
 
         when(strategyExecutionAppService.executeWeeklyStrategy(any())).thenReturn(advice);
         when(objectMapper.writeValueAsString(any())).thenReturn("{}");
 
         // 510300 价格：d1=100, d2=105, d3=110
-        when(navDataRepository.findByDateRange("510300", d1.minusDays(5), d1))
+        when(navDataRepository.findByDateRange("510300", d1.minusDays(10), d1))
                 .thenReturn(List.of(nav(d1, "100")));
-        when(navDataRepository.findByDateRange("510300", d2.minusDays(5), d2))
+        when(navDataRepository.findByDateRange("510300", d2.minusDays(10), d2))
                 .thenReturn(List.of(nav(d2, "105")));
-        when(navDataRepository.findByDateRange("510300", d3.minusDays(5), d3))
+        when(navDataRepository.findByDateRange("510300", d3.minusDays(10), d3))
                 .thenReturn(List.of(nav(d3, "110")));
 
         var response = backtestAppService.runBacktest(d1, d3);

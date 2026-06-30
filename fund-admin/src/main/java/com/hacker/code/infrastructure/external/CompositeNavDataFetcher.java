@@ -11,13 +11,14 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 /**
  * 组合净值获取器。
- * 优先使用东方财富获取历史 K 线；如果东方财富取不到，则回退到新浪财经获取最新行情。
+ * <p>
+ * 历史净值优先使用东方财富 ETF K 线；东方财富失败时回退到腾讯财经 K 线。
+ * 新浪财经实时行情仅用于获取最新一日行情，不再混入历史序列，避免污染动量计算。
  */
 @Slf4j
 @Component
@@ -42,13 +43,7 @@ public class CompositeNavDataFetcher implements NavDataFetcher {
             return history;
         }
 
-        log.warn("腾讯财经获取 {} 历史净值失败，回退到新浪最新行情", fundCode);
-        Nav latest = sinaFetcher.fetchLatest(fundCode);
-        if (latest != null) {
-            List<Nav> fallback = new ArrayList<>();
-            fallback.add(latest);
-            return fallback;
-        }
+        log.warn("腾讯财经获取 {} 历史净值也失败，历史数据返回空。如需实时行情请调用 fetchLatest", fundCode);
         return Collections.emptyList();
     }
 

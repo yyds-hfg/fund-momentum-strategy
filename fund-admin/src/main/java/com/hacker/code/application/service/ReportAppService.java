@@ -2,6 +2,7 @@ package com.hacker.code.application.service;
 
 import com.hacker.code.application.assembler.StrategyAssembler;
 import com.hacker.code.application.dto.RebalanceAdviceDTO;
+import com.hacker.code.domain.portfolio.service.PortfolioMergeService;
 import com.hacker.code.domain.portfolio.valueobject.RebalanceAdvice;
 import com.hacker.code.domain.strategy.entity.StrategyResult;
 import com.hacker.code.domain.strategy.repository.StrategyResultRepository;
@@ -22,6 +23,7 @@ public class ReportAppService {
 
     private final StrategyResultRepository strategyResultRepository;
     private final StrategyAssembler strategyAssembler;
+    private final PortfolioMergeService portfolioMergeService;
     private final SpringTemplateEngine templateEngine;
 
     public RebalanceAdvice getLatestWeeklyReport() {
@@ -38,7 +40,7 @@ public class ReportAppService {
         balanced.ifPresent(subResults::add);
         active.ifPresent(subResults::add);
 
-        return new RebalanceAdvice(tradeDate, marketStatus, subResults);
+        return portfolioMergeService.merge(tradeDate, marketStatus, subResults);
     }
 
     public String generateWeeklyReportHtml() {

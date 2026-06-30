@@ -12,4 +12,5 @@ public class RebalanceAdviceDTO {
     private LocalDate tradeDate;
     private String marketStatus;
     private List<StrategyResultDTO> subResults = new ArrayList<>();
+    private List<PositionDTO> mergedPositions = new ArrayList<>();
 }

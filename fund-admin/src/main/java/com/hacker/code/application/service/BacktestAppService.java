@@ -6,6 +6,7 @@ import com.hacker.code.domain.fund.repository.NavDataRepository;
 import com.hacker.code.domain.fund.valueobject.Nav;
 import com.hacker.code.domain.portfolio.valueobject.Position;
 import com.hacker.code.domain.portfolio.valueobject.RebalanceAdvice;
+import com.hacker.code.domain.shared.util.TradeDateUtil;
 import com.hacker.code.domain.strategy.repository.BacktestRecordRepository;
 import com.hacker.code.infrastructure.persistence.po.BacktestRecordPO;
 import lombok.RequiredArgsConstructor;
@@ -16,8 +17,8 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.temporal.IsoFields;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +27,8 @@ import java.util.stream.Collectors;
 
 /**
  * 回测应用服务。
- * 按每周最后一个交易日调仓，持有到下一调仓日，按收盘净值计算收益。
+ * <p>
+ * 按每周最后一个 A 股交易日调仓，持有到下一调仓日，按收盘净值计算收益。
  */
 @Slf4j
 @Service
@@ -46,7 +48,7 @@ public class BacktestAppService {
     public BacktestResponse runBacktest(LocalDate startDate, LocalDate endDate) {
         log.info("Running backtest from {} to {}", startDate, endDate);
 
-        List<LocalDate> rebalanceDates = collectFridays(startDate, endDate);
+        List<LocalDate> rebalanceDates = collectWeeklyTradeDates(startDate, endDate);
         if (rebalanceDates.size() < 2) {
             throw new IllegalArgumentException("回测区间至少需要包含两个调仓日");
         }
@@ -132,30 +134,20 @@ public class BacktestAppService {
     }
 
     private BigDecimal calculateWeeklyReturn(RebalanceAdvice advice, LocalDate tradeDate, LocalDate nextTradeDate) {
-        if (advice.getSubResults().isEmpty()) {
+        if (advice.getMergedPositions().isEmpty()) {
             return BigDecimal.ZERO;
-        }
-
-        // 合并同一 ETF 的总暴露
-        Map<String, BigDecimal> aggregatedWeights = new HashMap<>();
-        for (var result : advice.getSubResults()) {
-            for (Position position : result.getPositions()) {
-                aggregatedWeights.merge(position.getFundCode(), position.getWeight(), BigDecimal::add);
-            }
         }
 
         BigDecimal totalWeight = BigDecimal.ZERO;
         BigDecimal weightedReturn = BigDecimal.ZERO;
 
-        for (Map.Entry<String, BigDecimal> entry : aggregatedWeights.entrySet()) {
-            String fundCode = entry.getKey();
-            BigDecimal weight = entry.getValue();
-            BigDecimal holdingReturn = calculateHoldingReturn(fundCode, tradeDate, nextTradeDate);
+        for (Position position : advice.getMergedPositions()) {
+            BigDecimal holdingReturn = calculateHoldingReturn(position.getFundCode(), tradeDate, nextTradeDate);
             if (holdingReturn == null) {
                 continue;
             }
-            weightedReturn = weightedReturn.add(holdingReturn.multiply(weight));
-            totalWeight = totalWeight.add(weight);
+            weightedReturn = weightedReturn.add(holdingReturn.multiply(position.getWeight()));
+            totalWeight = totalWeight.add(position.getWeight());
         }
 
         if (totalWeight.compareTo(BigDecimal.ZERO) == 0) {
@@ -165,8 +157,8 @@ public class BacktestAppService {
     }
 
     private BigDecimal calculateHoldingReturn(String fundCode, LocalDate buyDate, LocalDate sellDate) {
-        List<Nav> buyHistory = navDataRepository.findByDateRange(fundCode, buyDate.minusDays(5), buyDate);
-        List<Nav> sellHistory = navDataRepository.findByDateRange(fundCode, sellDate.minusDays(5), sellDate);
+        List<Nav> buyHistory = navDataRepository.findByDateRange(fundCode, buyDate.minusDays(10), buyDate);
+        List<Nav> sellHistory = navDataRepository.findByDateRange(fundCode, sellDate.minusDays(10), sellDate);
 
         Nav buyNav = buyHistory.stream()
                 .filter(n -> !n.getDate().isAfter(buyDate))
@@ -184,16 +176,34 @@ public class BacktestAppService {
                 .divide(buyNav.getCloseNav(), SCALE, RoundingMode.HALF_UP);
     }
 
-    private List<LocalDate> collectFridays(LocalDate startDate, LocalDate endDate) {
-        List<LocalDate> dates = new ArrayList<>();
-        LocalDate date = startDate;
-        while (!date.getDayOfWeek().equals(DayOfWeek.FRIDAY)) {
-            date = date.plusDays(1);
+    /**
+     * 收集区间内的每周最后一个 A 股交易日。
+     */
+    private List<LocalDate> collectWeeklyTradeDates(LocalDate startDate, LocalDate endDate) {
+        List<LocalDate> tradeDates = TradeDateUtil.tradeDatesBetween(startDate, endDate);
+        if (tradeDates.isEmpty()) {
+            return new ArrayList<>();
         }
-        while (!date.isAfter(endDate)) {
-            dates.add(date);
-            date = date.plusWeeks(1);
+
+        List<LocalDate> weeklyDates = new ArrayList<>();
+        LocalDate lastWeekEnd = null;
+        int lastWeekOfYear = -1;
+        for (LocalDate date : tradeDates) {
+            int weekOfYear = date.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
+            int year = date.get(IsoFields.WEEK_BASED_YEAR);
+            int weekKey = year * 100 + weekOfYear;
+            if (lastWeekEnd == null) {
+                lastWeekEnd = date;
+                lastWeekOfYear = weekKey;
+            } else if (weekKey != lastWeekOfYear) {
+                weeklyDates.add(lastWeekEnd);
+                lastWeekEnd = date;
+                lastWeekOfYear = weekKey;
+            } else {
+                lastWeekEnd = date;
+            }
         }
-        return dates;
+        weeklyDates.add(lastWeekEnd);
+        return weeklyDates;
     }
 }
